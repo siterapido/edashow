@@ -21,8 +21,4 @@ const nextConfig = {
   reactCompiler: false,
 }
 
-// Desabilita o bundling de pacotes do servidor durante desenvolvimento
-// para melhor performance e compatibilidade
-export default withPayload(nextConfig, { 
-  devBundleServerPackages: false 
-})
+export default withPayload(nextConfig)

@@ -19,6 +19,10 @@ const nextConfig = {
     ],
   },
   reactCompiler: false,
+  experimental: {
+    // Desabilita Turbopack explicitamente
+    turbo: undefined,
+  },
 }
 
 export default withPayload(nextConfig)

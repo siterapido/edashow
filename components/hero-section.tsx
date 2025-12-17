@@ -242,7 +242,7 @@ export function HeroSection() {
                       Ler matéria completa
                       <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
-                    <Button variant="outline" size="lg" className="border-slate-600 text-white hover:bg-slate-800 hover:text-white rounded-full px-5 sm:px-6 h-10 sm:h-11 md:h-12 text-sm sm:text-base min-h-[44px]">
+                    <Button variant="outline" size="lg" className="border-slate-600 text-chart-3 hover:bg-slate-800 hover:text-white rounded-full px-5 sm:px-6 h-10 sm:h-11 md:h-12 text-sm sm:text-base min-h-[44px]">
                       <Share2 className="mr-2 w-4 h-4" />
                       Compartilhar
                     </Button>
@@ -255,7 +255,7 @@ export function HeroSection() {
                   initial="hidden"
                   animate="show"
                   variants={fadeIn("left", 0.5)}
-                  className="relative mt-8 lg:mt-0"
+                  className="relative mt-8 lg:mt-0 hidden md:block"
                 >
                   <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] lg:aspect-[16/10] group cursor-pointer">
                     <motion.img 

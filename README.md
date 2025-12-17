@@ -1,287 +1,203 @@
-# EdaShow - Portal de Notícias
+# 🎭 EdaShow - Plataforma de Eventos
 
-*Website moderno com CMS integrado*
+Uma plataforma moderna para gerenciamento e divulgação de eventos, construída com Next.js 16, Payload CMS e MongoDB.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/marcos-projects-05ce9093/v0-website-ui-recreation)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/vuFAxfHrMHc)
-[![PayloadCMS](https://img.shields.io/badge/CMS-PayloadCMS-black?style=for-the-badge)](https://payloadcms.com)
+## 🚀 Deploy Rápido
 
-## 📋 Sobre o Projeto
-
-Portal de notícias moderno construído com Next.js 16, React 19 e integrado com PayloadCMS para gerenciamento de conteúdo.
-
-## ✨ Características
-
-- 🎨 Interface moderna e responsiva
-- 📝 CMS headless integrado (PayloadCMS)
-- 🔐 Sistema de autenticação completo
-- 📰 Gerenciamento de posts, eventos e colunistas
-- 🖼️ Upload e processamento automático de imagens
-- 🌐 API REST completa
-- 📱 Totalmente responsivo
-- ⚡ Performance otimizada com Next.js 16
-
-## 🚀 Integração PayloadCMS
-
-Este projeto está totalmente integrado com o PayloadCMS! Acesse a documentação completa:
-
-- **[INTEGRACAO_PAYLOAD.md](./INTEGRACAO_PAYLOAD.md)** - Resumo da integração
-- **[PAYLOAD_README.md](./PAYLOAD_README.md)** - Documentação completa de uso
-
-### Quick Start com PayloadCMS
+### Opção 1: Script Automático (Recomendado)
 
 ```bash
-# 1. Instalar MongoDB (macOS)
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
-
-# 2. Configurar ambiente
-cp .env.example .env
-# Edite o .env com suas configurações
-
-# 3. Instalar dependências
-pnpm install
-
-# 4. Iniciar servidor
-pnpm dev
-
-# 5. Acessar o admin
-# http://localhost:3000/admin
+./deploy.sh
 ```
 
-### Collections Disponíveis
+### Opção 2: Manual
 
-- ✅ **Posts** - Notícias e artigos
-- ✅ **Events** - Eventos e conferências
-- ✅ **Columnists** - Colunistas e autores
-- ✅ **Media** - Biblioteca de mídia
-- ✅ **Users** - Usuários e autenticação
-
-### Globals (Configurações)
-
-- ✅ **Site Settings** - Configurações gerais
-- ✅ **Header** - Navegação principal
-- ✅ **Footer** - Rodapé do site
-
-## 📚 Overview
-
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
-
-## Deployment
-
-Your project is live at:
-
-**[https://vercel.com/marcos-projects-05ce9093/v0-website-ui-recreation](https://vercel.com/marcos-projects-05ce9093/v0-website-ui-recreation)**
-
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/vuFAxfHrMHc](https://v0.app/chat/vuFAxfHrMHc)**
-
-## 🛠️ Tecnologias
-
-- **Framework**: Next.js 16.0.10
-- **React**: 19.2.0
-- **CMS**: PayloadCMS 3.68.5
-- **Database**: MongoDB
-- **Styling**: Tailwind CSS 4.1.9
-- **UI Components**: Radix UI
-- **TypeScript**: 5.0.2
-- **Package Manager**: pnpm
-
-## 📦 Estrutura do Projeto
-
-```
-edashow-1/
-├── app/                    # Páginas e rotas Next.js
-│   ├── api/               # API routes (PayloadCMS)
-│   ├── cms-example/       # Página de exemplo do CMS
-│   └── ...
-├── components/            # Componentes React
-│   └── ui/               # Componentes UI reutilizáveis
-├── lib/                  # Utilitários e helpers
-│   └── payload/          # Funções do PayloadCMS
-├── public/               # Arquivos estáticos
-│   └── uploads/          # Uploads do CMS
-├── scripts/              # Scripts auxiliares
-├── payload.config.ts     # Configuração do PayloadCMS
-├── next.config.mjs       # Configuração do Next.js
-└── tsconfig.json         # Configuração TypeScript
-```
-
-## 🔧 Scripts Disponíveis
+#### 1️⃣ Autenticar no GitHub
 
 ```bash
-# Desenvolvimento
-pnpm dev              # Inicia servidor de desenvolvimento
-
-# Build
-pnpm build            # Cria build de produção
-pnpm start            # Inicia servidor de produção
-
-# Linting
-pnpm lint             # Executa ESLint
-
-# Setup
-./scripts/setup-payload.sh  # Script de setup do PayloadCMS
-
-# Ingestão de Conteúdo
-pnpm ts-node scripts/scrape-conexao-saude.ts  # Importa notícias do Conexão Saúde
+gh auth logout
+gh auth login
 ```
 
-### 📥 Script de Ingestão do Conexão Saúde
+Escolha:
+- `GitHub.com`
+- `HTTPS`
+- `Login with a web browser`
 
-O projeto inclui um script para importar notícias automaticamente do site Conexão Saúde:
+#### 2️⃣ Enviar para GitHub
 
 ```bash
-# Configurar variáveis de ambiente
-export PAYLOAD_SERVER_URL=http://localhost:3000
-export PAYLOAD_API_TOKEN=seu-token
-
-# Executar importação
-pnpm ts-node scripts/scrape-conexao-saude.ts
+git push origin main
 ```
 
-**Documentação completa:** [SCRAPE_CONEXAO_SAUDE.md](./SCRAPE_CONEXAO_SAUDE.md)
-
-## 🌐 Endpoints da API
-
-O PayloadCMS expõe automaticamente uma API REST completa:
+#### 3️⃣ Deploy no Vercel
 
 ```bash
-# Posts
-GET    /api/posts              # Listar posts
-GET    /api/posts/:id          # Obter post
-POST   /api/posts              # Criar post
-PATCH  /api/posts/:id          # Atualizar post
-DELETE /api/posts/:id          # Deletar post
-
-# Eventos
-GET    /api/events             # Listar eventos
-GET    /api/events/:id         # Obter evento
-
-# Colunistas
-GET    /api/columnists         # Listar colunistas
-GET    /api/columnists/:id     # Obter colunista
-
-# Globals
-GET    /api/globals/site-settings
-GET    /api/globals/header
-GET    /api/globals/footer
+vercel --prod
 ```
 
-## 🔐 Autenticação
+#### 4️⃣ Configurar Variáveis de Ambiente
 
 ```bash
-# Login
-POST /api/users/login
-{
-  "email": "user@example.com",
-  "password": "password"
-}
+# Gerar secret
+openssl rand -base64 32
 
-# Usar token nas requisições
-Authorization: JWT <token>
+# Adicionar variáveis
+vercel env add PAYLOAD_SECRET
+vercel env add DATABASE_URI
+vercel env add NEXT_PUBLIC_SERVER_URL
+
+# Deploy final
+vercel --prod
 ```
-
-## 📝 Variáveis de Ambiente
-
-```env
-# PayloadCMS
-PAYLOAD_SECRET=your-secret-key
-DATABASE_URI=mongodb://localhost:27017/edashow
-
-# Next.js
-NEXT_PUBLIC_SERVER_URL=http://localhost:3000
-```
-
-## 🚢 Deploy
-
-### Vercel (Recomendado)
-
-1. Configure MongoDB Atlas (gratuito)
-2. Configure as variáveis de ambiente no Vercel
-3. Deploy automático via Git
-
-### Outras Plataformas
-
-Consulte a [documentação do PayloadCMS](https://payloadcms.com/docs/production/deployment) para outras opções de deploy.
-
-## 🚀 Como Começar (3 Passos Rápidos)
-
-### 1. Iniciar MongoDB
-```bash
-brew services start mongodb-community
-```
-
-### 2. Iniciar o Servidor
-```bash
-pnpm dev
-```
-
-### 3. Acessar e Criar Conteúdo
-- **Admin**: http://localhost:3000/admin (crie seu usuário)
-- **Home**: http://localhost:3000
-- **Exemplo CMS**: http://localhost:3000/cms-example
-
-## ✅ Implementação Completa
-
-### 🎯 Componentes Integrados com CMS
-- ✅ **Latest News** - Busca posts reais do PayloadCMS
-- ✅ **Events** - Busca eventos reais do PayloadCMS
-- ✅ **Columnists** - Busca colunistas reais do PayloadCMS
-
-### 📄 Páginas Dinâmicas Criadas
-- ✅ `/posts/[slug]` - Página individual de posts com SEO
-- ✅ `/events/[slug]` - Página individual de eventos com SEO
-- ✅ `/columnists/[slug]` - Página de colunistas com artigos
-- ✅ `/posts` - Lista completa de todos os posts
-- ✅ `/events` - Lista completa de todos os eventos
-
-### ⚡ Features Implementadas
-- ✅ Integração completa com PayloadCMS
-- ✅ Geração estática de páginas (SSG)
-- ✅ SEO otimizado (metadados + Open Graph)
-- ✅ Otimização de imagens (Next.js Image)
-- ✅ Fallback inteligente para dados estáticos
-- ✅ Formatação de datas em português (pt-BR)
-- ✅ Layout 100% responsivo
-- ✅ Navegação intuitiva com breadcrumbs
-
-## 📖 Documentação Completa
-
-### Guias de Início
-- **[COMO_COMECAR.md](./COMO_COMECAR.md)** ⚡ - Guia rápido de 3 passos
-- **[IMPLEMENTACAO_COMPLETA.md](./IMPLEMENTACAO_COMPLETA.md)** 📋 - Tudo que foi implementado
-
-### Documentação Técnica
-- **[INTEGRACAO_PAYLOAD.md](./INTEGRACAO_PAYLOAD.md)** 🔧 - Resumo da integração
-- **[PAYLOAD_README.md](./PAYLOAD_README.md)** 📚 - Guia completo do CMS
-- **[EXEMPLOS_USO.md](./EXEMPLOS_USO.md)** 💻 - Exemplos práticos de código
-- **[ESTRUTURA_PROJETO.md](./ESTRUTURA_PROJETO.md)** 🗂️ - Estrutura visual
-
-### Referências Externas
-- [PayloadCMS Docs](https://payloadcms.com/docs)
-- [Next.js Docs](https://nextjs.org/docs)
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição antes de enviar um PR.
-
-## 📄 Licença
-
-Este projeto é privado e proprietário.
-
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
 
 ---
 
-**Desenvolvido com ❤️ usando Next.js e PayloadCMS**
+## 📚 Documentação Completa
+
+- 📖 **[PASSOS-RAPIDOS.md](./PASSOS-RAPIDOS.md)** - Guia passo a passo resumido
+- 📘 **[DEPLOY.md](./DEPLOY.md)** - Documentação completa de deploy
+- 🔧 **[.env.example](./.env.example)** - Exemplo de variáveis de ambiente
+
+---
+
+## 🛠️ Tecnologias
+
+- **Framework**: Next.js 16
+- **CMS**: Payload CMS 3.x
+- **Database**: MongoDB
+- **UI**: React 19, Tailwind CSS 4, Radix UI
+- **Deploy**: Vercel
+
+---
+
+## 💻 Desenvolvimento Local
+
+```bash
+# Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+```
+
+Acesse:
+- **Site**: http://localhost:3000
+- **Admin**: http://localhost:3000/admin
+
+---
+
+## 📦 Scripts Disponíveis
+
+```bash
+npm run dev          # Desenvolvimento
+npm run build        # Build para produção
+npm run start        # Iniciar produção
+npm run lint         # Lint do código
+npm run seed:posts   # Popular posts de exemplo
+```
+
+---
+
+## 🌍 Variáveis de Ambiente
+
+### Desenvolvimento (`.env`)
+
+```env
+PAYLOAD_SECRET=seu-secret-aqui
+DATABASE_URI=mongodb://localhost:27017/edashow
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+```
+
+### Produção (Vercel)
+
+```env
+PAYLOAD_SECRET=secret-super-seguro-gerado
+DATABASE_URI=mongodb+srv://user:pass@cluster.mongodb.net/edashow
+NEXT_PUBLIC_SERVER_URL=https://seu-projeto.vercel.app
+```
+
+---
+
+## 🗄️ MongoDB Atlas
+
+Para produção, você precisa de um banco MongoDB Atlas:
+
+1. Crie conta em [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Crie um cluster gratuito (M0)
+3. Configure usuário e senha
+4. Adicione IP à whitelist (0.0.0.0/0 para permitir todos)
+5. Copie a connection string
+
+---
+
+## 📋 Estrutura do Projeto
+
+```
+edashow/
+├── app/                    # Next.js App Router
+│   ├── (frontend)/        # Páginas públicas
+│   ├── (payload)/         # Admin Payload CMS
+│   └── api/               # API Routes
+├── components/            # Componentes React
+│   ├── ui/               # Componentes de UI
+│   └── ...               # Componentes específicos
+├── lib/                   # Utilitários
+├── payload/              # Configuração Payload CMS
+│   ├── collections/      # Coleções (Posts, Users, etc)
+│   └── payload.config.ts # Config principal
+├── public/               # Arquivos estáticos
+└── scripts/              # Scripts auxiliares
+```
+
+---
+
+## 🎯 Recursos
+
+- ✅ Sistema de posts com rich text editor
+- ✅ Gerenciamento de usuários
+- ✅ Upload de imagens
+- ✅ SEO otimizado
+- ✅ Responsive design
+- ✅ Dark mode
+- ✅ API REST completa
+- ✅ Admin dashboard
+
+---
+
+## 🔗 Links Úteis
+
+- [Documentação Next.js](https://nextjs.org/docs)
+- [Documentação Payload CMS](https://payloadcms.com/docs)
+- [Documentação Vercel](https://vercel.com/docs)
+- [MongoDB Atlas](https://www.mongodb.com/docs/atlas/)
+
+---
+
+## 📞 Suporte
+
+Para problemas ou dúvidas:
+
+1. Consulte [DEPLOY.md](./DEPLOY.md) para troubleshooting
+2. Verifique os logs: `vercel logs`
+3. Verifique as variáveis: `vercel env ls`
+
+---
+
+## 📄 Licença
+
+Este projeto é privado.
+
+---
+
+## 🎉 Pronto para Deploy!
+
+Execute `./deploy.sh` e siga as instruções! 🚀
+
+---
+
+**Desenvolvido com ❤️ usando Next.js e Payload CMS**

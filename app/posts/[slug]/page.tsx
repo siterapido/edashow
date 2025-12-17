@@ -463,27 +463,6 @@ const fallbackPosts: Record<string, any> = {
   }
 }
 
-// Permitir geração dinâmica de páginas não pré-renderizadas
-export const dynamicParams = true
-
-// Gerar páginas estáticas para posts existentes
-export async function generateStaticParams() {
-  const posts = await getPosts({ limit: 100, status: 'published' })
-  
-  // Incluir slugs dos posts do CMS
-  const cmsSlugs = posts.map((post: any) => ({
-    slug: post.slug,
-  }))
-  
-  // Incluir slugs dos posts fallback
-  const fallbackSlugs = Object.keys(fallbackPosts).map((slug) => ({
-    slug,
-  }))
-  
-  // Combinar ambos
-  return [...cmsSlugs, ...fallbackSlugs]
-}
-
 // Metadados da página
 export async function generateMetadata({ params }: PostPageProps) {
   const { slug } = await params

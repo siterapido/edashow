@@ -402,6 +402,7 @@ const config = buildConfig({
       slug: 'columnists',
       admin: {
         useAsTitle: 'name',
+        defaultColumns: ['name', 'slug', 'photo', 'role'],
       },
       labels: {
         plural: 'Colunistas',
@@ -470,6 +471,7 @@ const config = buildConfig({
       slug: 'events',
       admin: {
         useAsTitle: 'title',
+        defaultColumns: ['title', 'category', 'author', 'status', 'publishedDate'],
       },
       labels: {
         plural: 'Eventos',

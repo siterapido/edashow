@@ -3,6 +3,7 @@
 import { Search, Menu, Bell, ChevronDown, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,8 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -49,23 +52,82 @@ export function Header({ onMenuClick }: HeaderProps) {
     }
   };
 
-  const menuItems = [
-    { label: "Sobre Nós", href: "/sobre" },
-    { label: "Patrocinadores", href: "/patrocinadores" },
-    {
-      label: "Conteúdo",
-      href: "#",
-      hasDropdown: true,
-      dropdownItems: [
-        { label: "Notícias", href: "/noticias", description: "Últimas notícias do setor" },
-        { label: "Análises", href: "/analises", description: "Análises profundas e estudos" },
-        { label: "Entrevistas", href: "/entrevistas", description: "Conversas exclusivas" },
-        { label: "Opinião", href: "/opiniao", description: "Artigos e editoriais" },
-        { label: "Colunas", href: "#", description: "Colunistas especializados" },
-      ]
-    },
-    { label: "Eventos", href: "/events" },
-  ];
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/busca?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
+    }
+  };
+
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadNavigation() {
+      try {
+        const [navRes, settingsRes] = await Promise.all([
+          fetch('/api/globals/header'),
+          fetch('/api/globals/site-settings')
+        ]);
+
+        let dynamicItems: any[] = [];
+
+        if (navRes.ok) {
+          const navData = await navRes.json();
+          if (navData.navigation && navData.navigation.length > 0) {
+            dynamicItems = navData.navigation.map((item: any) => ({
+              label: item.label,
+              href: item.url, // Usando 'url' do CMS
+              hasDropdown: item.hasDropdown,
+              dropdownItems: item.dropdownItems?.map((di: any) => ({
+                label: di.label,
+                href: di.url, // Usando 'url' do CMS
+                description: di.description
+              }))
+            }));
+          }
+        }
+
+        // Se não houver itens dinâmicos, usa os padrões
+        if (dynamicItems.length === 0) {
+          dynamicItems = [
+            { label: "Sobre Nós", href: "/sobre" },
+            { label: "Patrocinadores", href: "/patrocinadores" },
+            {
+              label: "Conteúdo",
+              href: "#",
+              hasDropdown: true,
+              dropdownItems: [
+                { label: "Notícias", href: "/noticias", description: "Últimas notícias do setor" },
+                { label: "Análises", href: "/analises", description: "Análises profundas e estudos" },
+                { label: "Entrevistas", href: "/entrevistas", description: "Conversas exclusivas" },
+                { label: "Opinião", href: "/opiniao", description: "Artigos e editoriais" },
+                { label: "Colunas", href: "#", description: "Colunistas especializados" },
+              ]
+            },
+            { label: "Eventos", href: "/events" },
+          ];
+        }
+
+        setMenuItems(dynamicItems);
+      } catch (error) {
+        console.error('Erro ao carregar navegação:', error);
+        // Fallback redundante
+        setMenuItems([
+          { label: "Sobre Nós", href: "/sobre" },
+          { label: "Patrocinadores", href: "/patrocinadores" },
+          { label: "Eventos", href: "/events" },
+        ]);
+      }
+    }
+
+    loadNavigation();
+  }, []);
 
   return (
     <>
@@ -169,7 +231,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
                     >
-                      {item.dropdownItems.map((dropdownItem) => (
+                      {item.dropdownItems.map((dropdownItem: any) => (
                         <a
                           key={dropdownItem.label}
                           href={dropdownItem.href}
@@ -192,8 +254,16 @@ export function Header({ onMenuClick }: HeaderProps) {
                   type="search"
                   placeholder="Buscar..."
                   className="w-48 bg-white/10 text-white placeholder:text-white/70 pl-4 pr-10 rounded-full border-transparent focus:bg-white focus:text-primary focus:placeholder:text-muted-foreground focus:w-64 transition-all duration-300 h-9"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
                 />
-                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70 group-hover:text-white group-focus-within:text-muted-foreground transition-colors" />
+                <button
+                  onClick={handleSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 group-hover:text-white group-focus-within:text-muted-foreground transition-colors"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
               </div>
 
               <Button
@@ -220,9 +290,9 @@ export function Header({ onMenuClick }: HeaderProps) {
 
           {/* Mobile Header Layout (G1 Style) */}
           <div className="md:hidden flex items-center justify-between w-full h-full">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="text-white hover:bg-white/10"
               onClick={onMenuClick}
             >
@@ -251,6 +321,10 @@ export function Header({ onMenuClick }: HeaderProps) {
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/10"
+                onClick={() => {
+                  // No mobile, apenas redireciona para a página de busca se vazio, ou leva o termo
+                  router.push(searchQuery.trim() ? `/busca?q=${encodeURIComponent(searchQuery.trim())}` : '/busca');
+                }}
               >
                 <Search className="w-6 h-6" />
               </Button>

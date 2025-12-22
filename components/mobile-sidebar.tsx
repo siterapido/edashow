@@ -5,6 +5,8 @@ import { X, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -32,6 +34,15 @@ const secondaryLinks = [
 ];
 
 export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/busca?q=${encodeURIComponent(searchQuery.trim())}`);
+      onClose();
+    }
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -69,8 +80,16 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                     type="text"
                     placeholder="O que você está procurando?"
                     className="w-full h-10 pl-4 pr-10 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
-                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <button
+                    onClick={handleSearch}
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                  >
+                    <Search className="w-4 h-4 text-gray-400" />
+                  </button>
                 </div>
               </div>
 

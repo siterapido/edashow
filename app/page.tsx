@@ -5,7 +5,8 @@ import { Footer } from "@/components/footer"
 import { Newsletter } from "@/components/newsletter"
 import { Events } from "@/components/events"
 import { LatestNews } from "@/components/latest-news"
-import { getPosts, getSponsors, getImageUrl } from "@/lib/payload/api"
+import { Columnists } from "@/components/columnists"
+import { getPosts, getSponsors, getImageUrl, getEvents, getColumnists } from "@/lib/payload/api"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import Link from "next/link"
@@ -76,6 +77,19 @@ export default async function HomePage() {
     revalidate: 3600 // Cache por 1 hora
   })
 
+  // Buscar eventos
+  const events = await getEvents({
+    limit: 3,
+    status: 'upcoming',
+    revalidate: 60
+  })
+
+  // Buscar colunistas
+  const columnists = await getColumnists({
+    limit: 4,
+    revalidate: 60
+  })
+
   // Separar posts por categoria
   const politicaPosts = allPosts
     .filter((post: any) =>
@@ -103,18 +117,18 @@ export default async function HomePage() {
   // Se não houver posts filtrados suficientes, usar os mais recentes do banco
   const politicaPostIds = new Set(politicaPosts.map((p: any) => p.id))
   const tecnologiaPostIds = new Set(tecnologiaPosts.map((p: any) => p.id))
-  
+
   const politicaCards = politicaPosts.length > 0
     ? postsToCards(politicaPosts.length >= 4 ? politicaPosts : [...politicaPosts, ...allPosts.filter((p: any) => !politicaPostIds.has(p.id))].slice(0, 4))
     : allPosts.length > 0
-    ? postsToCards(allPosts.slice(0, 4))
-    : []
+      ? postsToCards(allPosts.slice(0, 4))
+      : []
 
   const tecnologiaCards = tecnologiaPosts.length > 0
     ? postsToCards(tecnologiaPosts.length >= 4 ? tecnologiaPosts : [...tecnologiaPosts, ...allPosts.filter((p: any) => !tecnologiaPostIds.has(p.id))].slice(0, 4))
     : allPosts.length > 0
-    ? postsToCards(allPosts.slice(4, 8))
-    : []
+      ? postsToCards(allPosts.slice(4, 8))
+      : []
 
   // Dados fallback caso não haja posts
   const fallbackPoliticaCards = [
@@ -200,7 +214,7 @@ export default async function HomePage() {
       <main>
         <HeroSection posts={heroPosts} />
         <SponsorCarousel sponsors={sponsors} />
-        <LatestNews />
+        <LatestNews initialPosts={allPosts.slice(0, 8)} />
 
         {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}
         {allPosts.length > 0 ? (
@@ -246,7 +260,8 @@ export default async function HomePage() {
           </>
         )}
 
-        <Events />
+        <Columnists initialColumnists={columnists} />
+        <Events initialEvents={events} />
         <Newsletter />
       </main>
       <Footer />

@@ -12,15 +12,15 @@ import Link from "next/link"
 import { useState } from "react"
 
 export interface CategorySidebarProps {
-  category: 'news' | 'analysis' | 'interviews' | 'opinion'
+  category: string
   popularPosts?: Post[]
   relatedPosts?: Post[]
   tags?: string[]
 }
 
-export function CategorySidebar({ 
-  category, 
-  popularPosts = [], 
+export function CategorySidebar({
+  category,
+  popularPosts = [],
   relatedPosts = [],
   tags = []
 }: CategorySidebarProps) {
@@ -41,8 +41,8 @@ export function CategorySidebar({
           </CardHeader>
           <CardContent className="space-y-4">
             {popularPosts.slice(0, 5).map((post) => (
-              <Link 
-                key={post.id} 
+              <Link
+                key={post.id}
                 href={`/posts/${post.slug}`}
                 className="block group"
               >

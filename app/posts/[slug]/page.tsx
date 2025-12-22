@@ -29,18 +29,18 @@ interface PostPageProps {
 export async function generateMetadata({ params }: PostPageProps) {
   const { slug } = await params
   let post = await getPostBySlug(slug)
-  
+
   // Se não encontrar no CMS, tenta usar dados fallback
   if (!post && fallbackPostsFull[slug]) {
     post = fallbackPostsFull[slug]
   }
-  
+
   if (!post) {
     return {
       title: 'Post não encontrado',
     }
   }
-  
+
   return {
     title: `${post.title} | EdaShow`,
     description: post.excerpt || 'Leia mais no EdaShow',
@@ -55,17 +55,17 @@ export async function generateMetadata({ params }: PostPageProps) {
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
   let post = await getPostBySlug(slug)
-  
+
   // Se não encontrar no CMS, tenta usar dados fallback
   // getPostBySlug já retorna fallback automaticamente, mas mantemos esta verificação como backup
   if (!post && fallbackPostsFull[slug]) {
     post = fallbackPostsFull[slug]
   }
-  
+
   if (!post) {
     notFound()
   }
-  
+
   return (
     <div className="min-h-screen bg-background">
       {/* Botão Voltar */}
@@ -84,10 +84,12 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Categoria */}
           <div className="flex items-center gap-2 mb-4">
             <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-              {post.category === 'news' && 'Notícias'}
-              {post.category === 'analysis' && 'Análises'}
-              {post.category === 'interviews' && 'Entrevistas'}
-              {post.category === 'opinion' && 'Opinião'}
+              {typeof post.category === 'object' && post.category !== null
+                ? post.category.name
+                : (post.category === 'news' ? 'Notícias' :
+                  post.category === 'analysis' ? 'Análises' :
+                    post.category === 'interviews' ? 'Entrevistas' :
+                      post.category === 'opinion' ? 'Opinião' : 'Geral')}
             </span>
             {post.featured && (
               <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
@@ -184,7 +186,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag: any, index: number) => (
-                    <span 
+                    <span
                       key={index}
                       className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors"
                     >
@@ -209,14 +211,14 @@ export default async function PostPage({ params }: PostPageProps) {
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <Avatar className="h-24 w-24 shrink-0">
                     {post.author.photo ? (
-                      <AvatarImage 
-                        src={getImageUrl(post.author.photo, 'thumbnail')} 
-                        alt={post.author.name} 
+                      <AvatarImage
+                        src={getImageUrl(post.author.photo, 'thumbnail')}
+                        alt={post.author.name}
                       />
                     ) : (
-                      <AvatarImage 
-                        src="/logo-dark.png" 
-                        alt="EDA Show Logo" 
+                      <AvatarImage
+                        src="/logo-dark.png"
+                        alt="EDA Show Logo"
                         className="object-contain p-2 bg-white"
                       />
                     )}
@@ -239,9 +241,9 @@ export default async function PostPage({ params }: PostPageProps) {
                     {post.author.social && (
                       <div className="flex gap-4 pt-2 border-t border-slate-200">
                         {post.author.social.twitter && (
-                          <a 
-                            href={post.author.social.twitter} 
-                            target="_blank" 
+                          <a
+                            href={post.author.social.twitter}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
                           >
@@ -249,9 +251,9 @@ export default async function PostPage({ params }: PostPageProps) {
                           </a>
                         )}
                         {post.author.social.linkedin && (
-                          <a 
-                            href={post.author.social.linkedin} 
-                            target="_blank" 
+                          <a
+                            href={post.author.social.linkedin}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
                           >
@@ -259,9 +261,9 @@ export default async function PostPage({ params }: PostPageProps) {
                           </a>
                         )}
                         {post.author.social.instagram && (
-                          <a 
-                            href={post.author.social.instagram} 
-                            target="_blank" 
+                          <a
+                            href={post.author.social.instagram}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:text-primary/80 font-medium hover:underline transition-colors"
                           >

@@ -19,12 +19,10 @@ export interface PostCardProps {
     slug: string
     excerpt?: string
     featuredImage?: any
-    category: 'news' | 'analysis' | 'interviews' | 'opinion'
+    category: string
     publishedDate?: string
     featured?: boolean
-    author?: {
-      name?: string
-    }
+    author?: any
   }
   variant?: 'default' | 'featured' | 'compact'
   className?: string
@@ -32,7 +30,7 @@ export interface PostCardProps {
 
 export function PostCard({ post, variant = 'default', className }: PostCardProps) {
   const categoryInfo = getCategoryInfo(post.category)
-  const imageUrl = post.featuredImage 
+  const imageUrl = post.featuredImage
     ? getImageUrl(post.featuredImage, variant === 'compact' ? 'thumbnail' : 'card')
     : null
 
@@ -56,7 +54,7 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           {variant !== 'compact' && (
             <div className="absolute top-3 left-3">
-              <Badge 
+              <Badge
                 className="bg-white/90 backdrop-blur text-slate-800 font-semibold shadow-sm hover:bg-white border-none"
                 style={{ backgroundColor: categoryInfo.color ? `${categoryInfo.color}15` : undefined }}
               >
@@ -66,7 +64,7 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
           )}
         </div>
       )}
-      
+
       {!imageUrl && variant !== 'compact' && (
         <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
           <span className="text-gray-400 text-sm font-medium">{categoryInfo.label}</span>
@@ -79,7 +77,7 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
       )}>
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           {variant === 'compact' && (
-            <Badge 
+            <Badge
               className="text-xs font-semibold border-none"
               style={{ backgroundColor: categoryInfo.color ? `${categoryInfo.color}15` : undefined }}
             >
@@ -115,10 +113,10 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
         {variant !== 'compact' && (
           <div className="flex items-center text-primary font-medium text-sm group/link mt-auto">
             Ler mais
-            <svg 
-              className="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform" 
-              fill="none" 
-              viewBox="0 0 24 24" 
+            <svg
+              className="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
               stroke="currentColor"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -126,7 +124,7 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
           </div>
         )}
 
-        {post.author?.name && variant === 'compact' && (
+        {post.author && typeof post.author === 'object' && post.author.name && variant === 'compact' && (
           <p className="text-xs text-slate-500 mt-1">Por {post.author.name}</p>
         )}
       </div>

@@ -13,7 +13,7 @@ import { motion } from "framer-motion"
 import { fadeIn } from "@/lib/motion"
 
 export interface CategoryHeroProps {
-  category: 'news' | 'analysis' | 'interviews' | 'opinion'
+  category: string
   featuredPost?: {
     id: string
     title: string
@@ -29,16 +29,16 @@ export interface CategoryHeroProps {
 
 export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
   const categoryInfo = getCategoryInfo(category)
-  
+
   if (!featuredPost) {
     return null
   }
 
-  const imageUrl = featuredPost.featuredImage 
+  const imageUrl = featuredPost.featuredImage
     ? getImageUrl(featuredPost.featuredImage, 'tablet')
     : '/placeholder.jpg'
 
-  const publishedDate = featuredPost.publishedDate 
+  const publishedDate = featuredPost.publishedDate
     ? formatDistanceToNow(new Date(featuredPost.publishedDate), { addSuffix: true, locale: ptBR })
     : 'Recente'
 
@@ -68,7 +68,7 @@ export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
             className="space-y-4 md:space-y-6"
           >
             <div className="flex items-center gap-3 flex-wrap">
-              <Badge 
+              <Badge
                 className="bg-primary text-white hover:bg-primary/90 border-none px-4 py-1.5 text-sm font-semibold uppercase tracking-wider"
                 style={{ backgroundColor: categoryInfo.color || '#FF6F00' }}
               >
@@ -91,9 +91,9 @@ export function CategoryHero({ category, featuredPost }: CategoryHeroProps) {
             )}
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button 
+              <Button
                 asChild
-                size="lg" 
+                size="lg"
                 className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 min-h-[44px]"
               >
                 <Link href={`/posts/${featuredPost.slug}`}>

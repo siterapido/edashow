@@ -7,13 +7,13 @@ import { Post } from "@/lib/payload/types"
 
 export interface CategoryPostsGridProps {
   posts: Post[]
-  category: 'news' | 'analysis' | 'interviews' | 'opinion'
+  category: string
   excludePostId?: string
 }
 
 export function CategoryPostsGrid({ posts, category, excludePostId }: CategoryPostsGridProps) {
   // Filtrar posts excluindo o post em destaque se fornecido
-  const filteredPosts = excludePostId 
+  const filteredPosts = excludePostId
     ? posts.filter(post => post.id !== excludePostId)
     : posts
 

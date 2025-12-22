@@ -11,29 +11,36 @@ import { motion } from "framer-motion"
 import { container, fadeIn } from "@/lib/motion"
 import { useEffect, useState } from "react"
 
-export function LatestNews() {
-  const [posts, setPosts] = useState<any[]>(fallbackPosts.slice(0, 8));
+interface LatestNewsProps {
+  initialPosts?: any[]
+}
+
+export function LatestNews({ initialPosts = [] }: LatestNewsProps) {
+  const [posts, setPosts] = useState<any[]>(initialPosts.length > 0 ? initialPosts : fallbackPosts.slice(0, 8));
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // getPosts já retorna fallback automaticamente se o CMS não estiver disponível
-        const data = await getPosts({ 
-          limit: 8, 
-          status: 'published',
-          revalidate: 60 
-        });
-        setPosts(data.length > 0 ? data : fallbackPosts.slice(0, 8));
-      } catch (e) {
-        // Em caso de erro inesperado, usa fallback
-        setPosts(fallbackPosts.slice(0, 8));
-      }
-    };
-    fetchData();
-  }, []);
+    // Se não recebeu posts iniciais, busca do CMS
+    if (initialPosts.length === 0) {
+      const fetchData = async () => {
+        try {
+          const data = await getPosts({
+            limit: 8,
+            status: 'published',
+            revalidate: 60
+          });
+          setPosts(data.length > 0 ? data : fallbackPosts.slice(0, 8));
+        } catch (e) {
+          setPosts(fallbackPosts.slice(0, 8));
+        }
+      };
+      fetchData();
+    } else {
+      setPosts(initialPosts);
+    }
+  }, [initialPosts]);
 
   return (
-    <motion.section 
+    <motion.section
       variants={container}
       initial="hidden"
       whileInView="show"
@@ -47,10 +54,10 @@ export function LatestNews() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto">
           {posts.length > 0 && posts.map((item: any, index: number) => {
             // Determinar a URL da imagem
-            const imageUrl = item.featuredImage 
-              ? (typeof item.featuredImage === 'string' 
-                  ? item.featuredImage 
-                  : getImageUrl(item.featuredImage, 'thumbnail'))
+            const imageUrl = item.featuredImage
+              ? (typeof item.featuredImage === 'string'
+                ? item.featuredImage
+                : getImageUrl(item.featuredImage, 'thumbnail'))
               : null;
 
             return (
@@ -83,25 +90,25 @@ export function LatestNews() {
                           Notícia
                         </span>
                         <span className="text-xs text-gray-500 flex items-center gap-1">
-                          {item.publishedDate 
-                            ? formatDistanceToNow(new Date(item.publishedDate), { 
-                                addSuffix: true, 
-                                locale: ptBR 
-                              })
+                          {item.publishedDate
+                            ? formatDistanceToNow(new Date(item.publishedDate), {
+                              addSuffix: true,
+                              locale: ptBR
+                            })
                             : 'Recente'}
                         </span>
                       </div>
-                      
+
                       <h3 className="font-bold text-lg leading-tight mb-3 text-primary group-hover:text-primary/80 transition-colors line-clamp-2">
                         {item.title}
                       </h3>
-                      
+
                       <p className="text-sm text-gray-600 line-clamp-3 mb-4 flex-1">
                         {item.excerpt || item.description}
                       </p>
-                      
+
                       <div className="flex items-center text-primary font-medium text-sm group/link mt-auto">
-                        Ler mais 
+                        Ler mais
                         <svg className="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

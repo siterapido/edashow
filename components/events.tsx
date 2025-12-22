@@ -37,39 +37,43 @@ function ensureEventImage(event: any, index: number): any {
   return event
 }
 
-export function Events() {
-  const [events, setEvents] = useState<any[]>(fallbackEvents.slice(0, 3));
+interface EventsProps {
+  initialEvents?: any[]
+}
+
+export function Events({ initialEvents = [] }: EventsProps) {
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // getEvents já retorna fallback automaticamente se o CMS não estiver disponível
-        let data = await getEvents({ 
-          limit: 3, 
-          status: 'upcoming',
-          revalidate: 60 
-        });
-        
-        // Se não houver dados, usa fallback
-        if (!data || data.length === 0) {
-          data = fallbackEvents.slice(0, 3);
-        } else {
-          // Garante que eventos do CMS sempre tenham imagens de exemplo
-          data = data.map((event: any, index: number) => ensureEventImage(event, index));
+    if (initialEvents.length > 0) {
+      setEvents(initialEvents.map((event: any, index: number) => ensureEventImage(event, index)));
+    } else {
+      const fetchData = async () => {
+        try {
+          let data = await getEvents({
+            limit: 3,
+            status: 'upcoming',
+            revalidate: 60
+          });
+
+          if (!data || data.length === 0) {
+            data = fallbackEvents.slice(0, 3);
+          } else {
+            data = data.map((event: any, index: number) => ensureEventImage(event, index));
+          }
+
+          setEvents(data);
+        } catch (e) {
+          setEvents(fallbackEvents.slice(0, 3));
         }
-        
-        setEvents(data);
-      } catch (e) {
-        // Em caso de erro inesperado, usa fallback
-        setEvents(fallbackEvents.slice(0, 3));
-      }
-    };
-    fetchData();
-  }, []);
+      };
+      fetchData();
+    }
+  }, [initialEvents]);
 
   return (
     <section className="w-full bg-gradient-to-r from-orange-500 to-amber-500 py-12 md:py-16">
-      <motion.div 
+      <motion.div
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -83,24 +87,24 @@ export function Events() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
           {events.map((event: any, index: number) => {
             // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:108',message:'Rendering event card',data:{eventId:event.id,eventTitle:event.title,eventSlug:event.slug,hasImage:!!event.image,imageType:typeof event.image,index},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:108', message: 'Rendering event card', data: { eventId: event.id, eventTitle: event.title, eventSlug: event.slug, hasImage: !!event.image, imageType: typeof event.image, index }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
             // #endregion
             const eventDate = new Date(event.startDate)
             const day = format(eventDate, 'dd')
             const month = format(eventDate, 'MMM', { locale: ptBR }).toUpperCase()
-            
+
             // Garante que sempre há uma imagem de exemplo
             const eventWithImage = ensureEventImage(event, index)
             // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:117',message:'After ensureEventImage call',data:{originalImage:event.image,processedImage:eventWithImage.image,imageType:typeof eventWithImage.image},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:117', message: 'After ensureEventImage call', data: { originalImage: event.image, processedImage: eventWithImage.image, imageType: typeof eventWithImage.image }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
             // #endregion
-            const imageUrl = typeof eventWithImage.image === 'string' 
-              ? eventWithImage.image 
+            const imageUrl = typeof eventWithImage.image === 'string'
+              ? eventWithImage.image
               : getImageUrl(eventWithImage.image, 'card')
             // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:123',message:'Final imageUrl computed',data:{imageUrl,eventSlug:event.slug},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:123', message: 'Final imageUrl computed', data: { imageUrl, eventSlug: event.slug }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'B' }) }).catch(() => { });
             // #endregion
-            
+
             return (
               <motion.div
                 key={event.id}
@@ -134,15 +138,15 @@ export function Events() {
                     </div>
                     <CardContent className="p-4 md:p-5 flex-1 flex flex-col">
                       <h3 className="font-bold text-base md:text-lg mb-2 line-clamp-2 group-hover/card:text-orange-600 transition-colors text-gray-900">{event.title}</h3>
-                      
+
                       {event.description && (
                         <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-1 leading-relaxed">
-                          {typeof event.description === 'string' 
-                            ? event.description 
+                          {typeof event.description === 'string'
+                            ? event.description
                             : 'Confira os detalhes do evento'}
                         </p>
                       )}
-                      
+
                       <div className="space-y-2 text-xs text-gray-500 mt-auto pt-4 border-t border-slate-100">
                         <div className="flex items-center gap-2">
                           <div className="p-1.5 rounded-full bg-orange-50 text-orange-500">
@@ -163,16 +167,16 @@ export function Events() {
                         )}
                       </div>
 
-                      <Button 
+                      <Button
                         className="w-full mt-5 h-10 md:h-auto text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition-all duration-300 uppercase tracking-wide min-h-[44px]"
                         onClick={(e) => {
                           // #region agent log
-                          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:184',message:'Button clicked',data:{hasRegistrationUrl:!!event.registrationUrl,registrationUrl:event.registrationUrl,eventSlug:event.slug},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+                          fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:184', message: 'Button clicked', data: { hasRegistrationUrl: !!event.registrationUrl, registrationUrl: event.registrationUrl, eventSlug: event.slug }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'C' }) }).catch(() => { });
                           // #endregion
                           if (event.registrationUrl) {
                             e.preventDefault()
                             // #region agent log
-                            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'components/events.tsx:189',message:'Opening registration URL',data:{url:event.registrationUrl},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
+                            fetch('http://127.0.0.1:7243/ingest/b23be4e3-a03c-4cb5-9aae-575cd428f4b6', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'components/events.tsx:189', message: 'Opening registration URL', data: { url: event.registrationUrl }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'C' }) }).catch(() => { });
                             // #endregion
                             window.open(event.registrationUrl, '_blank')
                           }

@@ -23,6 +23,71 @@ interface FetchOptions {
 }
 
 /**
+ * Busca categorias do CMS
+ */
+export async function getCategories(options: {
+  limit?: number
+  revalidate?: number
+} = {}) {
+  const { limit = 100, revalidate = 3600 } = options
+
+  if (!CMS_ENABLED) {
+    return []
+  }
+
+  try {
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+      sort: 'name',
+    })
+
+    const response = await fetch(`${API_URL}/api/categories?${params.toString()}`, {
+      next: { revalidate },
+    })
+
+    if (!response.ok) {
+      console.warn(`[CMS] Erro ao buscar categorias (${response.status})`)
+      return []
+    }
+
+    const data = await response.json()
+    return data.docs || []
+  } catch (error) {
+    console.error('[CMS] Erro ao buscar categorias:', error)
+    return []
+  }
+}
+
+/**
+ * Busca uma categoria por slug
+ */
+export async function getCategoryBySlug(slug: string, revalidate = 3600) {
+  if (!CMS_ENABLED) {
+    return null
+  }
+
+  try {
+    const response = await fetch(
+      `${API_URL}/api/categories?where[slug][equals]=${slug}&limit=1`,
+      {
+        next: { revalidate },
+      }
+    )
+
+    if (!response.ok) {
+      console.warn(`[CMS] Erro ao buscar categoria por slug (${response.status})`)
+      return null
+    }
+
+    const data = await response.json()
+    return data.docs?.[0] || null
+  } catch (error) {
+    console.error(`[CMS] Erro ao buscar categoria (slug: ${slug}):`, error)
+    return null
+  }
+}
+
+/**
  * Busca posts do CMS
  * Retorna dados de fallback se o CMS não estiver disponível
  */
@@ -334,7 +399,7 @@ export async function getSiteSettings(revalidate = 3600) {
 export async function getThemeSettings(revalidate = 3600) {
   try {
     const settings = await getSiteSettings(revalidate)
-    
+
     if (!settings) return null
 
     return {
@@ -457,7 +522,7 @@ export function getImageUrl(media: any, size?: string): string {
 
   // Tentar obter URL padrão (full ou url)
   const defaultUrl = mediaObj.url || mediaObj.full || mediaObj.filename
-  
+
   if (defaultUrl) {
     // URLs absolutas já incluem protocolo e domínio
     if (typeof defaultUrl === 'string' && (defaultUrl.startsWith('http://') || defaultUrl.startsWith('https://'))) {

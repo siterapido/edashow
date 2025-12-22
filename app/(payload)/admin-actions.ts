@@ -3,23 +3,21 @@
 import configPromise from '@payload-config'
 
 /**
- * Server function para o Payload CMS
- * Esta função é usada pelo RootLayout para executar ações no servidor
+ * Server function required by Payload CMS admin
+ * This function is used internally by Payload's RootLayout component
  * 
- * @param args - Argumentos passados pelo Payload CMS
- * @returns Resultado da ação
+ * @param args - Arguments passed from Payload's RootLayout
+ * @returns The resolved config with any additional args
  */
-export async function serverFunction(args: any) {
+export async function serverFunction(args: Record<string, unknown>) {
   const config = await configPromise
-  
-  // O Payload CMS usa esta função para executar ações server-side
-  // A implementação específica depende do que o Payload precisa fazer
-  // Por padrão, apenas retornamos a config resolvida
-  
   return {
     config,
     ...args,
   }
 }
+
+
+
 
 

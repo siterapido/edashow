@@ -207,3 +207,4 @@ Usuário → Next.js (App Router) → RootPage (Payload) → Collections/Globals
 O Payload CMS renderiza todo o painel admin como uma aplicação React dentro do Next.js, utilizando Server Components para melhor performance e Client Components onde interatividade é necessária.
 
 
+

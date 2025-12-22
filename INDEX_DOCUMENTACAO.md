@@ -280,3 +280,4 @@ Este índice é atualizado conforme novos documentos são adicionados.
 **💡 Dica**: Use Ctrl+F (ou Cmd+F no Mac) para buscar palavras-chave neste índice!
 
 
+

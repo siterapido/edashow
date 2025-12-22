@@ -213,3 +213,4 @@ Siga os guias passo a passo e você terá tudo funcionando em menos de 1 hora.
 **📖 Próximo passo**: [RESUMO_MIGRACAO.md](./RESUMO_MIGRACAO.md)
 
 
+

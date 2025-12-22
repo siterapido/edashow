@@ -18,8 +18,8 @@ import { s3Storage } from '@payloadcms/storage-s3'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import sharp from 'sharp'
-import { ptBRTranslations } from './lib/payload/translations/pt-BR'
-import { beforeChange, afterChange, beforeValidate } from './payload/hooks/posts'
+import { ptBRTranslations } from './lib/payload/translations/pt-BR.ts'
+import { beforeChange, afterChange, beforeValidate } from './payload/hooks/posts.ts'
 
 // Importar componentes customizados do admin
 // Nota: Em Payload 3.0, componentes customizados são registrados via path ou componente importado
@@ -1438,7 +1438,7 @@ const config = buildConfig({
   admin: {
     importMap: {
       baseDir: path.resolve(dirname),
-      importMapFile: path.resolve(dirname, 'app/admin.backup/importMap.ts'),
+      importMapFile: path.resolve(dirname, 'app/(payload)/importMap.ts'),
     },
     user: 'users',
     meta: {

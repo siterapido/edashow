@@ -3,15 +3,16 @@ import { Footer } from "@/components/footer";
 import { InstitutionalSection } from "@/components/institutional-section";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Megaphone, 
-  Users, 
-  TrendingUp, 
+import {
+  Megaphone,
+  Users,
+  TrendingUp,
   Mail,
   BarChart3,
   Target,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Award
 } from "lucide-react";
 import Link from "next/link";
 
@@ -42,9 +43,9 @@ export default function AnunciePage() {
         {/* Por que anunciar */}
         <InstitutionalSection title="Por que Anunciar no EDA Show">
           <p className="text-lg leading-relaxed mb-6">
-            O EDA Show é reconhecido como o maior comunicador da área de saúde suplementar 
-            no Brasil, com mais de 1,3 milhão de visualizações mensais. Conectamos empresas, 
-            corretores, investidores e profissionais do setor através de comunicação estratégica, 
+            O EDA Show é reconhecido como o maior comunicador da área de saúde suplementar
+            no Brasil, com mais de 1,3 milhão de visualizações mensais. Conectamos empresas,
+            corretores, investidores e profissionais do setor através de comunicação estratégica,
             oferecendo visibilidade nacional, autoridade e credibilidade para sua marca.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -89,8 +90,8 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Entrevistas com profissionais, empresários, corretores, especialistas em saúde 
-                  suplementar, tecnologia, softwares e inovação no setor. Cada entrevista constrói 
+                  Entrevistas com profissionais, empresários, corretores, especialistas em saúde
+                  suplementar, tecnologia, softwares e inovação no setor. Cada entrevista constrói
                   autoridade e fortalece sua marca.
                 </p>
               </CardContent>
@@ -108,7 +109,7 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Cobertura completa de feiras, encontros corporativos, lançamentos de produtos, 
+                  Cobertura completa de feiras, encontros corporativos, lançamentos de produtos,
                   campanhas e ações promocionais. Damos visibilidade aos principais eventos do setor.
                 </p>
               </CardContent>
@@ -126,8 +127,8 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-3">
-                  Visita institucional apresentando estrutura física e organizacional, cultura da 
-                  empresa, setores e responsáveis, funcionamento operacional. Posiciona a marca 
+                  Visita institucional apresentando estrutura física e organizacional, cultura da
+                  empresa, setores e responsáveis, funcionamento operacional. Posiciona a marca
                   com clareza, transparência e autoridade.
                 </p>
                 <ul className="space-y-1 text-muted-foreground text-sm">
@@ -155,8 +156,8 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-3">
-                  Projeto itinerante que percorre cidades e estados mostrando o mercado local de 
-                  saúde suplementar, estrutura das corretoras, diferenciais regionais e principais 
+                  Projeto itinerante que percorre cidades e estados mostrando o mercado local de
+                  saúde suplementar, estrutura das corretoras, diferenciais regionais e principais
                   hospitais.
                 </p>
                 <ul className="space-y-1 text-muted-foreground text-sm">
@@ -184,7 +185,7 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Chamadas, anúncios e divulgações estratégicas dentro do EDA Show, garantindo 
+                  Chamadas, anúncios e divulgações estratégicas dentro do EDA Show, garantindo
                   visibilidade nacional para sua marca.
                 </p>
               </CardContent>
@@ -262,7 +263,7 @@ export default function AnunciePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Conexão estratégica entre empresas e corretores em nível nacional, fortalecendo 
+                  Conexão estratégica entre empresas e corretores em nível nacional, fortalecendo
                   relacionamentos e alavancando marcas de forma humana e estratégica.
                 </p>
               </CardContent>
@@ -273,7 +274,7 @@ export default function AnunciePage() {
         {/* Benefícios */}
         <InstitutionalSection title="Benefícios para Sua Marca">
           <p className="text-lg leading-relaxed mb-6">
-            Ao anunciar no EDA.Show, sua marca conquista benefícios estratégicos que fortalecem 
+            Ao anunciar no EDA.Show, sua marca conquista benefícios estratégicos que fortalecem
             sua posição no mercado de saúde suplementar:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -322,7 +323,7 @@ export default function AnunciePage() {
         {/* Público-Alvo */}
         <InstitutionalSection title="Nosso Público-Alvo">
           <p className="text-lg leading-relaxed mb-6">
-            Conectamos profissionais, corretores, empresários e empresas do setor de saúde 
+            Conectamos profissionais, corretores, empresários e empresas do setor de saúde
             suplementar, com foco em:
           </p>
           <div className="space-y-4 mt-6">
@@ -376,7 +377,7 @@ export default function AnunciePage() {
                 Pronto para começar?
               </h2>
               <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Entre em contato com nossa equipe comercial e descubra como podemos 
+                Entre em contato com nossa equipe comercial e descubra como podemos
                 ajudar sua marca a alcançar os principais líderes do setor.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -401,6 +402,7 @@ export default function AnunciePage() {
     </div>
   );
 }
+
 
 
 

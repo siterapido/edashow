@@ -3,15 +3,16 @@ import { Footer } from "@/components/footer";
 import { InstitutionalSection } from "@/components/institutional-section";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Download, 
-  Users, 
-  TrendingUp, 
+import {
+  Download,
+  Users,
+  TrendingUp,
   BarChart3,
   Eye,
   MousePointerClick,
   FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Award
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -143,7 +144,7 @@ export default function MediaKitPage() {
               <CardContent className="pt-6">
                 <h4 className="font-semibold mb-3">Atuação Geográfica</h4>
                 <p className="text-muted-foreground">
-                  Atuação nacional em todo o Brasil, conectando empresas, corretores e profissionais 
+                  Atuação nacional em todo o Brasil, conectando empresas, corretores e profissionais
                   de todas as regiões do país.
                 </p>
               </CardContent>
@@ -259,7 +260,7 @@ export default function MediaKitPage() {
         {/* Downloads */}
         <InstitutionalSection title="Materiais para Download">
           <p className="text-lg leading-relaxed mb-6">
-            Acesse nossos materiais de marca, logos e apresentações para usar em suas 
+            Acesse nossos materiais de marca, logos e apresentações para usar em suas
             campanhas e propostas comerciais.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -272,7 +273,7 @@ export default function MediaKitPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Logos em diferentes formatos e variações de cor, incluindo versões 
+                  Logos em diferentes formatos e variações de cor, incluindo versões
                   para fundo claro e escuro.
                 </p>
                 <Button variant="outline" className="w-full">
@@ -291,7 +292,7 @@ export default function MediaKitPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Apresentação completa com dados atualizados, formatos publicitários 
+                  Apresentação completa com dados atualizados, formatos publicitários
                   e informações sobre nossa audiência.
                 </p>
                 <Button variant="outline" className="w-full">
@@ -310,7 +311,7 @@ export default function MediaKitPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Planilha completa com métricas detalhadas, dados demográficos e 
+                  Planilha completa com métricas detalhadas, dados demográficos e
                   análises de audiência atualizadas mensalmente.
                 </p>
                 <Button variant="outline" className="w-full">
@@ -329,7 +330,7 @@ export default function MediaKitPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Manual completo com diretrizes de uso da marca, paleta de cores, 
+                  Manual completo com diretrizes de uso da marca, paleta de cores,
                   tipografia e exemplos de aplicação.
                 </p>
                 <Button variant="outline" className="w-full">
@@ -349,7 +350,7 @@ export default function MediaKitPage() {
                 Precisa de mais informações?
               </h2>
               <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Nossa equipe comercial está pronta para ajudar você a criar a campanha 
+                Nossa equipe comercial está pronta para ajudar você a criar a campanha
                 ideal para sua marca.
               </p>
               <Button asChild size="lg" className="min-h-[48px]">
@@ -365,6 +366,7 @@ export default function MediaKitPage() {
     </div>
   );
 }
+
 
 
 

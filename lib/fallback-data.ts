@@ -2035,6 +2035,42 @@ export function getFallbackColumnists(options: {
   return fallbackColumnists.slice(0, limit)
 }
 
+// Sponsors de fallback
+export const fallbackSponsors = [
+  "1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png", "8.png", "9.jpeg", "10.png",
+  "11.png", "12.png", "13.png", "14.png", "15.png", "16.png", "17.png", "18.webp", "19.png", "20.jpg",
+  "21.png", "22.png", "23.png", "24.png", "25.png", "26.png", "27.png", "28.png", "29.png", "30.png",
+  "31.gif", "32.png", "33.png", "34.png", "35.png", "36.jpg", "37.jpg", "38.png", "39.jpeg", "40.png",
+  "41.png", "42.png", "43.png"
+].map((filename, index) => ({
+  id: index + 1,
+  name: `Patrocinador ${index + 1}`,
+  logo: `/sponsors/${filename}`,
+  website: '#',
+  active: true,
+}))
+
+export function getFallbackSponsors(options: {
+  limit?: number
+  active?: boolean
+} = {}) {
+  const { limit = 100, active = true } = options
+
+  let filtered = [...fallbackSponsors]
+
+  if (active) {
+    filtered = filtered.filter(sponsor => sponsor.active === active)
+  }
+
+  return filtered.slice(0, limit)
+}
+
+
+
+
+
+
+
 
 
 

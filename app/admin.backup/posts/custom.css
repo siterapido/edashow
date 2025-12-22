@@ -1,0 +1,208 @@
+/* Estilos customizados para o formulário de posts no admin */
+
+/* Melhor espaçamento e organização visual */
+.payload-form {
+  /* @apply space-y-6; */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Destaque para campos importantes */
+.payload-field[data-field-name="title"],
+.payload-field[data-field-name="content"] {
+  border: 2px solid rgba(26, 26, 26, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Indicadores visuais de status */
+.post-status-indicator {
+  display: inline-flex;
+  items-center: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.post-status-draft {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.post-status-published {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.post-status-archived {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.post-status-scheduled {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Contadores de caracteres */
+.character-counter {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.character-counter.warning {
+  color: #ca8a04;
+}
+
+.character-counter.error {
+  color: #dc2626;
+}
+
+.character-counter.success {
+  color: #16a34a;
+}
+
+/* Botões de ação rápida */
+.quick-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+/* Preview modal */
+.preview-modal-content {
+  max-width: 56rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Auto-save indicator */
+.auto-save-indicator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+}
+
+/* Melhorias no editor Lexical */
+.lexical-editor-wrapper {
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  min-height: 400px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.lexical-editor-toolbar {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background-color: #ffffff;
+}
+
+/* Grupos de campos */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: oklch(0.97 0 0 / 0.3);
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.field-group-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Validação visual */
+.field-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.field-success {
+  font-size: 0.875rem;
+  color: #16a34a;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .payload-form {
+    gap: 1rem;
+  }
+  
+  .quick-action-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Garantir tema claro mesmo se dark mode estiver ativo */
+.dark .payload-field[data-field-name="title"],
+.dark .payload-field[data-field-name="content"],
+html.dark .payload-field[data-field-name="title"],
+html.dark .payload-field[data-field-name="content"] {
+  border-color: rgba(26, 26, 26, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark .field-group,
+html.dark .field-group {
+  background-color: rgba(250, 250, 250, 0.8) !important;
+  border-color: #e5e5e5 !important;
+}
+
+.dark .lexical-editor-wrapper,
+html.dark .lexical-editor-wrapper {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #e5e5e5 !important;
+}
+
+.dark .auto-save-indicator,
+html.dark .auto-save-indicator {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #e5e5e5 !important;
+}
+
+
+
+
+
+
+
+

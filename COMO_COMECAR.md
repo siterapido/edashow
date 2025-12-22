@@ -1,16 +1,18 @@
 # 🚀 Como Começar - Guia Rápido
 
-## ⚡ Quick Start (3 passos)
+## ⚡ Quick Start (2 passos)
 
-### 1. Iniciar MongoDB
+### 1. Configurar Supabase
 
-```bash
-# macOS
-brew services start mongodb-community
+**Primeira vez?** Siga o guia completo: [SUPABASE_SETUP.md](SUPABASE_SETUP.md)
 
-# Verificar se está rodando
-brew services list
-```
+**Resumo rápido:**
+1. Crie um projeto no [Supabase](https://supabase.com)
+2. Copie as credenciais para o arquivo `.env`
+3. Crie o bucket `media` no Storage
+4. Configure as políticas de acesso
+
+**Já configurou?** Pule para o próximo passo!
 
 ### 2. Iniciar o Servidor
 
@@ -19,6 +21,8 @@ pnpm dev
 ```
 
 ### 3. Acessar e Criar Conteúdo
+
+> **💡 Primeira vez?** O Payload irá criar as tabelas automaticamente no PostgreSQL quando você iniciar o servidor pela primeira vez!
 
 1. **Admin Panel**: http://localhost:3000/admin
    - Crie seu primeiro usuário administrador
@@ -38,6 +42,7 @@ pnpm dev
 
 ## 📖 Documentação Completa
 
+- **SUPABASE_SETUP.md** - 🆕 Guia completo de configuração do Supabase
 - **INTEGRACAO_PAYLOAD.md** - Resumo da integração
 - **PAYLOAD_README.md** - Guia completo do CMS
 - **EXEMPLOS_USO.md** - Exemplos de código
@@ -48,10 +53,11 @@ pnpm dev
 
 ## 🆘 Problemas Comuns
 
-### MongoDB não conecta
+### Erro de conexão com o banco de dados
 ```bash
-# Reiniciar MongoDB
-brew services restart mongodb-community
+# Verifique se as credenciais do Supabase estão corretas no .env
+# Teste a conexão:
+npm run test:db
 ```
 
 ### Porta 3000 já está em uso
@@ -67,6 +73,13 @@ PORT=3001 pnpm dev
 ```bash
 # Reiniciar o servidor
 # Os tipos são gerados automaticamente em payload-types.ts
+```
+
+### Imagens não carregam
+```bash
+# Verifique se o bucket 'media' foi criado no Supabase
+# Verifique se as políticas de acesso estão configuradas
+# Consulte: SUPABASE_SETUP.md
 ```
 
 ---

@@ -1,10 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { Analytics } from "@vercel/analytics/react"
-import { Toaster } from "sonner"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Header } from "@/components/header"
+import { ClientLayout } from "@/components/client-layout"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -23,18 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <Header />
+      <body className={`${inter.className} pb-16 md:pb-0`}>
+        <ClientLayout>
           {children}
-        </ThemeProvider>
-        <Toaster position="top-right" richColors />
-        <Analytics />
+        </ClientLayout>
       </body>
     </html>
   )

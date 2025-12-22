@@ -9,6 +9,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { getImageUrl } from "@/lib/payload/api";
 
 interface SlideData {
   id: string;
@@ -98,24 +99,6 @@ const fallbackSlides: SlideData[] = [
   }
 ];
 
-function getImageUrl(media: any): string {
-  if (!media) return '/placeholder.jpg';
-  
-  if (typeof media === 'string') {
-    if (media.startsWith('/') || media.startsWith('http')) {
-      return media;
-    }
-    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
-    return `${API_URL}/api/media/${media}`;
-  }
-
-  if (media.url) {
-    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
-    return `${API_URL}${media.url}`;
-  }
-
-  return '/placeholder.jpg';
-}
 
 function getCategoryBadge(category?: string): string {
   const categoryMap: Record<string, string> = {
@@ -144,7 +127,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
       .slice(0, 4); // Limitar a 4 slides
 
     return sortedPosts.map((post, index) => {
-      const publishedDate = post.publishedDate 
+      const publishedDate = post.publishedDate
         ? formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true, locale: ptBR })
         : 'Recente';
 
@@ -154,7 +137,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
         time: publishedDate,
         title: post.title || 'Sem título',
         description: post.excerpt || 'Leia a matéria completa para saber mais.',
-        image: getImageUrl(post.featuredImage),
+        image: getImageUrl(post.featuredImage, 'tablet') || '/placeholder.jpg',
         imageAlt: post.title || 'Imagem do post',
         credit: post.author?.name ? `Foto: ${post.author.name}` : 'Foto: Divulgação',
         statLabel: post.featured ? 'Destaque' : 'Novo',
@@ -220,7 +203,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
   // Auto-play functionality
   useEffect(() => {
     if (!isAutoPlaying || isInitialMount || slides.length === 0) return;
-    
+
     const interval = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -244,41 +227,62 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
 
   return (
     <section
-      className="relative bg-[#0f172a] text-white overflow-hidden h-screen"
+      className="relative bg-[#0f172a] text-white overflow-hidden h-[400px] sm:h-[500px] md:h-screen"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      {/* Navigation Arrows */}
+      {/* Navigation Controls - Side Arrows (Desktop) */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
+        className="hidden md:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 lg:p-4 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] lg:min-w-[56px] lg:min-h-[56px] items-center justify-center"
         aria-label="Slide anterior"
       >
-        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronLeft className="w-6 h-6 lg:w-8 lg:h-8 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 sm:p-2.5 md:p-3 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
+        className="hidden md:flex absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 lg:p-4 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[44px] min-h-[44px] lg:min-w-[56px] lg:min-h-[56px] items-center justify-center"
         aria-label="Próximo slide"
       >
-        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+        <ChevronRight className="w-6 h-6 lg:w-8 lg:h-8 text-white group-hover:scale-110 transition-transform duration-300" />
       </button>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
-        {slides.map((_, index) => (
+      {/* Hero Navigation Indicators & Mobile Controls */}
+      <div className="absolute left-4 sm:left-16 md:left-20 lg:left-24 bottom-6 sm:bottom-12 z-30 flex items-center gap-6">
+        {/* Mobile-only arrows */}
+        <div className="flex md:hidden items-center gap-2">
           <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`transition-all duration-300 rounded-full ${
-              index === currentSlide
-                ? "bg-primary w-8 h-2"
-                : "bg-white/30 hover:bg-white/50 w-2 h-2"
-            }`}
-            aria-label={`Ir para slide ${index + 1}`}
-          />
-        ))}
+            onClick={prevSlide}
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] flex items-center justify-center"
+            aria-label="Slide anterior"
+          >
+            <ChevronLeft className="w-4 h-4 text-white" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-2 transition-all duration-300 group border border-white/20 hover:border-white/40 min-w-[36px] min-h-[36px] flex items-center justify-center"
+            aria-label="Próximo slide"
+          >
+            <ChevronRight className="w-4 h-4 text-white" />
+          </button>
+        </div>
+
+        {/* Indicators (Dots) */}
+        <div className="flex gap-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`transition-all duration-300 rounded-full ${index === currentSlide
+                  ? "bg-primary w-8 h-2"
+                  : "bg-white/30 hover:bg-white/50 w-2 h-2"
+                }`}
+              aria-label={`Ir para slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="relative w-full h-full">
@@ -296,7 +300,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
           >
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0">
-              <motion.img 
+              <motion.img
                 src={currentSlideData.image}
                 alt={currentSlideData.imageAlt}
                 className="w-full h-full object-cover"
@@ -306,15 +310,15 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
               />
               <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-900/90 to-slate-900/80" />
             </div>
-            
+
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 relative z-10 h-full">
+            <div className="container mx-auto px-4 sm:px-16 md:px-20 lg:px-24 py-6 sm:py-16 md:py-20 lg:py-24 relative z-10 h-full">
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center h-full min-h-0">
-                
+
                 {/* Main Content */}
-                <motion.div 
+                <motion.div
                   key={`content-${currentSlide}`}
                   initial="hidden"
                   animate="show"
@@ -331,16 +335,16 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                     </span>
                   </div>
 
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
+                  <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
                     {currentSlideData.title}
                   </h1>
 
-                  <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl">
+                  <p className="text-sm sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none">
                     {currentSlideData.description}
                   </p>
 
-                  <div className="flex flex-col items-center gap-3 pt-2 sm:pt-4">
-                    <div className="flex justify-center">
+                  <div className="flex flex-col items-start gap-3 pt-2 sm:pt-4">
+                    <div className="flex justify-start">
                       {currentSlideData.slug ? (
                         <Button asChild size="default" className="bg-primary hover:bg-primary/90 text-white font-bold rounded-full px-4 sm:px-6 h-8 sm:h-9 text-xs sm:text-sm shadow-lg shadow-primary/20 min-h-[36px]">
                           <Link href={`/posts/${currentSlideData.slug}`}>
@@ -367,7 +371,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                   className="relative mt-8 lg:mt-0 hidden md:block"
                 >
                   <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] lg:aspect-[16/10] group cursor-pointer">
-                    <motion.img 
+                    <motion.img
                       src={currentSlideData.image}
                       alt={currentSlideData.imageAlt}
                       className="w-full h-full object-cover"
@@ -377,7 +381,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                       whileHover={{ scale: 1.05 }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
-                    
+
                     {/* Image Caption/Credit */}
                     <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-xs text-white/60">
                       {currentSlideData.credit}
@@ -385,19 +389,19 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                   </div>
 
                   {/* Floating Card */}
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                     className="absolute -bottom-4 lg:-bottom-6 -left-4 lg:-left-6 bg-white dark:bg-slate-800 p-3 lg:p-4 rounded-xl shadow-xl max-w-[180px] lg:max-w-[200px] hidden lg:block"
                   >
-                     <div className="flex items-center gap-2 lg:gap-3 mb-1.5 lg:mb-2">
-                       <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                       <span className="text-xs font-bold text-slate-500 uppercase">{currentSlideData.statLabel}</span>
-                     </div>
-                     <p className="text-xs lg:text-sm font-bold text-slate-800 dark:text-white leading-tight">
-                       {currentSlideData.statValue}
-                     </p>
+                    <div className="flex items-center gap-2 lg:gap-3 mb-1.5 lg:mb-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      <span className="text-xs font-bold text-slate-500 uppercase">{currentSlideData.statLabel}</span>
+                    </div>
+                    <p className="text-xs lg:text-sm font-bold text-slate-800 dark:text-white leading-tight">
+                      {currentSlideData.statValue}
+                    </p>
                   </motion.div>
                 </motion.div>
 

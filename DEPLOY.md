@@ -6,7 +6,7 @@ Antes de fazer o deploy, você precisa:
 
 1. ✅ Conta no GitHub
 2. ✅ Conta no Vercel (pode usar login do GitHub)
-3. ✅ MongoDB Atlas configurado (para produção)
+3. ✅ Projeto Supabase configurado (para produção)
 
 ---
 
@@ -36,16 +36,15 @@ git push origin main
 
 ---
 
-## 🗄️ Passo 3: Configurar MongoDB Atlas (Produção)
+## 🗄️ Passo 3: Configurar Supabase (Produção)
 
-1. Acesse [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Crie um cluster gratuito (se ainda não tiver)
-3. Crie um usuário de banco de dados
-4. Adicione seu IP à whitelist (ou use 0.0.0.0/0 para permitir todos)
-5. Copie a connection string:
-   ```
-   mongodb+srv://username:password@cluster.mongodb.net/edashow?retryWrites=true&w=majority
-   ```
+1. Acesse [Supabase](https://supabase.com)
+2. Crie um projeto (se ainda não tiver)
+3. Configure o bucket `media` no Storage
+4. Configure as políticas de acesso
+5. Copie todas as credenciais necessárias
+
+> 📖 **Guia completo**: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
 
 ---
 
@@ -81,11 +80,23 @@ Siga as instruções:
 No dashboard do Vercel ou durante o deploy via CLI, adicione:
 
 ```bash
-# PayloadCMS
-PAYLOAD_SECRET=seu-secret-super-seguro-aqui-mude-isso
+# Database
+DATABASE_URI=postgresql://postgres.xxxx:[SENHA]@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
 
-# MongoDB Atlas (Produção)
-DATABASE_URI=mongodb+srv://username:password@cluster.mongodb.net/edashow?retryWrites=true&w=majority
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...
+
+# Storage
+SUPABASE_BUCKET=media
+SUPABASE_REGION=us-east-1
+SUPABASE_ENDPOINT=https://xxxx.supabase.co/storage/v1/s3
+SUPABASE_ACCESS_KEY_ID=xxxx
+SUPABASE_SECRET_ACCESS_KEY=xxxx
+
+# Payload
+PAYLOAD_SECRET=seu-secret-super-seguro-aqui-minimo-32-caracteres
 
 # Next.js
 NEXT_PUBLIC_SERVER_URL=https://seu-projeto.vercel.app
@@ -93,7 +104,7 @@ NEXT_PUBLIC_SERVER_URL=https://seu-projeto.vercel.app
 
 **⚠️ IMPORTANTE:**
 - Gere um `PAYLOAD_SECRET` forte (pode usar: `openssl rand -base64 32`)
-- Use a connection string do MongoDB Atlas (não localhost)
+- Use as credenciais do Supabase (veja [SUPABASE_SETUP.md](./SUPABASE_SETUP.md))
 - Atualize `NEXT_PUBLIC_SERVER_URL` com a URL do Vercel
 
 ---
@@ -178,6 +189,11 @@ git push origin main
 ```
 
 O Vercel vai automaticamente fazer o redeploy! ✨
+
+
+
+
+
 
 
 

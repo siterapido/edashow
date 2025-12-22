@@ -1,6 +1,6 @@
 # 🎭 EdaShow - Plataforma de Eventos
 
-Uma plataforma moderna para gerenciamento e divulgação de eventos, construída com Next.js 16, Payload CMS e MongoDB.
+Uma plataforma moderna para gerenciamento e divulgação de eventos, construída com Next.js 15, Payload CMS e Supabase PostgreSQL.
 
 ## 🚀 Deploy Rápido
 
@@ -55,6 +55,8 @@ vercel --prod
 
 ## 📚 Documentação Completa
 
+- 🚀 **[COMO_COMECAR.md](./COMO_COMECAR.md)** - Guia rápido para começar
+- 🔧 **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Configuração completa do Supabase
 - 📖 **[PASSOS-RAPIDOS.md](./PASSOS-RAPIDOS.md)** - Guia passo a passo resumido
 - 📘 **[DEPLOY.md](./DEPLOY.md)** - Documentação completa de deploy
 - 🔧 **[.env.example](./.env.example)** - Exemplo de variáveis de ambiente
@@ -63,9 +65,10 @@ vercel --prod
 
 ## 🛠️ Tecnologias
 
-- **Framework**: Next.js 16
+- **Framework**: Next.js 15
 - **CMS**: Payload CMS 3.x
-- **Database**: MongoDB
+- **Database**: PostgreSQL (Supabase)
+- **Storage**: Supabase S3
 - **UI**: React 19, Tailwind CSS 4, Radix UI
 - **Deploy**: Vercel
 
@@ -77,13 +80,18 @@ vercel --prod
 # Instalar dependências
 npm install
 
+# Configurar Supabase
+# Siga o guia completo: SUPABASE_SETUP.md
+
 # Configurar variáveis de ambiente
 cp .env.example .env
-# Edite o .env com suas credenciais
+# Edite o .env com suas credenciais do Supabase
 
 # Iniciar servidor de desenvolvimento
 npm run dev
 ```
+
+> 📖 **Primeira vez?** Consulte [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para configuração completa do Supabase.
 
 Acesse:
 - **Site**: http://localhost:3000
@@ -108,30 +116,46 @@ npm run seed:posts   # Popular posts de exemplo
 ### Desenvolvimento (`.env`)
 
 ```env
-PAYLOAD_SECRET=seu-secret-aqui
-DATABASE_URI=mongodb://localhost:27017/edashow
+# Database
+DATABASE_URI=postgresql://postgres.xxxx:[SENHA]@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...
+
+# Storage
+SUPABASE_BUCKET=media
+SUPABASE_REGION=us-east-1
+SUPABASE_ENDPOINT=https://xxxx.supabase.co/storage/v1/s3
+SUPABASE_ACCESS_KEY_ID=xxxx
+SUPABASE_SECRET_ACCESS_KEY=xxxx
+
+# Payload
+PAYLOAD_SECRET=seu-secret-aqui-minimo-32-caracteres
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 ```
 
 ### Produção (Vercel)
 
-```env
-PAYLOAD_SECRET=secret-super-seguro-gerado
-DATABASE_URI=mongodb+srv://user:pass@cluster.mongodb.net/edashow
-NEXT_PUBLIC_SERVER_URL=https://seu-projeto.vercel.app
-```
+Use as mesmas variáveis, mas atualize:
+- `NEXT_PUBLIC_SERVER_URL=https://seu-projeto.vercel.app`
+
+> 📖 Veja [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para obter todas as credenciais.
 
 ---
 
-## 🗄️ MongoDB Atlas
+## 🗄️ Supabase
 
-Para produção, você precisa de um banco MongoDB Atlas:
+Para desenvolvimento e produção, você precisa de um projeto Supabase:
 
-1. Crie conta em [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Crie um cluster gratuito (M0)
-3. Configure usuário e senha
-4. Adicione IP à whitelist (0.0.0.0/0 para permitir todos)
-5. Copie a connection string
+1. Crie conta em [Supabase](https://supabase.com)
+2. Crie um novo projeto (gratuito)
+3. Configure o bucket `media` no Storage
+4. Configure as políticas de acesso
+5. Copie as credenciais
+
+> 📖 **Guia completo**: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
 
 ---
 
@@ -173,8 +197,8 @@ edashow/
 
 - [Documentação Next.js](https://nextjs.org/docs)
 - [Documentação Payload CMS](https://payloadcms.com/docs)
+- [Documentação Supabase](https://supabase.com/docs)
 - [Documentação Vercel](https://vercel.com/docs)
-- [MongoDB Atlas](https://www.mongodb.com/docs/atlas/)
 
 ---
 

@@ -1,10 +1,11 @@
 import { HeroSection } from "@/components/hero-section"
+import { SponsorCarousel } from "@/components/sponsor-carousel"
 import { EditorialBlock, CardType } from "@/components/editorial-block"
 import { Footer } from "@/components/footer"
 import { Newsletter } from "@/components/newsletter"
 import { Events } from "@/components/events"
 import { LatestNews } from "@/components/latest-news"
-import { getPosts, getImageUrl } from "@/lib/payload/api"
+import { getPosts, getSponsors, getImageUrl } from "@/lib/payload/api"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import Link from "next/link"
@@ -29,8 +30,8 @@ function postsToCards(posts: any[]): Array<{
       opinion: 'Opinião',
     }
 
-    const cardType: CardType = post.category === 'opinion' ? 'opinion' : 
-                                post.category === 'analysis' ? 'article' : 'news'
+    const cardType: CardType = post.category === 'opinion' ? 'opinion' :
+      post.category === 'analysis' ? 'article' : 'news'
 
     return {
       type: cardType,
@@ -39,7 +40,7 @@ function postsToCards(posts: any[]): Array<{
       image: post.featuredImage ? getImageUrl(post.featuredImage, 'card') : '/placeholder.jpg',
       category: categoryMap[post.category] || 'Notícias',
       author: post.author?.name,
-      date: post.publishedDate 
+      date: post.publishedDate
         ? formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true, locale: ptBR })
         : undefined,
       featured: post.featured,
@@ -50,31 +51,37 @@ function postsToCards(posts: any[]): Array<{
 
 export default async function HomePage() {
   // Buscar posts publicados do Payload CMS
-  const allPosts = await getPosts({ 
-    limit: 20, 
+  const allPosts = await getPosts({
+    limit: 20,
     status: 'published',
-    revalidate: 60 
+    revalidate: 60
   })
 
   // Buscar posts em destaque para o Hero Section
-  const featuredPosts = await getPosts({ 
-    limit: 4, 
+  const featuredPosts = await getPosts({
+    limit: 4,
     status: 'published',
     featured: true,
-    revalidate: 60 
+    revalidate: 60
   })
 
   // Se não houver posts em destaque, usar os mais recentes
-  const heroPosts = featuredPosts.length > 0 
-    ? featuredPosts 
+  const heroPosts = featuredPosts.length > 0
+    ? featuredPosts
     : allPosts.slice(0, 4)
+
+  // Buscar patrocinadores
+  const sponsors = await getSponsors({
+    active: true,
+    revalidate: 3600 // Cache por 1 hora
+  })
 
   // Separar posts por categoria
   const politicaPosts = allPosts
-    .filter((post: any) => 
-      post.category === 'news' || 
-      post.tags?.some((tag: any) => 
-        tag.tag?.toLowerCase().includes('política') || 
+    .filter((post: any) =>
+      post.category === 'news' ||
+      post.tags?.some((tag: any) =>
+        tag.tag?.toLowerCase().includes('política') ||
         tag.tag?.toLowerCase().includes('regulação') ||
         tag.tag?.toLowerCase().includes('ans')
       )
@@ -82,24 +89,32 @@ export default async function HomePage() {
     .slice(0, 4)
 
   const tecnologiaPosts = allPosts
-    .filter((post: any) => 
+    .filter((post: any) =>
       post.category === 'analysis' ||
-      post.tags?.some((tag: any) => 
-        tag.tag?.toLowerCase().includes('tecnologia') || 
+      post.tags?.some((tag: any) =>
+        tag.tag?.toLowerCase().includes('tecnologia') ||
         tag.tag?.toLowerCase().includes('inovação') ||
         tag.tag?.toLowerCase().includes('digital')
       )
     )
     .slice(0, 4)
 
-  // Se não houver posts suficientes, usar os mais recentes
-  const politicaCards = politicaPosts.length >= 4 
-    ? postsToCards(politicaPosts)
-    : postsToCards(allPosts.slice(0, 4))
+  // Sempre usar posts do banco quando disponíveis, mesmo que sejam poucos
+  // Se não houver posts filtrados suficientes, usar os mais recentes do banco
+  const politicaPostIds = new Set(politicaPosts.map((p: any) => p.id))
+  const tecnologiaPostIds = new Set(tecnologiaPosts.map((p: any) => p.id))
+  
+  const politicaCards = politicaPosts.length > 0
+    ? postsToCards(politicaPosts.length >= 4 ? politicaPosts : [...politicaPosts, ...allPosts.filter((p: any) => !politicaPostIds.has(p.id))].slice(0, 4))
+    : allPosts.length > 0
+    ? postsToCards(allPosts.slice(0, 4))
+    : []
 
-  const tecnologiaCards = tecnologiaPosts.length >= 4
-    ? postsToCards(tecnologiaPosts)
-    : postsToCards(allPosts.slice(4, 8))
+  const tecnologiaCards = tecnologiaPosts.length > 0
+    ? postsToCards(tecnologiaPosts.length >= 4 ? tecnologiaPosts : [...tecnologiaPosts, ...allPosts.filter((p: any) => !tecnologiaPostIds.has(p.id))].slice(0, 4))
+    : allPosts.length > 0
+    ? postsToCards(allPosts.slice(4, 8))
+    : []
 
   // Dados fallback caso não haja posts
   const fallbackPoliticaCards = [
@@ -184,46 +199,51 @@ export default async function HomePage() {
     <div className="min-h-screen bg-white">
       <main>
         <HeroSection posts={heroPosts} />
+        <SponsorCarousel sponsors={sponsors} />
         <LatestNews />
-        
-        {politicaCards.length > 0 ? (
-          <EditorialBlock 
-            title="Política e Regulação" 
-            subtitle="Acompanhe as decisões que impactam o setor"
-            ctaText="Ver cobertura completa"
-            ctaLink="/posts"
-            cards={politicaCards.map(card => ({
-              ...card,
-              // Envolver card em Link para navegação
-              title: card.title,
-            }))}
-          />
-        ) : (
-          <EditorialBlock 
-            title="Política e Regulação" 
-            subtitle="Acompanhe as decisões que impactam o setor"
-            ctaText="Ver cobertura completa"
-            ctaLink="/posts"
-            cards={fallbackPoliticaCards}
-          />
-        )}
 
-        {tecnologiaCards.length > 0 ? (
-          <EditorialBlock 
-            title="Tecnologia e Inovação" 
-            subtitle="O futuro da saúde digital"
-            ctaText="Explorar tecnologia"
-            ctaLink="/posts"
-            cards={tecnologiaCards}
-          />
+        {/* Sempre usar posts do banco quando disponíveis, fallback apenas se não houver posts */}
+        {allPosts.length > 0 ? (
+          <>
+            {politicaCards.length > 0 && (
+              <EditorialBlock
+                title="Política e Regulação"
+                subtitle="Acompanhe as decisões que impactam o setor"
+                ctaText="Ver cobertura completa"
+                ctaLink="/posts"
+                cards={politicaCards.map(card => ({
+                  ...card,
+                  title: card.title,
+                }))}
+              />
+            )}
+            {tecnologiaCards.length > 0 && (
+              <EditorialBlock
+                title="Tecnologia e Inovação"
+                subtitle="O futuro da saúde digital"
+                ctaText="Explorar tecnologia"
+                ctaLink="/posts"
+                cards={tecnologiaCards}
+              />
+            )}
+          </>
         ) : (
-          <EditorialBlock 
-            title="Tecnologia e Inovação" 
-            subtitle="O futuro da saúde digital"
-            ctaText="Explorar tecnologia"
-            ctaLink="/posts"
-            cards={fallbackTecnologiaCards}
-          />
+          <>
+            <EditorialBlock
+              title="Política e Regulação"
+              subtitle="Acompanhe as decisões que impactam o setor"
+              ctaText="Ver cobertura completa"
+              ctaLink="/posts"
+              cards={fallbackPoliticaCards}
+            />
+            <EditorialBlock
+              title="Tecnologia e Inovação"
+              subtitle="O futuro da saúde digital"
+              ctaText="Explorar tecnologia"
+              ctaLink="/posts"
+              cards={fallbackTecnologiaCards}
+            />
+          </>
         )}
 
         <Events />

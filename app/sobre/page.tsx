@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { InstitutionalSection } from "@/components/institutional-section";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Target, 
-  Users, 
-  TrendingUp, 
-  Award, 
+import {
+  Target,
+  Users,
+  TrendingUp,
+  Award,
   Newspaper,
   BarChart3,
   Eye,
@@ -37,19 +37,38 @@ export default function SobrePage() {
           </p>
         </header>
 
+        {/* Sobre o Eda */}
+        <InstitutionalSection title="Quem é o Eda">
+          <p className="text-lg leading-relaxed mb-4">
+            EDA SHOW é Edson Eda Show, comunicador, palestrante e criador de projetos que conectam o mercado de planos de saúde e seguros em todo o Brasil.
+            Reconhecido pela linguagem simples, direta e verdadeira, o Eda Show dá voz aos corretores, valoriza histórias reais e fortalece conexões que geram negócios.
+          </p>
+          <p className="text-lg leading-relaxed mb-4">
+            Criador de projetos como Jogo das Águias, EDA pelo Brasil, Águia-Visita, Circuito das Águias e do método Comunicação & Oratória – Corretor Faixa Preta, ele une comunicação, motivação, esporte e propósito.
+          </p>
+          <p className="text-lg leading-relaxed mb-4">
+            Com coberturas exclusivas de grandes eventos, entrevistas com líderes do mercado e conteúdos que inspiram, o Eda Show tem um só objetivo:
+            conectar pessoas, fortalecer o corretor e fazer o mercado voar mais alto.
+          </p>
+          <p className="text-lg leading-relaxed font-bold mt-6">
+            Águia anda com águia.<br />
+            E aqui, só o impossível interessa.
+          </p>
+        </InstitutionalSection>
+
         {/* História e Missão */}
         <InstitutionalSection title="Nossa História">
           <p className="text-lg leading-relaxed mb-4">
-            O EDA Show é um projeto de comunicação que conecta pessoas, histórias e empresas 
-            por meio de entrevistas estratégicas, informação qualificada sobre o mercado de 
-            planos de saúde e seguros, e ações sociais e institucionais. Com 18 anos de 
-            experiência no setor, somos reconhecidos como o maior comunicador da área de 
+            O EDA Show é um projeto de comunicação que conecta pessoas, histórias e empresas
+            por meio de entrevistas estratégicas, informação qualificada sobre o mercado de
+            planos de saúde e seguros, e ações sociais e institucionais. Com 18 anos de
+            experiência no setor, somos reconhecidos como o maior comunicador da área de
             saúde suplementar no Brasil.
           </p>
           <p className="text-lg leading-relaxed mb-4">
-            O projeto atua com leveza, verdade e propósito, fortalecendo relacionamentos, 
-            alavancando marcas e conectando o mercado de forma humana e estratégica em todo 
-            o país. Acreditamos que a comunicação estratégica é fundamental para aproximar 
+            O projeto atua com leveza, verdade e propósito, fortalecendo relacionamentos,
+            alavancando marcas e conectando o mercado de forma humana e estratégica em todo
+            o país. Acreditamos que a comunicação estratégica é fundamental para aproximar
             empresas, corretores, investidores e profissionais do setor.
           </p>
         </InstitutionalSection>
@@ -57,13 +76,13 @@ export default function SobrePage() {
         {/* Missão */}
         <InstitutionalSection title="Nossa Missão">
           <p className="text-lg leading-relaxed mb-4">
-            O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas 
-            e profissionais do mercado de saúde suplementar, conectando marcas, corretores 
+            O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas
+            e profissionais do mercado de saúde suplementar, conectando marcas, corretores
             e soluções de forma clara, estratégica e humana, em todo o Brasil.
           </p>
           <p className="text-lg leading-relaxed mb-4">
-            Aproximamos empresas, corretores, investidores e profissionais do setor através 
-            de entrevistas estratégicas, informação qualificada e ações que fortalecem 
+            Aproximamos empresas, corretores, investidores e profissionais do setor através
+            de entrevistas estratégicas, informação qualificada e ações que fortalecem
             relacionamentos e alavancam marcas.
           </p>
         </InstitutionalSection>
@@ -80,7 +99,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Acreditamos que comunicação estratégica pode ser leve e acessível, 
+                  Acreditamos que comunicação estratégica pode ser leve e acessível,
                   mantendo profissionalismo e qualidade em cada interação.
                 </p>
               </CardContent>
@@ -95,7 +114,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Compromisso com transparência, honestidade e informação qualificada 
+                  Compromisso com transparência, honestidade e informação qualificada
                   em todas as nossas ações e comunicações.
                 </p>
               </CardContent>
@@ -110,7 +129,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Cada ação tem um propósito claro: fortalecer relacionamentos, 
+                  Cada ação tem um propósito claro: fortalecer relacionamentos,
                   alavancar marcas e conectar o mercado de forma estratégica.
                 </p>
               </CardContent>
@@ -125,7 +144,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Conectamos pessoas, histórias e empresas de forma humana e estratégica, 
+                  Conectamos pessoas, histórias e empresas de forma humana e estratégica,
                   valorizando relacionamentos genuínos e duradouros.
                 </p>
               </CardContent>
@@ -173,21 +192,21 @@ export default function SobrePage() {
         {/* Equipe Editorial */}
         <InstitutionalSection title="Nossa Atuação">
           <p className="text-lg leading-relaxed mb-6">
-            O EDA.Show atua como um projeto de comunicação estratégica, oferecendo 
-            entrevistas com profissionais, empresários, corretores e especialistas em 
-            saúde suplementar, tecnologia, softwares e inovação no setor. Nossa cobertura 
-            inclui feiras, encontros corporativos, lançamentos de produtos e ações 
+            O EDA.Show atua como um projeto de comunicação estratégica, oferecendo
+            entrevistas com profissionais, empresários, corretores e especialistas em
+            saúde suplementar, tecnologia, softwares e inovação no setor. Nossa cobertura
+            inclui feiras, encontros corporativos, lançamentos de produtos e ações
             promocionais.
           </p>
           <p className="text-lg leading-relaxed mb-6">
-            Através do projeto "Águia Visita", visitamos empresas apresentando sua estrutura 
-            física e organizacional, cultura, setores e funcionamento operacional. Com o 
-            "EDA pelo Brasil", percorremos cidades e estados mostrando o mercado local de 
+            Através do projeto "Águia Visita", visitamos empresas apresentando sua estrutura
+            física e organizacional, cultura, setores e funcionamento operacional. Com o
+            "EDA pelo Brasil", percorremos cidades e estados mostrando o mercado local de
             saúde suplementar, estrutura das corretoras e diferenciais regionais.
           </p>
           <p className="text-lg leading-relaxed">
-            Também oferecemos palestras, treinamentos em comunicação e oratória, além de 
-            parcerias comerciais que conectam empresas e corretores em nível nacional, 
+            Também oferecemos palestras, treinamentos em comunicação e oratória, além de
+            parcerias comerciais que conectam empresas e corretores em nível nacional,
             sempre com foco em entregar marca e autoridade.
           </p>
         </InstitutionalSection>
@@ -237,6 +256,11 @@ export default function SobrePage() {
     </div>
   );
 }
+
+
+
+
+
 
 
 

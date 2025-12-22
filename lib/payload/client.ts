@@ -44,7 +44,7 @@ async function authenticate(): Promise<string> {
     // Tentar autenticar com email/senha se não houver token
     const email = process.env.PAYLOAD_ADMIN_EMAIL || 'admin@example.com'
     const password = process.env.PAYLOAD_ADMIN_PASSWORD || 'password'
-    
+
     const response = await fetch(`${PAYLOAD_SERVER_URL}/api/users/login`, {
       method: 'POST',
       headers: {
@@ -272,6 +272,133 @@ export async function findOrCreateColumnist(
     return null
   }
 }
+
+/**
+ * Cria ou atualiza um patrocinador
+ */
+export async function upsertSponsor(data: {
+  name: string
+  logo: string // ID da mídia
+  website?: string
+  active?: boolean
+}): Promise<any | null> {
+  try {
+    const token = await authenticate()
+
+    const searchResponse = await fetch(
+      `${PAYLOAD_SERVER_URL}/api/sponsors?where[name][equals]=${encodeURIComponent(data.name)}&limit=1`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    )
+
+    let existing: any = null
+    if (searchResponse.ok) {
+      const searchData = await searchResponse.json()
+      existing = searchData.docs?.[0] || null
+    }
+
+    const payload = {
+      name: data.name,
+      logo: data.logo,
+      website: data.website || '',
+      active: data.active ?? true,
+    }
+
+    let response: Response
+    if (existing) {
+      response = await fetch(`${PAYLOAD_SERVER_URL}/api/sponsors/${existing.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+    } else {
+      response = await fetch(`${PAYLOAD_SERVER_URL}/api/sponsors`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+    }
+
+    if (!response.ok) throw new Error(response.statusText)
+    return await response.json()
+  } catch (error) {
+    console.error(`Erro ao salvar patrocinador ${data.name}:`, error)
+    return null
+  }
+}
+
+/**
+ * Cria ou atualiza um evento
+ */
+export async function upsertEvent(data: {
+  title: string
+  slug: string
+  startDate: string
+  [key: string]: any
+}): Promise<any | null> {
+  try {
+    const token = await authenticate()
+
+    const searchResponse = await fetch(
+      `${PAYLOAD_SERVER_URL}/api/events?where[slug][equals]=${data.slug}&limit=1`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    )
+
+    let existing: any = null
+    if (searchResponse.ok) {
+      const searchData = await searchResponse.json()
+      existing = searchData.docs?.[0] || null
+    }
+
+    const payload = { ...data }
+
+    let response: Response
+    if (existing) {
+      response = await fetch(`${PAYLOAD_SERVER_URL}/api/events/${existing.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+    } else {
+      response = await fetch(`${PAYLOAD_SERVER_URL}/api/events`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+    }
+
+    if (!response.ok) throw new Error(response.statusText)
+    return await response.json()
+  } catch (error) {
+    console.error(`Erro ao salvar evento ${data.title}:`, error)
+    return null
+  }
+}
+
+
+
+
+
+
 
 
 

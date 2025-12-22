@@ -1,6 +1,6 @@
 "use client";
 
-import { Instagram, Linkedin, Youtube, Mail, MapPin } from "lucide-react";
+import { Instagram, Linkedin, Youtube, Mail, MapPin, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
@@ -32,11 +32,18 @@ export function Footer() {
             <h4 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6">Institucional</h4>
             <ul className="space-y-2 md:space-y-3">
               <li><a href="/sobre" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Sobre o EDA Show</a></li>
+              <li><a href="/patrocinadores" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Patrocinadores</a></li>
               <li><a href="/anuncie" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Anuncie Conosco</a></li>
               <li><a href="/media-kit" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Media Kit</a></li>
               <li><a href="/privacidade" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Política de Privacidade</a></li>
               <li><a href="/termos" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Termos de Uso</a></li>
               <li><a href="/trabalhe-conosco" className="text-sm md:text-base hover:text-primary transition-colors block py-1">Trabalhe Conosco</a></li>
+              <li>
+                <a href="/login" className="text-sm md:text-base hover:text-primary transition-colors flex items-center gap-2 py-1">
+                  <Shield className="w-4 h-4" />
+                  Área Administrativa
+                </a>
+              </li>
             </ul>
           </div>
 

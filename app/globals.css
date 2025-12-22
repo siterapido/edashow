@@ -4,39 +4,41 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Cores principais - Tema claro branco, preto e laranja */
   --background: #ffffff;
   --foreground: #1a1a1a;
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
   --primary: #FF6F00;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f8fafc;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1a1a1a;
+  --muted: #fafafa;
   --muted-foreground: #64748b;
-  --accent: #0284c7;
+  --accent: #FF6F00;
   --accent-foreground: #ffffff;
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
   --border: #e5e5e5;
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --input: #ffffff;
+  --ring: #FF6F00;
+  --chart-1: #FF6F00;
+  --chart-2: #ff8c42;
+  --chart-3: #ffa366;
+  --chart-4: #ffb88a;
+  --chart-5: #ffcdae;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Sidebar - Tema claro */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #FF6F00;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fafafa;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #FF6F00;
 }
 
 .dark {
@@ -124,6 +126,49 @@
   
   /* Remove positioning from Next.js portal elements */
   nextjs-portal {
+  }
+
+  /* Forçar tema claro no admin - sobrescreve qualquer dark mode */
+  /* Aplica para qualquer rota que comece com /admin */
+  html:has([data-payload-admin]),
+  html:has([id^="payload"]),
+  [data-payload-admin],
+  [id^="payload"] {
+    color-scheme: light !important;
+  }
+  
+  /* Forçar cores claras mesmo se dark mode estiver ativo */
+  .dark [data-payload-admin],
+  .dark [id^="payload"],
+  html.dark:has([data-payload-admin]),
+  html.dark:has([id^="payload"]) {
+    --background: #ffffff !important;
+    --foreground: #1a1a1a !important;
+    --card: #ffffff !important;
+    --card-foreground: #1a1a1a !important;
+    --popover: #ffffff !important;
+    --popover-foreground: #1a1a1a !important;
+    --primary: #FF6F00 !important;
+    --primary-foreground: #ffffff !important;
+    --secondary: #f5f5f5 !important;
+    --secondary-foreground: #1a1a1a !important;
+    --muted: #fafafa !important;
+    --muted-foreground: #64748b !important;
+    --accent: #FF6F00 !important;
+    --accent-foreground: #ffffff !important;
+    --border: #e5e5e5 !important;
+    --input: #ffffff !important;
+    --ring: #FF6F00 !important;
+    --sidebar: #ffffff !important;
+    --sidebar-foreground: #1a1a1a !important;
+    --sidebar-primary: #FF6F00 !important;
+    --sidebar-primary-foreground: #ffffff !important;
+    --sidebar-accent: #fafafa !important;
+    --sidebar-accent-foreground: #1a1a1a !important;
+    --sidebar-border: #e5e5e5 !important;
+    --sidebar-ring: #FF6F00 !important;
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
   }
 }
 

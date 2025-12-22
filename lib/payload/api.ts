@@ -8,6 +8,7 @@ import {
   getFallbackPostBySlug,
   getFallbackEvents,
   getFallbackColumnists,
+  getFallbackSponsors,
 } from '@/lib/fallback-data'
 
 const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
@@ -50,6 +51,7 @@ export async function getPosts(options: {
     limit: limit.toString(),
     'where[status][equals]': status,
     sort: '-publishedDate',
+    depth: '2', // Popular relacionamentos (featuredImage, author, category)
   })
 
   if (category) {
@@ -72,7 +74,7 @@ export async function getPosts(options: {
 
     const data = await response.json()
     const posts = data.docs || []
-    
+
     // Se não houver posts do CMS, usa fallback
     if (posts.length === 0) {
       console.warn('[CMS] Nenhum post encontrado, usando dados de fallback')
@@ -99,7 +101,7 @@ export async function getPostBySlug(slug: string, revalidate = 60) {
 
   try {
     const response = await fetch(
-      `${API_URL}/api/posts?where[slug][equals]=${slug}&limit=1`,
+      `${API_URL}/api/posts?where[slug][equals]=${slug}&limit=1&depth=2`,
       {
         next: { revalidate },
       }
@@ -257,6 +259,55 @@ export async function getColumnistBySlug(slug: string, revalidate = 60) {
 }
 
 /**
+ * Busca patrocinadores do CMS
+ * Retorna dados de fallback se o CMS não estiver disponível
+ */
+export async function getSponsors(options: {
+  limit?: number
+  active?: boolean
+  revalidate?: number
+} = {}) {
+  // Se CMS desabilitado, retorna fallback imediatamente
+  if (!CMS_ENABLED) {
+    console.warn('[CMS] CMS desabilitado, usando dados de fallback')
+    return getFallbackSponsors(options)
+  }
+
+  const { limit = 100, active = true, revalidate = 60 } = options
+
+  const params = new URLSearchParams({
+    limit: limit.toString(),
+    'where[active][equals]': active.toString(),
+    sort: 'name',
+  })
+
+  try {
+    const response = await fetch(`${API_URL}/api/sponsors?${params.toString()}`, {
+      next: { revalidate },
+    })
+
+    if (!response.ok) {
+      console.warn(`[CMS] Erro ao buscar patrocinadores (${response.status}): ${response.statusText}, usando fallback`)
+      return getFallbackSponsors(options)
+    }
+
+    const data = await response.json()
+    const sponsors = data.docs || []
+
+    // Se não houver patrocinadores do CMS, usa fallback
+    if (sponsors.length === 0) {
+      console.warn('[CMS] Nenhum patrocinador encontrado, usando dados de fallback')
+      return getFallbackSponsors(options)
+    }
+
+    return sponsors
+  } catch (error) {
+    console.warn('[CMS] Erro ao buscar patrocinadores do CMS, usando dados de fallback:', error instanceof Error ? error.message : 'Erro desconhecido')
+    return getFallbackSponsors(options)
+  }
+}
+
+/**
  * Busca configurações do site (Global)
  */
 export async function getSiteSettings(revalidate = 3600) {
@@ -272,6 +323,33 @@ export async function getSiteSettings(revalidate = 3600) {
     return await response.json()
   } catch (error) {
     console.error('Error fetching site settings:', error)
+    return null
+  }
+}
+
+/**
+ * Busca apenas as configurações de tema (cores, logos, tipografia)
+ * Útil para uso no ThemeProvider
+ */
+export async function getThemeSettings(revalidate = 3600) {
+  try {
+    const settings = await getSiteSettings(revalidate)
+    
+    if (!settings) return null
+
+    return {
+      logo: settings.logo,
+      logoDark: settings.logoDark,
+      logoWhite: settings.logoWhite,
+      favicon: settings.favicon,
+      themeColors: settings.themeColors,
+      backgroundColors: settings.backgroundColors,
+      otherColors: settings.otherColors,
+      darkModeColors: settings.darkModeColors,
+      typography: settings.typography,
+    }
+  } catch (error) {
+    console.error('Error fetching theme settings:', error)
     return null
   }
 }
@@ -338,27 +416,75 @@ export async function getMediaById(id: string, revalidate = 3600) {
 
 /**
  * Helper para obter URL de imagem
+ * Suporta objetos Media populados do PayloadCMS com depth=2
+ * Lida com diferentes estruturas: string (ID), objeto Media completo, ou relacionamento populado
  */
 export function getImageUrl(media: any, size?: string): string {
   if (!media) return '/placeholder.jpg'
-  
+
+  // Se for string (ID ou URL)
   if (typeof media === 'string') {
     if (media.startsWith('/') || media.startsWith('http')) {
       return media
     }
+    // Se for apenas um ID, retornar endpoint da API
     return `${API_URL}/api/media/${media}`
   }
 
-  if (size && media.sizes?.[size]?.url) {
-    return `${API_URL}${media.sizes[size].url}`
+  // Se o objeto tiver uma propriedade 'doc' (relacionamento populado com depth)
+  // PayloadCMS pode retornar { doc: { ... } } quando populado
+  const mediaObj = media.doc || media
+
+  // Verificar se é um objeto válido
+  if (typeof mediaObj !== 'object' || mediaObj === null) {
+    return '/placeholder.jpg'
   }
 
-  if (media.url) {
-    return `${API_URL}${media.url}`
+  // Tentar obter URL do tamanho específico primeiro (se size foi especificado)
+  if (size && mediaObj.sizes?.[size]?.url) {
+    const sizeUrl = mediaObj.sizes[size].url
+    // URLs absolutas já incluem protocolo e domínio
+    if (sizeUrl.startsWith('http://') || sizeUrl.startsWith('https://')) {
+      return sizeUrl
+    }
+    // URLs relativas precisam do API_URL
+    if (sizeUrl.startsWith('/')) {
+      return `${API_URL}${sizeUrl}`
+    }
+    // Se não começar com /, adicionar
+    return `${API_URL}/${sizeUrl}`
+  }
+
+  // Tentar obter URL padrão (full ou url)
+  const defaultUrl = mediaObj.url || mediaObj.full || mediaObj.filename
+  
+  if (defaultUrl) {
+    // URLs absolutas já incluem protocolo e domínio
+    if (typeof defaultUrl === 'string' && (defaultUrl.startsWith('http://') || defaultUrl.startsWith('https://'))) {
+      return defaultUrl
+    }
+    // URLs relativas precisam do API_URL
+    if (typeof defaultUrl === 'string' && defaultUrl.startsWith('/')) {
+      return `${API_URL}${defaultUrl}`
+    }
+    // Se não começar com /, adicionar
+    if (typeof defaultUrl === 'string') {
+      return `${API_URL}/${defaultUrl}`
+    }
+  }
+
+  // Se tiver apenas ID, tentar buscar via API
+  if (mediaObj.id) {
+    return `${API_URL}/api/media/${mediaObj.id}`
   }
 
   return '/placeholder.jpg'
 }
+
+
+
+
+
 
 
 

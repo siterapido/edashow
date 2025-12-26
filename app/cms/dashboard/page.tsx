@@ -58,10 +58,10 @@ export default function CMSDashboard() {
     }, [])
 
     const statCards = [
-        { label: 'Total de Posts', value: stats.posts, icon: FileText, color: 'text-orange-400', bg: 'bg-orange-400/10' },
-        { label: 'Eventos', value: stats.events, icon: Calendar, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-        { label: 'Patrocinadores', value: stats.sponsors, icon: Megaphone, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-        { label: 'Assinantes', value: stats.subscribers, icon: Mail, color: 'text-green-500', bg: 'bg-green-500/10' },
+        { label: 'Total de Posts', value: stats.posts, icon: FileText, color: 'text-orange-500', bg: 'bg-orange-50' },
+        { label: 'Eventos', value: stats.events, icon: Calendar, color: 'text-orange-600', bg: 'bg-orange-50' },
+        { label: 'Patrocinadores', value: stats.sponsors, icon: Megaphone, color: 'text-purple-600', bg: 'bg-purple-50' },
+        { label: 'Assinantes', value: stats.subscribers, icon: Mail, color: 'text-green-600', bg: 'bg-green-50' },
     ]
 
     return (
@@ -69,7 +69,7 @@ export default function CMSDashboard() {
             {/* Welcome Header */}
             <div>
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900">Bem-vindo ao Dashboard</h1>
-                <p className="text-gray-500 mt-2">Aqui está o que está acontecendo no seu site hoje.</p>
+                <p className="text-gray-500 font-medium mt-1">Aqui está o que está acontecendo no seu site hoje.</p>
             </div>
 
             {/* Stats Grid */}
@@ -132,8 +132,8 @@ export default function CMSDashboard() {
                                                 <h4 className="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">{post.title}</h4>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <span className={cn(
-                                                        "text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider",
-                                                        post.status === 'published' ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                                                        "text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider",
+                                                        post.status === 'published' ? "bg-green-50 text-green-700 border border-green-100" : "bg-gray-100 text-gray-500 border border-gray-200"
                                                     )}>
                                                         {post.status === 'published' ? 'Publicado' : 'Rascunho'}
                                                     </span>

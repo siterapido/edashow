@@ -117,10 +117,13 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
+
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 
@@ -128,16 +131,16 @@
   .safe-area-pb {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   .safe-area-pt {
     padding-top: env(safe-area-inset-top);
   }
-  
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -183,11 +186,10 @@
     font-size: 1rem;
     line-height: 1.75;
   }
-  
+
   /* Prevent text selection on toolbar buttons */
   button {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
 }
-

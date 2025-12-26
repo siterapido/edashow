@@ -19,7 +19,7 @@ export default function CMSColumnistsPage() {
     const fetchCols = async () => {
         setLoading(true)
         try {
-            const { data } = await getColumnists() // This was already in cms-taxonomy
+            const data = await getColumnists()
             setColumnists(data || [])
         } catch (error) {
             console.error('Erro ao buscar colunistas:', error)
@@ -168,7 +168,7 @@ export default function CMSColumnistsPage() {
                             <Label className="text-gray-400 text-[10px] font-bold uppercase">Slug</Label>
                             <Input
                                 value={currentCol.slug}
-                                onChange={(e) => setCurrentCol({ ...prev, slug: e.target.value })}
+                                onChange={(e) => setCurrentCol((prev: any) => ({ ...prev, slug: e.target.value }))}
                                 className="bg-gray-50 border-gray-100 text-gray-500 focus:bg-white transition-colors"
                             />
                         </div>
@@ -177,7 +177,7 @@ export default function CMSColumnistsPage() {
                             <Label className="text-gray-400 text-[10px] font-bold uppercase">Biografia</Label>
                             <textarea
                                 value={currentCol.bio}
-                                onChange={(e) => setCurrentCol({ ...prev, bio: e.target.value })}
+                                onChange={(e) => setCurrentCol((prev: any) => ({ ...prev, bio: e.target.value }))}
                                 className="w-full bg-gray-50 border border-gray-100 focus:bg-white transition-colors rounded-md p-3 text-gray-700 text-sm min-h-[80px] outline-none focus:ring-2 focus:ring-orange-500"
                                 placeholder="Breve descrição sobre o autor..."
                             />
@@ -190,9 +190,9 @@ export default function CMSColumnistsPage() {
                                 </Label>
                                 <Input
                                     value={currentCol.social_instagram}
-                                    onChange={(e) => setCurrentCol({ ...prev, social_instagram: e.target.value })}
+                                    onChange={(e) => setCurrentCol((prev: any) => ({ ...prev, social_instagram: e.target.value }))}
                                     placeholder="@username"
-                                    className="bg-slate-950 border-slate-800 text-pink-500 text-xs"
+                                    className="bg-gray-50 border-gray-100 text-pink-600 text-xs focus:bg-white transition-colors"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -201,7 +201,7 @@ export default function CMSColumnistsPage() {
                                 </Label>
                                 <Input
                                     value={currentCol.social_twitter}
-                                    onChange={(e) => setCurrentCol({ ...prev, social_twitter: e.target.value })}
+                                    onChange={(e) => setCurrentCol((prev: any) => ({ ...prev, social_twitter: e.target.value }))}
                                     placeholder="@username"
                                     className="bg-gray-50 border-gray-100 text-orange-400 text-xs focus:bg-white transition-colors"
                                 />

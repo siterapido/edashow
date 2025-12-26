@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Upload, Trash2, Image as ImageIcon, Search, Plus, X, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { getMedia, uploadMedia, deleteMedia } from '@/lib/actions/cms-media'
 import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
@@ -59,8 +60,8 @@ export default function CMSMediaPage() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Biblioteca de Mídia</h1>
-                    <p className="text-slate-400 text-sm mt-1">Gerencie suas imagens e arquivos para o blog e eventos.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Biblioteca de Mídia</h1>
+                    <p className="text-gray-500 text-sm mt-1">Gerencie suas imagens e arquivos para o blog e eventos.</p>
                 </div>
                 <div className="relative">
                     <Input
@@ -74,7 +75,7 @@ export default function CMSMediaPage() {
                     <Label
                         htmlFor="media-upload"
                         className={cn(
-                            "flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white rounded-md cursor-pointer transition-all font-bold shadow-lg shadow-orange-900/20 active:scale-95",
+                            "flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white rounded-md cursor-pointer transition-all font-bold shadow-lg shadow-orange-500/20 active:scale-95",
                             uploading && "opacity-50 cursor-not-allowed"
                         )}
                     >
@@ -87,11 +88,11 @@ export default function CMSMediaPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {loading ? (
                     Array(12).fill(0).map((_, i) => (
-                        <div key={i} className="aspect-square bg-slate-900 rounded-lg animate-pulse border border-slate-800" />
+                        <div key={i} className="aspect-square bg-gray-100 rounded-lg animate-pulse border border-gray-100" />
                     ))
                 ) : media.length > 0 ? (
                     media.map((item) => (
-                        <div key={item.id} className="group relative aspect-square bg-slate-900 rounded-lg border border-slate-800 overflow-hidden hover:border-orange-400/50 transition-all shadow-lg shadow-black/20">
+                        <div key={item.id} className="group relative aspect-square bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-orange-500 transition-all shadow-sm">
                             <img
                                 src={item.url}
                                 alt={item.alt || item.title}
@@ -102,7 +103,7 @@ export default function CMSMediaPage() {
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleDelete(item.id, item.filename)}
-                                    className="text-red-400 hover:text-red-300 hover:bg-red-900/30"
+                                    className="text-red-500 hover:text-red-600 hover:bg-red-50"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -113,12 +114,12 @@ export default function CMSMediaPage() {
                         </div>
                     ))
                 ) : (
-                    <div className="col-span-full py-20 text-center flex flex-col items-center justify-center bg-slate-900/50 rounded-xl border-2 border-dashed border-slate-800">
-                        <ImageIcon className="w-12 h-12 text-slate-700 mb-4" />
-                        <p className="text-slate-500 italic">Sua biblioteca de mídia está vazia.</p>
+                    <div className="col-span-full py-20 text-center flex flex-col items-center justify-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                        <ImageIcon className="w-12 h-12 text-gray-300 mb-4" />
+                        <p className="text-gray-400 italic">Sua biblioteca de mídia está vazia.</p>
                         <Button
                             variant="link"
-                            className="mt-2 text-orange-400 font-bold"
+                            className="mt-2 text-orange-500 font-bold"
                             onClick={() => document.getElementById('media-upload')?.click()}
                         >
                             Fazer seu primeiro upload

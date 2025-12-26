@@ -99,15 +99,5 @@ export function generateCSSVariables(settings: ThemeSettings): string {
 
     css += '}\n'
 
-    // Dark Mode
-    if (colors?.darkModeColors) {
-        css += '.dark {\n'
-        if (colors.darkModeColors.darkBackground) css += `  --background: ${hexToHSLVariables(colors.darkModeColors.darkBackground)};\n`
-        if (colors.darkModeColors.darkForeground) css += `  --foreground: ${hexToHSLVariables(colors.darkModeColors.darkForeground)};\n`
-        if (colors.darkModeColors.darkCard) css += `  --card: ${hexToHSLVariables(colors.darkModeColors.darkCard)};\n`
-        if (colors.darkModeColors.darkCardForeground) css += `  --card-foreground: ${hexToHSLVariables(colors.darkModeColors.darkCardForeground)};\n`
-        css += '}\n'
-    }
-
     return css
 }

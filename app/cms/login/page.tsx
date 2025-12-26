@@ -35,20 +35,20 @@ export default function CMSLoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-4 ring-4 ring-orange-900/50">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-full mb-4 ring-4 ring-orange-100">
                         <Shield className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">EDAShow CMS</h1>
-                    <p className="text-slate-400">Painel de Administração</p>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-2">EDAShow CMS</h1>
+                    <p className="text-gray-500 font-medium">Painel de Administração</p>
                 </div>
 
-                <Card className="shadow-2xl border-slate-800 bg-slate-800 text-slate-100">
+                <Card className="shadow-xl border-gray-200 bg-white text-gray-900">
                     <CardHeader className="space-y-1 pb-6">
                         <CardTitle className="text-xl text-center">Acessar Sistema</CardTitle>
-                        <CardDescription className="text-center text-slate-400">
+                        <CardDescription className="text-center text-gray-400">
                             Digite suas credenciais administrativas
                         </CardDescription>
                     </CardHeader>
@@ -56,11 +56,11 @@ export default function CMSLoginPage() {
                     <CardContent>
                         <form action={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="email" className="text-sm font-medium text-slate-300">
+                                <Label htmlFor="email" className="text-sm font-bold text-gray-600 uppercase tracking-wider text-[10px]">
                                     Email
                                 </Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4" />
+                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                     <Input
                                         id="email"
                                         name="email"
@@ -68,18 +68,18 @@ export default function CMSLoginPage() {
                                         placeholder="admin@edashow.com.br"
                                         required
                                         disabled={isPending}
-                                        className="pl-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-orange-400"
+                                        className="pl-10 h-11 bg-gray-50 border-gray-100 text-gray-900 placeholder:text-gray-400 focus:ring-orange-500 focus:bg-white transition-all"
                                         autoComplete="email"
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="password" className="text-sm font-medium text-slate-300">
+                                <Label htmlFor="password" className="text-sm font-bold text-gray-600 uppercase tracking-wider text-[10px]">
                                     Senha
                                 </Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4" />
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                     <Input
                                         id="password"
                                         name="password"
@@ -87,13 +87,13 @@ export default function CMSLoginPage() {
                                         placeholder="••••••••"
                                         required
                                         disabled={isPending}
-                                        className="pl-10 pr-10 h-11 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 focus:ring-orange-400"
+                                        className="pl-10 pr-10 h-11 bg-gray-50 border-gray-100 text-gray-900 placeholder:text-gray-400 focus:ring-orange-500 focus:bg-white transition-all"
                                         autoComplete="current-password"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                                         disabled={isPending}
                                     >
                                         {showPassword ? (
@@ -106,14 +106,14 @@ export default function CMSLoginPage() {
                             </div>
 
                             {errorMsg && (
-                                <div className="p-3 rounded-md bg-red-900/50 border border-red-800 text-sm text-red-200">
+                                <div className="p-3 rounded-md bg-red-50 border border-red-100 text-sm text-red-600">
                                     {errorMsg}
                                 </div>
                             )}
 
                             <Button
                                 type="submit"
-                                className="w-full h-11 bg-orange-500 hover:bg-orange-400 text-white font-semibold transition-all shadow-lg active:scale-95"
+                                className="w-full h-11 bg-orange-500 hover:bg-orange-400 text-white font-bold transition-all shadow-lg shadow-orange-500/20 active:scale-95"
                                 disabled={isPending}
                             >
                                 {isPending ? (
@@ -127,8 +127,8 @@ export default function CMSLoginPage() {
                             </Button>
                         </form>
 
-                        <div className="mt-8 pt-6 border-t border-slate-700 text-center">
-                            <Link href="/" className="text-sm text-slate-400 hover:text-orange-300 transition-colors">
+                        <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                            <Link href="/" className="text-sm text-gray-400 hover:text-orange-500 font-medium transition-colors">
                                 ← Voltar para o site
                             </Link>
                         </div>

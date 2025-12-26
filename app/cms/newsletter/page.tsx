@@ -58,8 +58,8 @@ export default function CMSNewsletterPage() {
             label: 'E-mail',
             render: (item: any) => (
                 <div className="flex items-center gap-2">
-                    <Mail className="w-3 h-3 text-slate-500" />
-                    <span className="font-medium text-white">{item.email}</span>
+                    <Mail className="w-3 h-3 text-gray-400" />
+                    <span className="font-bold text-gray-900">{item.email}</span>
                 </div>
             )
         },
@@ -77,8 +77,8 @@ export default function CMSNewsletterPage() {
                     className={cn(
                         "flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all",
                         item.active
-                            ? "bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500/20"
-                            : "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
+                            ? "bg-green-50 text-green-600 border border-green-100 hover:bg-green-100"
+                            : "bg-red-50 text-red-600 border border-red-100 hover:bg-red-100"
                     )}
                 >
                     {item.active ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
@@ -92,21 +92,21 @@ export default function CMSNewsletterPage() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Assinantes da Newsletter</h1>
-                    <p className="text-slate-400 text-sm mt-1">Gerencie a lista de e-mails capturados pelo site.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Assinantes da Newsletter</h1>
+                    <p className="text-gray-500 text-sm mt-1">Gerencie a lista de e-mails capturados pelo site.</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
                         variant="outline"
                         size="icon"
                         onClick={fetchSubs}
-                        className="border-slate-800 text-slate-400 hover:bg-slate-800"
+                        className="border-gray-200 text-gray-400 hover:bg-gray-50"
                     >
                         <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
                     </Button>
                     <Button
                         onClick={exportCSV}
-                        className="bg-green-600 hover:bg-green-500 text-white font-bold gap-2 shadow-lg shadow-green-900/20"
+                        className="bg-green-600 hover:bg-green-500 text-white font-bold gap-2 shadow-lg shadow-green-500/20"
                         disabled={subscribers.length === 0}
                     >
                         <Download className="w-4 h-4" /> Exportar CSV

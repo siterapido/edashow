@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
-  
+
   // Se for uma rota do admin, não renderiza o Header e Footer do site
   const isAdmin = pathname?.startsWith('/admin');
 
@@ -21,6 +21,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       <ThemeProvider
         attribute="class"
         defaultTheme="light"
+        forcedTheme="light"
         enableSystem={false}
         disableTransitionOnChange
       >
@@ -34,6 +35,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <ThemeProvider
       attribute="class"
       defaultTheme="light"
+      forcedTheme="light"
       enableSystem={false}
       disableTransitionOnChange
     >
@@ -41,10 +43,10 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       <main className="min-h-screen">
         {children}
       </main>
-      
+
       <MobileBottomNav onMenuClick={() => setIsSidebarOpen(true)} />
       <MobileSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
+
       <Toaster position="top-right" richColors />
       <Analytics />
     </ThemeProvider>

@@ -33,15 +33,15 @@ export function DataTable<T extends { id: string | number }>({
     onRowClick
 }: DataTableProps<T>) {
     return (
-        <div className="bg-slate-900 rounded-xl border border-slate-800 shadow-xl overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="border-b border-slate-800 bg-slate-900/50">
+                        <tr className="border-b border-gray-100 bg-gray-50/50">
                             {columns.map((col) => (
                                 <th
                                     key={col.key}
-                                    className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest"
+                                    className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest"
                                 >
                                     <div className="flex items-center gap-2">
                                         {col.label}
@@ -52,13 +52,13 @@ export function DataTable<T extends { id: string | number }>({
                             <th className="px-6 py-4 text-right"></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-gray-100">
                         {loading ? (
                             Array(5).fill(0).map((_, i) => (
                                 <tr key={i} className="animate-pulse">
                                     {columns.map((_, j) => (
                                         <td key={j} className="px-6 py-4">
-                                            <div className="h-4 bg-slate-800 rounded w-full" />
+                                            <div className="h-4 bg-gray-100 rounded w-full" />
                                         </td>
                                     ))}
                                     <td className="px-6 py-4"></td>
@@ -70,17 +70,17 @@ export function DataTable<T extends { id: string | number }>({
                                     key={item.id}
                                     onClick={() => onRowClick?.(item)}
                                     className={cn(
-                                        "hover:bg-slate-800/50 transition-colors cursor-pointer group",
-                                        onRowClick && "active:bg-slate-800"
+                                        "hover:bg-gray-50 transition-colors cursor-pointer group",
+                                        onRowClick && "active:bg-gray-100"
                                     )}
                                 >
                                     {columns.map((col) => (
-                                        <td key={col.key} className="px-6 py-4 text-sm text-slate-300">
+                                        <td key={col.key} className="px-6 py-4 text-sm text-gray-600">
                                             {col.render ? col.render(item) : (item as any)[col.key]}
                                         </td>
                                     ))}
                                     <td className="px-6 py-4 text-right">
-                                        <Button variant="ghost" size="icon" className="text-slate-500 hover:text-white">
+                                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900">
                                             <MoreHorizontal className="w-4 h-4" />
                                         </Button>
                                     </td>
@@ -98,15 +98,15 @@ export function DataTable<T extends { id: string | number }>({
             </div>
 
             {/* Pagination Placeholder */}
-            <div className="px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex items-center justify-between">
-                <p className="text-xs text-slate-500">
-                    Mostrando <span className="font-bold text-slate-300">{data.length}</span> resultados
+            <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
+                <p className="text-xs text-gray-500">
+                    Mostrando <span className="font-bold text-gray-700">{data.length}</span> resultados
                 </p>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 h-8 px-2">
+                    <Button variant="outline" size="sm" className="bg-white border-gray-200 text-gray-500 hover:bg-gray-50 h-8 px-2">
                         <ChevronLeft className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="sm" className="bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 h-8 px-2">
+                    <Button variant="outline" size="sm" className="bg-white border-gray-200 text-gray-500 hover:bg-gray-50 h-8 px-2">
                         <ChevronRight className="w-4 h-4" />
                     </Button>
                 </div>

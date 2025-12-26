@@ -25,14 +25,17 @@ const eventExampleImages = [
 
 // Função para garantir que eventos sempre tenham uma imagem de exemplo
 function ensureEventImage(event: any, index: number): any {
-  if (!event.image_url) {
+  if (!event.cover_image_url && !event.image_url) {
     const imageIndex = index % eventExampleImages.length
     return {
       ...event,
       image_url: eventExampleImages[imageIndex]
     }
   }
-  return event
+  return {
+    ...event,
+    image_url: event.cover_image_url || event.image_url
+  }
 }
 
 interface EventsProps {

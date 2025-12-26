@@ -100,7 +100,7 @@ export async function getEvents(options: { limit?: number, status?: string } = {
     let query = supabase.from('events').select('*').order('event_date', { ascending: true })
 
     if (options.limit) query = query.limit(options.limit)
-    // if (options.status) query = query.eq('status', options.status) // Status column missing in DB
+    if (options.status) query = query.eq('status', options.status)
 
     const { data, error } = await query
     if (error) {

@@ -65,7 +65,7 @@ export default async function EventsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event: any, index: number) => {
-              const eventDate = new Date(event.date)
+              const eventDate = new Date(event.event_date || event.date)
 
               if (isNaN(eventDate.getTime())) {
                 console.error(`Invalid date for event: ${event.id}`)
@@ -77,7 +77,7 @@ export default async function EventsPage() {
 
               // Garante que sempre há uma imagem de exemplo
               const eventWithImage = ensureEventImage(event, index)
-              const imageUrl = eventWithImage.image_url
+              const imageUrl = event.cover_image_url || eventWithImage.image_url
 
               return (
                 <div key={event.id}>

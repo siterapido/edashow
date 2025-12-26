@@ -13,7 +13,7 @@ export default function CMSEventsPage() {
     const [events, setEvents] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
-    const [currentEvent, setCurrentEvent] = useState<any>({ name: '', date: '', location: '', description: '', status: 'upcoming', external_link: '' })
+    const [currentEvent, setCurrentEvent] = useState<any>({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
     const [saving, setSaving] = useState(false)
 
     const fetchEvents = async () => {
@@ -37,7 +37,7 @@ export default function CMSEventsPage() {
         try {
             await saveEvent(currentEvent)
             setIsEditing(false)
-            setCurrentEvent({ name: '', date: '', location: '', description: '', status: 'upcoming', external_link: '' })
+            setCurrentEvent({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
             fetchEvents()
         } catch (error) {
             console.error('Erro ao salvar evento:', error)
@@ -48,7 +48,7 @@ export default function CMSEventsPage() {
     const handleEdit = (event: any) => {
         setCurrentEvent({
             ...event,
-            date: event.date ? new Date(event.date).toISOString().split('T')[0] : ''
+            event_date: event.event_date ? new Date(event.event_date).toISOString().split('T')[0] : ''
         })
         setIsEditing(true)
     }
@@ -69,7 +69,7 @@ export default function CMSEventsPage() {
             label: 'Evento',
             render: (item: any) => (
                 <div className="flex flex-col">
-                    <span className="font-bold text-white">{item.name}</span>
+                    <span className="font-bold text-white">{item.title}</span>
                     <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
                         <MapPin className="w-2.5 h-2.5" /> {item.location || 'Local não definido'}
                     </div>
@@ -77,12 +77,12 @@ export default function CMSEventsPage() {
             )
         },
         {
-            key: 'date',
+            key: 'event_date',
             label: 'Data',
-            render: (item: any) => item.date ? (
+            render: (item: any) => item.event_date ? (
                 <div className="flex items-center gap-1.5 text-slate-300">
                     <Calendar className="w-3.5 h-3.5 text-orange-400" />
-                    {new Date(item.date).toLocaleDateString()}
+                    {new Date(item.event_date).toLocaleDateString()}
                 </div>
             ) : '-'
         },
@@ -109,7 +109,7 @@ export default function CMSEventsPage() {
                 </div>
                 <Button
                     onClick={() => {
-                        setCurrentEvent({ name: '', date: '', location: '', description: '', status: 'upcoming', external_link: '' })
+                        setCurrentEvent({ title: '', event_date: '', location: '', description: '', status: 'upcoming', registration_url: '' })
                         setIsEditing(true)
                     }}
                     className="bg-orange-500 hover:bg-orange-400 text-white font-bold gap-2 shadow-lg shadow-orange-900/20"
@@ -143,8 +143,8 @@ export default function CMSEventsPage() {
                         <div className="space-y-2">
                             <Label className="text-slate-500 text-[10px] font-bold uppercase">Nome do Evento</Label>
                             <Input
-                                value={currentEvent.name}
-                                onChange={(e) => setCurrentEvent({ ...prev, name: e.target.value })}
+                                value={currentEvent.title}
+                                onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
                                 placeholder="Ex: Congresso Saúde Digital 2026"
                                 className="bg-slate-950 border-slate-800 text-white h-11"
                                 required
@@ -156,8 +156,8 @@ export default function CMSEventsPage() {
                                 <Label className="text-slate-500 text-[10px] font-bold uppercase">Data</Label>
                                 <Input
                                     type="date"
-                                    value={currentEvent.date}
-                                    onChange={(e) => setCurrentEvent({ ...prev, date: e.target.value })}
+                                    value={currentEvent.event_date}
+                                    onChange={(e) => setCurrentEvent({ ...currentEvent, event_date: e.target.value })}
                                     className="bg-slate-950 border-slate-800 text-slate-300 h-11"
                                     required
                                 />
@@ -166,7 +166,7 @@ export default function CMSEventsPage() {
                                 <Label className="text-slate-500 text-[10px] font-bold uppercase">Status</Label>
                                 <select
                                     value={currentEvent.status}
-                                    onChange={(e) => setCurrentEvent({ ...prev, status: e.target.value })}
+                                    onChange={(e) => setCurrentEvent({ ...currentEvent, status: e.target.value })}
                                     className="w-full bg-slate-950 border-slate-800 text-slate-300 text-sm rounded-md px-3 h-11 outline-none focus:ring-2 focus:ring-orange-400"
                                 >
                                     <option value="upcoming">Em breve</option>
@@ -181,7 +181,7 @@ export default function CMSEventsPage() {
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
                                 <Input
                                     value={currentEvent.location}
-                                    onChange={(e) => setCurrentEvent({ ...prev, location: e.target.value })}
+                                    onChange={(e) => setCurrentEvent({ ...currentEvent, location: e.target.value })}
                                     placeholder="Ex: São Paulo, SP (ou Online)"
                                     className="pl-9 bg-slate-950 border-slate-800 text-slate-300 h-11"
                                 />
@@ -193,8 +193,8 @@ export default function CMSEventsPage() {
                             <div className="relative">
                                 <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-600" />
                                 <Input
-                                    value={currentEvent.external_link}
-                                    onChange={(e) => setCurrentEvent({ ...prev, external_link: e.target.value })}
+                                    value={currentEvent.registration_url}
+                                    onChange={(e) => setCurrentEvent({ ...currentEvent, registration_url: e.target.value })}
                                     placeholder="https://sua-pagina.com.br"
                                     className="pl-9 bg-slate-950 border-slate-800 text-slate-300 h-11"
                                 />
@@ -205,7 +205,7 @@ export default function CMSEventsPage() {
                             <Label className="text-slate-500 text-[10px] font-bold uppercase">Descrição Curta</Label>
                             <textarea
                                 value={currentEvent.description}
-                                onChange={(e) => setCurrentEvent({ ...prev, description: e.target.value })}
+                                onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
                                 className="w-full bg-slate-950 border border-slate-800 rounded-md p-3 text-slate-300 text-sm min-h-[100px] outline-none focus:ring-2 focus:ring-orange-400"
                                 placeholder="Principais detalhes do evento..."
                             />

@@ -61,7 +61,7 @@ export default async function EventPage({ params }: EventPageProps) {
     notFound()
   }
 
-  const startDate = new Date(event.date)
+  const startDate = new Date(event.event_date || event.date)
   const endDate = event.end_date ? new Date(event.end_date) : null
 
   // Status badge
@@ -87,7 +87,7 @@ export default async function EventPage({ params }: EventPageProps) {
     return types[type as keyof typeof types] || type
   }
 
-  const imageUrl = event.image_url || '/conference-healthcare-panel.jpg'
+  const imageUrl = event.cover_image_url || event.image_url || '/conference-healthcare-panel.jpg'
 
   return (
     <div className="min-h-screen bg-background">
@@ -134,7 +134,7 @@ export default async function EventPage({ params }: EventPageProps) {
         {/* Card de Data Destacado */}
         <div className="mb-8">
           <EventDateCard
-            startDate={event.date}
+            startDate={event.event_date || event.date}
             endDate={event.end_date}
           />
         </div>

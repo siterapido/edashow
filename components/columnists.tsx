@@ -8,38 +8,6 @@ import { motion } from "framer-motion"
 import { container, fadeIn } from "@/lib/motion"
 import { useEffect, useState } from "react"
 
-// Dados fallback caso o CMS não esteja disponível
-const fallbackColumnists = [
-  {
-    id: 1,
-    name: "João Carlos",
-    role: "Promoção Financeira",
-    slug: "#",
-    photo: "/professional-man.jpg"
-  },
-  {
-    id: 2,
-    name: "Maria Castro",
-    role: "Marketing em Saúde",
-    slug: "#",
-    photo: "/professional-woman-smiling.png"
-  },
-  {
-    id: 3,
-    name: "Ana Souza",
-    role: "Regulação e Mercado",
-    slug: "#",
-    photo: "/professional-woman-diverse.png"
-  },
-  {
-    id: 4,
-    name: "Pedro Lima",
-    role: "Inovação Médica",
-    slug: "#",
-    photo: "/professional-man-in-suit-outdoors.jpg"
-  }
-]
-
 interface ColumnistsProps {
   initialColumnists?: any[]
 }
@@ -53,20 +21,23 @@ export function Columnists({ initialColumnists = [] }: ColumnistsProps) {
     } else {
       const fetchData = async () => {
         try {
-          let data = await getColumnists({
-            limit: 4
+          const data = await getColumnists({
+            limit: 20
           });
-          if (!data || data.length === 0) {
-            data = fallbackColumnists;
-          }
-          setColumnists(data);
+          setColumnists(data || []);
         } catch (e) {
-          setColumnists(fallbackColumnists);
+          console.error('Erro ao buscar colunistas:', e);
+          setColumnists([]);
         }
       };
       fetchData();
     }
   }, [initialColumnists]);
+
+  if (columnists.length === 0) {
+    return null;
+  }
+
 
   return (
     <motion.section

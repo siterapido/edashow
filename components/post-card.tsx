@@ -33,7 +33,7 @@ export function PostCard({ post, variant = 'default', className }: PostCardProps
 
   const cardContent = (
     <Card className={cn(
-      "overflow-hidden hover:shadow-lg transition-all duration-300 h-full group cursor-pointer border-slate-100 hover:border-slate-200",
+      "overflow-hidden hover:shadow-lg transition-all duration-300 h-full group cursor-pointer bg-white border border-slate-100 hover:border-slate-200 shadow-sm",
       variant === 'compact' && "flex flex-row gap-4",
       className
     )}>

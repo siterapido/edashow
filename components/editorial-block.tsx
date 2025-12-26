@@ -21,23 +21,23 @@ interface EditorialCardProps {
   slug?: string;
 }
 
-export function EditorialCard({ 
-  type = "news", 
-  title, 
-  excerpt, 
-  image, 
-  category, 
+export function EditorialCard({
+  type = "news",
+  title,
+  excerpt,
+  image,
+  category,
   author,
   date,
   featured = false,
   slug
 }: EditorialCardProps) {
   const cardContent = (
-    <Card className={`h-full border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col py-0 gap-0 group ${featured ? 'bg-slate-900 text-white border-slate-800' : 'bg-white'}`}>
+    <Card className={`h-full shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col py-0 gap-0 group bg-white ${featured ? 'ring-2 ring-primary/20 border-primary/30' : 'border border-slate-100 hover:border-slate-200'}`}>
       <div className="relative aspect-video overflow-hidden">
-        <img 
-          src={image} 
-          alt={title} 
+        <img
+          src={image}
+          alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -46,35 +46,42 @@ export function EditorialCard({
             <PlayCircle className="w-12 h-12 text-white opacity-90 drop-shadow-lg" />
           </div>
         )}
-        <Badge className={`absolute top-3 left-3 ${featured ? 'bg-primary text-white border-none' : 'bg-white/90 text-primary backdrop-blur-sm shadow-sm'}`}>
+        <Badge className={`absolute top-3 left-3 ${featured ? 'bg-primary text-white border-none' : 'bg-white/90 text-slate-700 backdrop-blur-sm shadow-sm border-none'}`}>
           {category}
         </Badge>
+        {featured && (
+          <div className="absolute top-3 right-3">
+            <span className="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">
+              Destaque
+            </span>
+          </div>
+        )}
       </div>
-      
-      <CardContent className={`flex-1 p-4 md:p-5 ${featured ? 'text-white' : ''}`}>
+
+      <CardContent className="flex-1 p-4 md:p-5">
         {type === "opinion" && author && (
           <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">
             Opinião / {author}
           </p>
         )}
-        
-        <h3 className={`font-bold leading-tight mb-2 transition-colors ${featured ? 'text-2xl text-white' : 'text-lg text-primary group-hover:text-primary/80'}`}>
+
+        <h3 className={`font-bold leading-tight mb-2 transition-colors text-slate-900 group-hover:text-primary ${featured ? 'text-xl' : 'text-lg'}`}>
           {title}
         </h3>
-        
+
         {excerpt && (
-          <p className={`text-sm line-clamp-3 ${featured ? 'text-slate-300' : 'text-slate-500'}`}>
+          <p className="text-sm line-clamp-3 text-slate-600">
             {excerpt}
           </p>
         )}
       </CardContent>
-      
+
       <CardFooter className="p-4 md:p-5 pt-0 flex justify-between items-center mt-auto">
-        <span className={`text-xs ${featured ? 'text-slate-400' : 'text-slate-400'}`}>
+        <span className="text-xs text-slate-400">
           {date || "Há 2 horas"}
         </span>
-        <div className={`flex items-center font-medium text-sm ${featured ? 'text-primary' : 'text-primary group-hover:text-primary/80'} transition-colors`}>
-          Ler mais 
+        <div className="flex items-center font-medium text-sm text-primary group-hover:text-primary/80 transition-colors">
+          Ler mais
           <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
@@ -129,7 +136,7 @@ export function EditorialBlock({ title, subtitle, ctaText = "Ver mais", ctaLink 
             <EditorialCard key={index} {...card} />
           ))}
         </div>
-        
+
         <div className="mt-6 md:mt-8 text-center sm:hidden">
           <Link href={ctaLink}>
             <Button variant="outline" className="w-full border-primary text-primary min-h-[44px]">

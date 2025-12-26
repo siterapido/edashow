@@ -5,9 +5,8 @@ import { Footer } from "@/components/footer"
 import { Newsletter } from "@/components/newsletter"
 import { Events } from "@/components/events"
 import { LatestNews } from "@/components/latest-news"
-import { Columnists } from "@/components/columnists"
 import BannerDisplay from "@/components/BannerDisplay"
-import { getPosts, getSponsors, getImageUrl, getEvents, getColumnists } from "@/lib/supabase/api"
+import { getPosts, getSponsors, getImageUrl, getEvents } from "@/lib/supabase/api"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import Link from "next/link"
@@ -74,10 +73,7 @@ export default async function HomePage() {
     status: 'upcoming'
   })
 
-  // Buscar colunistas
-  const columnists = await getColumnists({
-    limit: 4
-  })
+
 
   // Separar posts por categoria
   const politicaPosts = allPosts
@@ -179,7 +175,6 @@ export default async function HomePage() {
           </div>
         )}
 
-        <Columnists initialColumnists={columnists} />
         <Events initialEvents={events} />
 
         {/* Banner Rodapé - Antes do Footer */}

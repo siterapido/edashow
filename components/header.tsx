@@ -4,6 +4,7 @@ import { Search, Menu, Bell, ChevronDown, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -272,9 +273,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                 className="text-white hover:bg-white/20 rounded-full"
                 asChild
               >
-                <a href="/login" title="Área Administrativa">
+                <Link href="/login" title="Área Administrativa">
                   <User className="w-5 h-5" />
-                </a>
+                </Link>
               </Button>
 
               <Button
@@ -313,9 +314,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                 className="text-white hover:bg-white/10"
                 asChild
               >
-                <a href="/admin" title="Área Administrativa">
+                <Link href="/login" title="Área Administrativa">
                   <User className="w-6 h-6" />
-                </a>
+                </Link>
               </Button>
               <Button
                 variant="ghost"

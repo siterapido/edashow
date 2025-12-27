@@ -9,6 +9,7 @@ import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
+import TextAlign from '@tiptap/extension-text-align'
 
 
 import {
@@ -28,7 +29,11 @@ import {
     Redo,
     Type,
     Code,
-    Strikethrough
+    Strikethrough,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    AlignJustify
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { uploadMedia } from '@/lib/actions/cms-media'
@@ -62,6 +67,11 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                     class: 'text-orange-600 underline hover:text-orange-500 transition-colors cursor-pointer'
                 }
             }),
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+                alignments: ['left', 'center', 'right', 'justify'],
+                defaultAlignment: 'justify',
+            }),
             Placeholder.configure({
                 placeholder,
             }),
@@ -73,7 +83,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none min-h-[300px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
+                class: 'prose prose-lg max-w-none min-h-[300px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {
@@ -229,6 +239,37 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                     title="Link"
                 >
                     <LinkIcon className="w-4 h-4" />
+                </BubbleButton>
+
+                <div className="w-px h-5 bg-gray-200 mx-1" />
+
+                <BubbleButton
+                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                    isActive={editor.isActive({ textAlign: 'left' })}
+                    title="Alinhar à esquerda"
+                >
+                    <AlignLeft className="w-4 h-4" />
+                </BubbleButton>
+                <BubbleButton
+                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                    isActive={editor.isActive({ textAlign: 'center' })}
+                    title="Centralizar"
+                >
+                    <AlignCenter className="w-4 h-4" />
+                </BubbleButton>
+                <BubbleButton
+                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                    isActive={editor.isActive({ textAlign: 'right' })}
+                    title="Alinhar à direita"
+                >
+                    <AlignRight className="w-4 h-4" />
+                </BubbleButton>
+                <BubbleButton
+                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                    isActive={editor.isActive({ textAlign: 'justify' })}
+                    title="Justificar"
+                >
+                    <AlignJustify className="w-4 h-4" />
                 </BubbleButton>
             </BubbleMenu>
 
@@ -409,6 +450,33 @@ function MobileToolbar({
                 </MobileToolbarButton>
                 <MobileToolbarButton onClick={onImageUpload}>
                     <ImageIcon className="w-5 h-5" />
+                </MobileToolbarButton>
+
+                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+
+                <MobileToolbarButton
+                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                    isActive={editor.isActive({ textAlign: 'left' })}
+                >
+                    <AlignLeft className="w-5 h-5" />
+                </MobileToolbarButton>
+                <MobileToolbarButton
+                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                    isActive={editor.isActive({ textAlign: 'center' })}
+                >
+                    <AlignCenter className="w-5 h-5" />
+                </MobileToolbarButton>
+                <MobileToolbarButton
+                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                    isActive={editor.isActive({ textAlign: 'right' })}
+                >
+                    <AlignRight className="w-5 h-5" />
+                </MobileToolbarButton>
+                <MobileToolbarButton
+                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                    isActive={editor.isActive({ textAlign: 'justify' })}
+                >
+                    <AlignJustify className="w-5 h-5" />
                 </MobileToolbarButton>
 
                 <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />

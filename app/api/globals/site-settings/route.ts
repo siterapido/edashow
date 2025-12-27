@@ -32,7 +32,8 @@ export async function GET() {
             },
             typography: {
                 borderRadius: '0.5rem'
-            }
+            },
+            socialMedia: theme.social_media || {}
         })
     } catch (error) {
         console.error('[API Site Settings] Error:', error)

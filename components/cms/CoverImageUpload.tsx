@@ -140,6 +140,9 @@ export function CoverImageUpload({ value, onChange, className }: CoverImageUploa
                         <p className="text-xs text-gray-400 mt-1">
                             Arraste uma imagem ou clique para selecionar
                         </p>
+                        <p className="text-[10px] text-orange-500/60 font-medium mt-2">
+                            Recomendado: 1200x630px para capa, 600x400px para miniaturas
+                        </p>
                     </div>
                 </>
             )}

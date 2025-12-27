@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Twitter, Linkedin, Share2, Link2 } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Share2, Link2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -13,18 +13,24 @@ interface SocialShareProps {
 export function SocialShare({ url, title, description }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : url;
-  const shareText = description || title;
+  const fullUrl = typeof window !== "undefined"
+    ? window.location.origin + url
+    : `https://edashow.com.br${url}`;
+
+  const shareText = `Confira esta notícia no EDA Show: ${title}`;
 
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      shareUrl
+      fullUrl
     )}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      shareUrl
-    )}&text=${encodeURIComponent(title)}`,
+      fullUrl
+    )}&text=${encodeURIComponent(shareText)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      shareUrl
+      fullUrl
+    )}`,
+    whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      `${shareText}\n\n${fullUrl}`
     )}`,
   };
 
@@ -79,6 +85,16 @@ export function SocialShare({ url, title, description }: SocialShareProps) {
         <Button
           variant="outline"
           size="sm"
+          onClick={() => handleShare("whatsapp")}
+          className="gap-2 border-slate-200 hover:bg-green-50 hover:border-green-300"
+          aria-label="Compartilhar no WhatsApp"
+        >
+          <MessageCircle className="w-4 h-4 text-green-600" />
+          <span className="hidden sm:inline">WhatsApp</span>
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
           onClick={handleCopyLink}
           className="gap-2 border-slate-200 hover:bg-slate-50"
           aria-label="Copiar link"
@@ -99,6 +115,7 @@ export function SocialShare({ url, title, description }: SocialShareProps) {
     </div>
   );
 }
+
 
 
 

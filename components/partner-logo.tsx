@@ -43,3 +43,4 @@ export function PartnerLogo({ src, alt, name, size = 64 }: PartnerLogoProps) {
 
 
 
+

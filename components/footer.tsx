@@ -1,6 +1,6 @@
 "use client";
 
-import { Instagram, Linkedin, Youtube, Mail, MapPin, Shield, Facebook } from "lucide-react";
+import { Instagram, Linkedin, Youtube, Mail, MapPin, Shield, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
@@ -50,28 +50,80 @@ export function Footer() {
             <p className="text-sm md:text-base text-slate-400 leading-relaxed">
               O EDA.Show existe para dar visibilidade, credibilidade e autoridade a empresas e profissionais do mercado de saúde suplementar, conectando marcas, corretores e soluções de forma clara, estratégica e humana, em todo o Brasil.
             </p>
-            <div className="flex gap-3 md:gap-4">
+            <div className="flex flex-wrap gap-3 md:gap-4">
               {siteSettings?.socialMedia?.instagram && (
-                <a href={siteSettings.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+                <a
+                  href={siteSettings.socialMedia.instagram.startsWith('http') ? siteSettings.socialMedia.instagram : `https://instagram.com/${siteSettings.socialMedia.instagram.replace('@', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Siga-nos no Instagram"
+                >
                   <Instagram className="w-5 h-5" />
                 </a>
               )}
               {siteSettings?.socialMedia?.youtube && (
-                <a href={siteSettings.socialMedia.youtube} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+                <a
+                  href={siteSettings.socialMedia.youtube.startsWith('http') ? siteSettings.socialMedia.youtube : `https://youtube.com/${siteSettings.socialMedia.youtube.startsWith('@') ? '' : '@'}${siteSettings.socialMedia.youtube}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Inscreva-se no Youtube"
+                >
                   <Youtube className="w-5 h-5" />
                 </a>
               )}
               {siteSettings?.socialMedia?.linkedin && (
-                <a href={siteSettings.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+                <a
+                  href={siteSettings.socialMedia.linkedin.startsWith('http') ? siteSettings.socialMedia.linkedin : `https://linkedin.com/in/${siteSettings.socialMedia.linkedin}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Conecte-se no LinkedIn"
+                >
                   <Linkedin className="w-5 h-5" />
                 </a>
               )}
               {siteSettings?.socialMedia?.facebook && (
-                <a href={siteSettings.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
+                <a
+                  href={siteSettings.socialMedia.facebook.startsWith('http') ? siteSettings.socialMedia.facebook : `https://facebook.com/${siteSettings.socialMedia.facebook}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Curta nossa página no Facebook"
+                >
                   <Facebook className="w-5 h-5" />
                 </a>
               )}
-              {!siteSettings?.socialMedia && (
+              {siteSettings?.socialMedia?.twitter && (
+                <a
+                  href={siteSettings.socialMedia.twitter.startsWith('http') ? siteSettings.socialMedia.twitter : `https://twitter.com/${siteSettings.socialMedia.twitter.replace('@', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Siga-nos no X / Twitter"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-4 h-4 fill-current"
+                    aria-hidden="true"
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                  </svg>
+                </a>
+              )}
+              {siteSettings?.socialMedia?.whatsapp && (
+                <a
+                  href={`https://wa.me/${siteSettings.socialMedia.whatsapp.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]"
+                  title="Fale conosco no WhatsApp"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+              )}
+              {(!siteSettings?.socialMedia || Object.values(siteSettings.socialMedia).every(v => !v)) && (
                 <>
                   <a href="https://www.instagram.com/edsonedashow" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all min-w-[44px] min-h-[44px]">
                     <Instagram className="w-5 h-5" />

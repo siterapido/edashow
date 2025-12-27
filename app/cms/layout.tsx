@@ -18,7 +18,9 @@ import {
     Menu,
     X,
     User,
-    Sparkles
+    Sparkles,
+    Share2,
+    Youtube
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -35,7 +37,9 @@ const navItems = [
     { label: 'Eventos', href: '/cms/events', icon: Calendar },
     { label: 'Patrocinadores', href: '/cms/sponsors', icon: Megaphone },
     { label: 'Publicidades', href: '/cms/banners', icon: Megaphone },
+    { label: 'YouTube', href: '/cms/youtube', icon: Youtube },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
+    { label: 'Redes Sociais', href: '/cms/settings/social', icon: Share2 },
     { label: 'Mídia', href: '/cms/media', icon: ImageIcon },
 ]
 

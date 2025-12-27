@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { processImageWithSettings, getMimeType, getExtension } from '@/lib/images/image-optimizer'
 
 export async function getMedia() {
     const supabase = await createClient()
@@ -17,29 +18,81 @@ export async function getMedia() {
 export async function uploadMedia(formData: FormData) {
     const supabase = await createClient()
     const file = formData.get('file') as File
-    const filename = `${Date.now()}-${file.name}`
+
+    // Check if it's an image
+    const isImage = file.type.startsWith('image/')
+
+    let fileBuffer: Buffer
+    let finalFilename: string
+    let finalMimeType: string
+    let finalSize: number
+
+    // Convert File to Buffer
+    const arrayBuffer = await file.arrayBuffer()
+    const originalBuffer = Buffer.from(arrayBuffer)
+
+    if (isImage) {
+        // Try to optimize the image
+        try {
+            const optimized = await processImageWithSettings(originalBuffer)
+
+            if (optimized) {
+                // Use optimized image
+                fileBuffer = optimized.buffer
+                finalMimeType = getMimeType(optimized.format)
+                finalSize = fileBuffer.length
+
+                // Generate new filename with correct extension
+                const baseName = file.name.replace(/\.[^.]+$/, '')
+                finalFilename = `${Date.now()}-${baseName}.${getExtension(optimized.format)}`
+
+                console.log(`Image optimized: ${file.name} (${file.size} bytes) -> ${finalFilename} (${finalSize} bytes)`)
+            } else {
+                // Optimization disabled or failed, use original
+                fileBuffer = originalBuffer
+                finalFilename = `${Date.now()}-${file.name}`
+                finalMimeType = file.type
+                finalSize = file.size
+            }
+        } catch (error) {
+            console.error('Error optimizing image:', error)
+            // Fallback to original
+            fileBuffer = originalBuffer
+            finalFilename = `${Date.now()}-${file.name}`
+            finalMimeType = file.type
+            finalSize = file.size
+        }
+    } else {
+        // Non-image files, use as-is
+        fileBuffer = originalBuffer
+        finalFilename = `${Date.now()}-${file.name}`
+        finalMimeType = file.type
+        finalSize = file.size
+    }
 
     // 1. Upload file to storage
     const { data: storageData, error: storageError } = await supabase.storage
         .from('edashow-media')
-        .upload(filename, file)
+        .upload(finalFilename, fileBuffer, {
+            contentType: finalMimeType
+        })
 
     if (storageError) throw storageError
 
     // 2. Get public URL
     const { data: { publicUrl } } = supabase.storage
         .from('edashow-media')
-        .getPublicUrl(filename)
+        .getPublicUrl(finalFilename)
 
     // 3. Save reference in media table
     const { data: mediaData, error: mediaError } = await supabase
         .from('media')
         .insert([
             {
-                filename,
+                filename: finalFilename,
                 url: publicUrl,
-                mime_type: file.type,
-                filesize: file.size,
+                mime_type: finalMimeType,
+                filesize: finalSize,
                 title: file.name
             }
         ])
@@ -51,6 +104,7 @@ export async function uploadMedia(formData: FormData) {
     revalidatePath('/cms/media')
     return mediaData
 }
+
 
 export async function deleteMedia(id: string, filename: string) {
     const supabase = await createClient()

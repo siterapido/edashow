@@ -1,174 +1,217 @@
 [
     {
         "filename": "1.png",
-        "name": "Dix med"
+        "name": "Patrocinador 1",
+        "display_order": 1
     },
     {
         "filename": "2.png",
-        "name": "Alice"
+        "name": "Patrocinador 2",
+        "display_order": 2
     },
     {
         "filename": "3.png",
-        "name": "KUINT INSURTECH"
+        "name": "Patrocinador 3",
+        "display_order": 3
     },
     {
         "filename": "4.png",
-        "name": "Soll"
+        "name": "Patrocinador 4",
+        "display_order": 4
     },
     {
         "filename": "5.png",
-        "name": "D2PARGROUP"
+        "name": "Patrocinador 5",
+        "display_order": 5
     },
     {
         "filename": "6.png",
-        "name": "Quind"
+        "name": "Patrocinador 6",
+        "display_order": 6
     },
     {
         "filename": "7.png",
-        "name": "AQUARIUM TECH"
+        "name": "Patrocinador 7",
+        "display_order": 7
     },
     {
         "filename": "8.png",
-        "name": "BIOVIDA SAÚDE"
+        "name": "Patrocinador 8",
+        "display_order": 8
     },
     {
         "filename": "9.jpeg",
-        "name": "Hospital Leonardo da Vinci"
+        "name": "Patrocinador 9",
+        "display_order": 9
     },
     {
         "filename": "10.png",
-        "name": "OPIPARI"
+        "name": "Patrocinador 10",
+        "display_order": 10
     },
     {
         "filename": "11.png",
-        "name": "ÚNICA SAÚDE"
+        "name": "Patrocinador 11",
+        "display_order": 11
     },
     {
         "filename": "12.png",
-        "name": "Climom"
+        "name": "Patrocinador 12",
+        "display_order": 12
     },
     {
         "filename": "13.png",
-        "name": "Hubhealth"
+        "name": "Patrocinador 13",
+        "display_order": 13
     },
     {
         "filename": "14.png",
-        "name": "Cacss"
+        "name": "Patrocinador 14",
+        "display_order": 14
     },
     {
         "filename": "15.png",
-        "name": "United"
+        "name": "Patrocinador 15",
+        "display_order": 15
     },
     {
         "filename": "16.png",
-        "name": "MedSênior"
+        "name": "Patrocinador 16",
+        "display_order": 16
     },
     {
         "filename": "17.png",
-        "name": "SAGRADA FAMÍLIA SAÚDE"
+        "name": "Patrocinador 17",
+        "display_order": 17
     },
     {
         "filename": "18.webp",
-        "name": "Sami"
+        "name": "Patrocinador 18",
+        "display_order": 18
     },
     {
         "filename": "19.png",
-        "name": "SIMETRIA BRASIL"
+        "name": "Patrocinador 19",
+        "display_order": 19
     },
     {
         "filename": "20.jpg",
-        "name": "Valorize Seguros"
+        "name": "Patrocinador 20",
+        "display_order": 20
     },
     {
         "filename": "21.png",
-        "name": "Hapvida NotreDame"
+        "name": "Patrocinador 21",
+        "display_order": 21
     },
     {
         "filename": "22.png",
-        "name": "Aticare"
+        "name": "Patrocinador 22",
+        "display_order": 22
     },
     {
         "filename": "23.png",
-        "name": "Amel's Conceito"
+        "name": "Patrocinador 23",
+        "display_order": 23
     },
     {
         "filename": "24.png",
-        "name": "Drv"
+        "name": "Patrocinador 24",
+        "display_order": 24
     },
     {
         "filename": "25.png",
-        "name": "Affix"
+        "name": "Patrocinador 25",
+        "display_order": 25
     },
     {
         "filename": "26.png",
-        "name": "ALTER BENEFÍCIOS E SEGUROS"
+        "name": "Patrocinador 26",
+        "display_order": 26
     },
     {
         "filename": "27.png",
-        "name": "BrazilHealth Insurance Specialists"
+        "name": "Patrocinador 27",
+        "display_order": 27
     },
     {
         "filename": "28.png",
-        "name": "ADC Administradora de Benefícios"
+        "name": "Patrocinador 28",
+        "display_order": 28
     },
     {
         "filename": "29.png",
-        "name": "CorClub Assessoria"
+        "name": "Patrocinador 29",
+        "display_order": 29
     },
     {
         "filename": "30.png",
-        "name": "MILLENNIUM Corretora de Seguros"
+        "name": "Patrocinador 30",
+        "display_order": 30
     },
     {
         "filename": "31.gif",
-        "name": "Sponsor 31"
+        "name": "Patrocinador 31",
+        "display_order": 31
     },
     {
         "filename": "32.png",
-        "name": "TJK SEGUROS"
+        "name": "Patrocinador 32",
+        "display_order": 32
     },
     {
         "filename": "33.png",
-        "name": "NEW OLD BENEFÍCIOS"
+        "name": "Patrocinador 33",
+        "display_order": 33
     },
     {
         "filename": "34.png",
-        "name": "Bomplano Corretora de Seguros"
+        "name": "Patrocinador 34",
+        "display_order": 34
     },
     {
         "filename": "35.png",
-        "name": "Ek Uniformes"
+        "name": "Patrocinador 35",
+        "display_order": 35
     },
     {
         "filename": "36.jpg",
-        "name": "NewPlanecom"
+        "name": "Patrocinador 36",
+        "display_order": 36
     },
     {
         "filename": "37.jpg",
-        "name": "Asche Saúde"
+        "name": "Patrocinador 37",
+        "display_order": 37
     },
     {
         "filename": "38.png",
-        "name": "Cobertura Mercado de Seguros"
+        "name": "Patrocinador 38",
+        "display_order": 38
     },
     {
         "filename": "39.jpeg",
-        "name": "CES CLUBE CORRETORES"
+        "name": "Patrocinador 39",
+        "display_order": 39
     },
     {
         "filename": "40.png",
-        "name": "1X8 CORRETORA DE SEGUROS"
+        "name": "Patrocinador 40",
+        "display_order": 40
     },
     {
         "filename": "41.png",
-        "name": "VIANA Padaria & Confeitaria"
+        "name": "Patrocinador 41",
+        "display_order": 41
     },
     {
         "filename": "42.png",
-        "name": "LAKS"
+        "name": "Patrocinador 42",
+        "display_order": 42
     },
     {
         "filename": "43.png",
-        "name": "CONTENTIX"
+        "name": "Patrocinador 43",
+        "display_order": 43
     }
 ]

@@ -42,8 +42,6 @@ async function importSponsors() {
 
         const ext = path.extname(sponsor.filename).toLowerCase();
 
-        // Removed skip to allow all files including 31.gif
-
         let fileBuffer: Buffer | Uint8Array = fs.readFileSync(originalFilePath);
         let contentType = getContentType(sponsor.filename);
 
@@ -100,21 +98,24 @@ async function importSponsors() {
             // Add a cache buster explicitly
             const publicUrl = `${publicUrlData.publicUrl}?t=${Date.now()}`;
 
-            // Update Database
+            // Update Database - simplified to only use existing columns
             const { data: existingSponsor } = await supabase
                 .from('sponsors')
                 .select('id')
                 .eq('name', sponsor.name)
                 .single();
 
+            // Prepare data object with only fields that exist in the table
+            const sponsorData: any = {
+                name: sponsor.name,
+                logo_path: publicUrl,
+                active: true
+            };
+
             if (existingSponsor) {
                 const { error: updateError } = await supabase
                     .from('sponsors')
-                    .update({
-                        logo_path: publicUrl,
-                        active: true,
-                        display_order: sponsor.display_order || 0
-                    })
+                    .update(sponsorData)
                     .eq('id', existingSponsor.id);
 
                 if (updateError) {
@@ -127,12 +128,7 @@ async function importSponsors() {
             } else {
                 const { error: insertError } = await supabase
                     .from('sponsors')
-                    .insert({
-                        name: sponsor.name,
-                        logo_path: publicUrl,
-                        active: true,
-                        display_order: sponsor.display_order || 0
-                    });
+                    .insert(sponsorData);
 
                 if (insertError) {
                     console.error(`Error inserting ${sponsor.name}:`, insertError);

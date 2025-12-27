@@ -5,9 +5,8 @@ import { Instagram, Youtube, Linkedin, Facebook, Twitter, Save, RefreshCw, Messa
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
 
-export default function SocialSettingsPage() {
+export function SocialSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [settingsId, setSettingsId] = useState<string | null>(null)
@@ -89,10 +88,10 @@ export default function SocialSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Redes Sociais</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Redes Sociais</h2>
                     <p className="text-gray-500 text-sm mt-1">Conecte as redes sociais do projeto usando o @ ou link do perfil.</p>
                 </div>
                 <Button

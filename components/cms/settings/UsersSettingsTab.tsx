@@ -8,9 +8,7 @@ import {
     Trash2,
     Edit2,
     RefreshCw,
-    Save,
     X,
-    Mail,
     Check,
     AlertCircle
 } from 'lucide-react'
@@ -19,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { getUsers, updateUserRole, updateUserProfile, deleteUser, createUser, type User } from '@/lib/actions/cms-users'
 
-export default function UsersSettingsPage() {
+export function UsersSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [users, setUsers] = useState<User[]>([])
     const [showCreateModal, setShowCreateModal] = useState(false)
@@ -82,11 +80,11 @@ export default function UsersSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Usuários</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Usuários</h2>
                     <p className="text-gray-500 text-sm mt-1">Gerencie usuários e permissões do sistema.</p>
                 </div>
                 <Button
@@ -101,10 +99,10 @@ export default function UsersSettingsPage() {
             {/* Users List */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Users className="w-4 h-4 text-orange-500" />
                         Usuários Cadastrados ({users.length})
-                    </h2>
+                    </h3>
                 </div>
                 <div className="divide-y divide-gray-100">
                     {users.length === 0 ? (
@@ -280,10 +278,10 @@ function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreate
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <UserPlus className="w-5 h-5 text-orange-500" />
                         Novo Usuário
-                    </h2>
+                    </h3>
                     <Button variant="ghost" size="icon" onClick={onClose}>
                         <X className="w-5 h-5" />
                     </Button>

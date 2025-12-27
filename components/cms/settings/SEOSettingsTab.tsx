@@ -13,10 +13,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { cn } from '@/lib/utils'
 import { getSiteSettings, updateSiteSettings } from '@/lib/actions/cms-settings'
 
-export default function SEOSettingsPage() {
+export function SEOSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
 
@@ -70,11 +69,11 @@ export default function SEOSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">SEO & Analytics</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">SEO & Analytics</h2>
                     <p className="text-gray-500 text-sm mt-1">Otimize seu site para mecanismos de busca.</p>
                 </div>
                 <Button
@@ -90,10 +89,10 @@ export default function SEOSettingsPage() {
             {/* Meta Description */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Globe className="w-4 h-4 text-orange-500" />
                         Meta Descrição
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     <div className="space-y-2">
@@ -125,10 +124,10 @@ export default function SEOSettingsPage() {
             {/* Keywords */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Tag className="w-4 h-4 text-orange-500" />
                         Palavras-chave
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     <div className="space-y-2">
@@ -149,10 +148,10 @@ export default function SEOSettingsPage() {
             {/* Analytics */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <BarChart3 className="w-4 h-4 text-orange-500" />
                         Google Analytics
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="space-y-2">
@@ -172,10 +171,10 @@ export default function SEOSettingsPage() {
             {/* Tag Manager */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Code className="w-4 h-4 text-orange-500" />
                         Google Tag Manager
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="space-y-2">

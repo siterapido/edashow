@@ -41,13 +41,7 @@ const navItems = [
     { label: 'YouTube', href: '/cms/youtube', icon: Youtube },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
     { label: 'Galeria & Mídia', href: '/cms/media', icon: ImageIcon },
-    // Configurações
-    { label: 'Configurações Gerais', href: '/cms/settings/general', icon: Settings },
-    { label: 'Branding', href: '/cms/settings/branding', icon: Settings },
-    { label: 'SEO & Analytics', href: '/cms/settings/seo', icon: Settings },
-    { label: 'Redes Sociais', href: '/cms/settings/social', icon: Share2 },
-    { label: 'Otimização de Imagens', href: '/cms/settings/images', icon: Settings },
-    { label: 'Usuários', href: '/cms/settings/users', icon: User },
+    { label: 'Configurações', href: '/cms/settings', icon: Settings },
     { label: 'Documentação', href: '/cms/docs', icon: BookOpen },
 ]
 

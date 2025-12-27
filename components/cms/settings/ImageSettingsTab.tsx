@@ -14,7 +14,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
-import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import {
     getImageSettings,
@@ -63,7 +62,7 @@ const formats = [
     { value: 'png', label: 'PNG', description: 'Suporta transparência' }
 ]
 
-export default function ImageSettingsPage() {
+export function ImageSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [uploadingLogo, setUploadingLogo] = useState(false)
@@ -169,11 +168,11 @@ export default function ImageSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Otimização de Imagens</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Otimização de Imagens</h2>
                     <p className="text-gray-500 text-sm mt-1">Configure a otimização automática e marca d'água para imagens enviadas.</p>
                 </div>
                 <Button
@@ -217,10 +216,10 @@ export default function ImageSettingsPage() {
             {settings.enabled && (
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                     <div className="p-6 border-b border-gray-100">
-                        <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                             <ImageIcon className="w-4 h-4 text-orange-500" />
                             Configurações de Otimização
-                        </h2>
+                        </h3>
                     </div>
                     <div className="p-6 space-y-6">
                         {/* Format */}

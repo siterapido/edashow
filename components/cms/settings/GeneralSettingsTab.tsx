@@ -19,7 +19,7 @@ import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
 import { getSiteSettings, updateSiteSettings, uploadFavicon, type SiteSettings } from '@/lib/actions/cms-settings'
 
-export default function GeneralSettingsPage() {
+export function GeneralSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [uploadingFavicon, setUploadingFavicon] = useState(false)
@@ -108,11 +108,11 @@ export default function GeneralSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Configurações Gerais</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Configurações Gerais</h2>
                     <p className="text-gray-500 text-sm mt-1">Configure as informações básicas do seu site.</p>
                 </div>
                 <Button
@@ -128,10 +128,10 @@ export default function GeneralSettingsPage() {
             {/* Site Info */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Globe className="w-4 h-4 text-orange-500" />
                         Informações do Site
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -199,10 +199,10 @@ export default function GeneralSettingsPage() {
             {/* Contact Info */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Mail className="w-4 h-4 text-orange-500" />
                         Informações de Contato
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -250,10 +250,10 @@ export default function GeneralSettingsPage() {
             {/* Footer Settings */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Settings className="w-4 h-4 text-orange-500" />
                         Rodapé
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="space-y-2">

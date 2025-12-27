@@ -34,7 +34,7 @@ const GOOGLE_FONTS = [
     'Work Sans'
 ]
 
-export default function BrandingSettingsPage() {
+export function BrandingSettingsTab() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [uploadingLogo, setUploadingLogo] = useState(false)
@@ -128,11 +128,11 @@ export default function BrandingSettingsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Branding</h1>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Branding</h2>
                     <p className="text-gray-500 text-sm mt-1">Configure cores, tipografia e logotipo do site.</p>
                 </div>
                 <Button
@@ -148,10 +148,10 @@ export default function BrandingSettingsPage() {
             {/* Logo */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Palette className="w-4 h-4 text-orange-500" />
                         Logotipo
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     {settings.logo_url ? (
@@ -215,10 +215,10 @@ export default function BrandingSettingsPage() {
             {/* Typography */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Type className="w-4 h-4 text-orange-500" />
                         Tipografia
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -259,10 +259,10 @@ export default function BrandingSettingsPage() {
             {/* Light Mode Colors */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Sun className="w-4 h-4 text-orange-500" />
                         Cores - Modo Claro
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -304,10 +304,10 @@ export default function BrandingSettingsPage() {
             {/* Dark Mode Colors */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
-                    <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Moon className="w-4 h-4 text-orange-500" />
                         Cores - Modo Escuro
-                    </h2>
+                    </h3>
                 </div>
                 <div className="p-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

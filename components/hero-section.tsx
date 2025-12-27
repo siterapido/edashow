@@ -124,7 +124,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
         if (!a.featured && b.featured) return 1;
         return 0;
       })
-      .slice(0, 4); // Limitar a 4 slides
+      .slice(0, 6); // Limitar a 6 slides
 
     return sortedPosts.map((post, index) => {
       const publishedAt = post.published_at

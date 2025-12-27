@@ -52,7 +52,7 @@ export default async function HomePage() {
 
   // Buscar posts em destaque para o Hero Section
   const featuredPosts = await getPosts({
-    limit: 4,
+    limit: 6,
     status: 'published',
     featured: true
   })
@@ -60,7 +60,7 @@ export default async function HomePage() {
   // Se não houver posts em destaque, usar os mais recentes
   const heroPosts = featuredPosts.length > 0
     ? featuredPosts
-    : allPosts.slice(0, 4)
+    : allPosts.slice(0, 6)
 
   // Buscar patrocinadores
   const sponsors = await getSponsors({

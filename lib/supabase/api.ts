@@ -82,7 +82,7 @@ export async function getCategories() {
 export async function getSponsors(options: { active?: boolean } = {}) {
     const supabase = getPublicSupabaseClient()
 
-    let query = supabase.from('sponsors').select('*').order('name')
+    let query = supabase.from('sponsors').select('*').order('display_order', { ascending: true })
 
     if (options.active) query = query.eq('active', true)
 

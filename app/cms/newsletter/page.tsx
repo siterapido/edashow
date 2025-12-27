@@ -89,7 +89,7 @@ export default function CMSNewsletterPage() {
     ]
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight text-gray-900">Assinantes da Newsletter</h1>

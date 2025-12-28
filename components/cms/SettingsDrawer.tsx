@@ -30,13 +30,14 @@ interface SettingsDrawerProps {
         status: string
         category_id: string
         columnist_id: string
+        author_id: string
         published_at: string
         featured_home: boolean
         source_url: string
     }
     onChange: (field: string, value: any) => void
     categories: Array<{ id: string; name: string }>
-    columnists: Array<{ id: string; name: string }>
+    authors: Array<{ id: string; name: string }>
     onDelete?: () => void
     isNew?: boolean
 }
@@ -281,7 +282,7 @@ function SettingsModal({
     formData,
     onChange,
     categories,
-    columnists,
+    authors,
     onDelete,
     isNew
 }: SettingsDrawerProps) {
@@ -416,11 +417,11 @@ function SettingsModal({
                             </div>
 
                             <div className="space-y-4">
-                                <SectionHeader icon={User} label="Autor / Colunista" />
+                                <SectionHeader icon={User} label="Autor do Sistema" />
                                 <CustomSelect
-                                    value={formData.columnist_id}
-                                    onChange={(val) => onChange('columnist_id', val)}
-                                    options={columnists}
+                                    value={formData.author_id}
+                                    onChange={(val) => onChange('author_id', val)}
+                                    options={authors}
                                     placeholder="Selecione o autor..."
                                     icon={User}
                                 />

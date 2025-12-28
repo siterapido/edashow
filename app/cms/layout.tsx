@@ -21,7 +21,8 @@ import {
     Sparkles,
     Share2,
     Youtube,
-    BookOpen
+    BookOpen,
+    Download
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -41,6 +42,7 @@ const navItems = [
     { label: 'YouTube', href: '/cms/youtube', icon: Youtube },
     { label: 'Newsletter', href: '/cms/newsletter', icon: Mail },
     { label: 'Galeria & Mídia', href: '/cms/media', icon: ImageIcon },
+    { label: 'Importar WordPress', href: '/cms/import', icon: Download },
     { label: 'Configurações', href: '/cms/settings', icon: Settings },
     { label: 'Documentação', href: '/cms/docs', icon: BookOpen },
 ]

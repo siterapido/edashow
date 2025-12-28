@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { DataTable } from '@/components/cms/DataTable'
-import { saveSponsor, deleteSponsor, toggleSponsorActive, uploadSponsorLogo } from '@/lib/actions/cms-sponsors'
+import { saveSponsor, deleteSponsor, toggleSponsorActive, uploadSponsorLogo, updateSponsorOrder } from '@/lib/actions/cms-sponsors'
 import { createClient } from '@/lib/supabase/client'
 
 interface Sponsor {
@@ -134,6 +134,26 @@ export default function CMSSponsorsPage() {
         }
     }
 
+    const handleReorder = async (newItems: Sponsor[]) => {
+        // Optimistic update with new display_orders
+        const reordered = newItems.map((item, index) => ({
+            ...item,
+            display_order: index + 1
+        }))
+        setSponsors(reordered)
+
+        try {
+            // Send only necessary data to server
+            await updateSponsorOrder(
+                reordered.map(({ id, display_order }) => ({ id, display_order }))
+            )
+        } catch (error) {
+            console.error('Failed to update order', error)
+            alert('Erro ao salvar ordenação')
+            fetchSponsors() // Revert on error
+        }
+    }
+
     const columns = [
         {
             key: 'drag',
@@ -239,6 +259,7 @@ export default function CMSSponsorsPage() {
                         data={sponsors}
                         loading={loading}
                         onRowClick={handleEdit}
+                        onReorder={handleReorder}
                     />
                 </div>
 

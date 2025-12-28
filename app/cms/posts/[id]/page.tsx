@@ -1,5 +1,4 @@
-import React from 'react'
-import { getPost, getCategories, getColumnists } from '@/lib/actions/cms-posts'
+import { getPost, getCategories, getAuthors } from '@/lib/actions/cms-posts'
 import { PostEditor } from '@/components/cms/PostEditor'
 import { notFound } from 'next/navigation'
 
@@ -15,9 +14,9 @@ export default async function CMSPostEditPage({ params }: { params: { id: string
         }
     }
 
-    const [categories, columnists] = await Promise.all([
+    const [categories, authors] = await Promise.all([
         getCategories(),
-        getColumnists()
+        getAuthors()
     ])
 
     return (
@@ -25,8 +24,9 @@ export default async function CMSPostEditPage({ params }: { params: { id: string
             <PostEditor
                 post={post}
                 categories={categories}
-                columnists={columnists}
+                authors={authors}
             />
         </div>
     )
 }
+

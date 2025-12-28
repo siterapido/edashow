@@ -14,7 +14,8 @@ export async function getPosts(options: {
         .select(`
       *,
       category:categories(id, name, slug),
-      author:columnists(id, name, slug, photo_url),
+      author:profiles!author_id(id, name, slug, avatar_url, bio, social_links),
+      columnist:columnists(id, name, slug, photo_url),
       cover_image_url
     `)
         .order('published_at', { ascending: false })
@@ -32,8 +33,6 @@ export async function getPosts(options: {
     }
 
     if (options.category) {
-        // Buscar o ID da categoria pelo slug primeiro se necessário, 
-        // ou usar join filtrado. No Supabase, se categories é uma tabela relacionada:
         query = query.filter('categories.slug', 'eq', options.category)
     }
 
@@ -42,7 +41,18 @@ export async function getPosts(options: {
         console.error('Error fetching posts from Supabase:', error)
         return []
     }
-    return data || []
+
+    // Process authors: prefer profiles, fallback to columnists
+    return (data || []).map(post => {
+        const author = post.author || post.columnist || { name: 'Redação' }
+        return {
+            ...post,
+            author: {
+                ...author,
+                avatar_url: (author as any).avatar_url || (author as any).photo_url
+            }
+        }
+    })
 }
 
 export async function getPostBySlug(slug: string) {
@@ -52,7 +62,8 @@ export async function getPostBySlug(slug: string) {
         .select(`
       *,
       category:categories(id, name, slug),
-      author:columnists(id, name, slug, bio, photo_url, instagram_url, twitter_url),
+      author:profiles!author_id(id, name, slug, avatar_url, bio, social_links, title, website),
+      columnist:columnists(id, name, slug, bio, photo_url, instagram_url, twitter_url),
       cover_image_url
     `)
         .eq('slug', slug)
@@ -62,8 +73,40 @@ export async function getPostBySlug(slug: string) {
         console.error(`Error fetching post ${slug}:`, error)
         return null
     }
-    return data
+
+    // Process author
+    const profileAuthor = data.author
+    const columnistAuthor = data.columnist
+
+    let author: any = null
+    if (profileAuthor) {
+        author = {
+            id: profileAuthor.id,
+            name: profileAuthor.name,
+            slug: profileAuthor.slug,
+            bio: profileAuthor.bio,
+            avatar_url: profileAuthor.avatar_url,
+            title: profileAuthor.title,
+            website: profileAuthor.website,
+            twitter_url: profileAuthor.social_links?.twitter ? `https://twitter.com/${profileAuthor.social_links.twitter}` : null,
+            instagram_url: profileAuthor.social_links?.instagram ? `https://instagram.com/${profileAuthor.social_links.instagram}` : null,
+            linkedin_url: profileAuthor.social_links?.linkedin ? `https://linkedin.com/in/${profileAuthor.social_links.linkedin}` : null
+        }
+    } else if (columnistAuthor) {
+        author = {
+            ...columnistAuthor,
+            avatar_url: columnistAuthor.photo_url
+        }
+    } else {
+        author = { name: 'Redação', bio: 'Equipe de jornalismo EdaShow.' }
+    }
+
+    return {
+        ...data,
+        author
+    }
 }
+
 
 export async function getCategories() {
     const supabase = getPublicSupabaseClient()

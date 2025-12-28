@@ -24,10 +24,10 @@ import { cn } from '@/lib/utils'
 interface PostEditorProps {
     post: any
     categories: any[]
-    columnists: any[]
+    authors: any[]
 }
 
-export function PostEditor({ post, categories, columnists }: PostEditorProps) {
+export function PostEditor({ post, categories, authors }: PostEditorProps) {
     const router = useRouter()
 
     const [settingsOpen, setSettingsOpen] = useState(false)
@@ -42,6 +42,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
         cover_image_url: post?.cover_image_url || '',
         category_id: post?.category_id || '',
         columnist_id: post?.columnist_id || '',
+        author_id: post?.author_id || '',
         status: post?.status || 'draft',
         published_at: post?.published_at ? new Date(post.published_at).toISOString().split('T')[0] : '',
         featured_home: post?.featured_home || false,
@@ -203,13 +204,14 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     status: formData.status,
                     category_id: formData.category_id,
                     columnist_id: formData.columnist_id,
+                    author_id: formData.author_id,
                     published_at: formData.published_at,
                     featured_home: formData.featured_home,
                     source_url: formData.source_url
                 }}
                 onChange={updateField}
                 categories={categories}
-                columnists={columnists}
+                authors={authors}
                 onDelete={handleDelete}
                 isNew={formData.id === 'new'}
             />
@@ -226,6 +228,7 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                     category: currentCategory
                 }}
             />
+
 
             {/* Bottom Action Bar */}
             <div className="sticky bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] safe-area-pb">

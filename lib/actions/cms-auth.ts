@@ -27,7 +27,7 @@ export async function login(formData: { email: string; password: string }): Prom
     }
   }
 
-  // Check if user has admin/editor role
+  // Check if user has CMS access role
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
     const { data: roleData } = await supabase
@@ -36,7 +36,8 @@ export async function login(formData: { email: string; password: string }): Prom
       .eq('user_id', user.id)
       .single()
 
-    if (!roleData || (roleData.role !== 'admin' && roleData.role !== 'editor')) {
+    const cmsRoles = ['admin', 'editor', 'author', 'columnist', 'contributor']
+    if (!roleData || !cmsRoles.includes(roleData.role)) {
       await supabase.auth.signOut()
       return {
         message: 'Acesso negado',
@@ -77,10 +78,13 @@ export async function getCurrentUser() {
     email: user.email,
     name: profile?.name || user.email?.split('@')[0],
     role: roleData?.role || 'user',
+    ...profile
   }
 }
 
 export async function isAuthenticated(): Promise<boolean> {
   const user = await getCurrentUser()
-  return !!user && (user.role === 'admin' || user.role === 'editor')
+  const cmsRoles = ['admin', 'editor', 'author', 'columnist', 'contributor']
+  return !!user && cmsRoles.includes(user.role)
 }
+

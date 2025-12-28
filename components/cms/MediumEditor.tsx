@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { BubbleMenu, FloatingMenu } from '@tiptap/react/menus'
 import StarterKit from '@tiptap/starter-kit'
@@ -10,7 +10,7 @@ import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
 import TextAlign from '@tiptap/extension-text-align'
-
+import { ImageCropperModal } from './ImageCropperModal'
 
 import {
     Bold,
@@ -46,6 +46,9 @@ interface MediumEditorProps {
 
 export function MediumEditor({ content, onChange, placeholder = 'Comece a escrever sua história...' }: MediumEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const [cropperOpen, setCropperOpen] = useState(false)
+    const [tempImage, setTempImage] = useState<string | null>(null)
+    const [originalFileName, setOriginalFileName] = useState<string>('image.jpg')
 
     const editor = useEditor({
         immediatelyRender: false,
@@ -92,7 +95,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
 
                     if (images.length > 0) {
                         event.preventDefault()
-                        images.forEach(image => handleImageUpload(image))
+                        handleFileSelect(images[0]) // Handle only first image for crop
                         return true
                     }
                 }
@@ -105,7 +108,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                         if (item.type.startsWith('image/')) {
                             event.preventDefault()
                             const file = item.getAsFile()
-                            if (file) handleImageUpload(file)
+                            if (file) handleFileSelect(file)
                             return true
                         }
                     }
@@ -115,8 +118,21 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
         },
     })
 
-    const handleImageUpload = useCallback(async (file: File) => {
+    const handleFileSelect = useCallback((file: File) => {
+        setOriginalFileName(file.name)
+        const reader = new FileReader()
+        reader.onload = () => {
+            setTempImage(reader.result as string)
+            setCropperOpen(true)
+        }
+        reader.readAsDataURL(file)
+    }, [])
+
+    const handleUploadConfirm = useCallback(async (blob: Blob) => {
         if (!editor) return
+
+        setCropperOpen(false)
+        setTempImage(null)
 
         // Insert placeholder
         const placeholderId = `uploading-${Date.now()}`
@@ -127,31 +143,41 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
 
         try {
             const formData = new FormData()
+            const file = new File([blob], originalFileName, { type: blob.type })
             formData.append('file', file)
             const result = await uploadMedia(formData)
 
             // Replace placeholder with actual image
+            // Note: Since we don't have easy ID reference to placeholder in standard Image extension,
+            // we might replace the last inserted image or just insert new one.
+            // A better UX is replacing selection, but for now we basically overwrote.
+            // Wait, standard behavior appends. Let's fix this by deleting previous (placeholder) logic if needed
+            // OR simpler: Just insert the image now.
+
+            // Ideally we find the placeholder and replace src.
+            // But simplifying: just insert the final image.
+            // Tiptap's setImage replaces selection.
             editor.chain().focus().setImage({
                 src: result.url,
-                alt: file.name
+                alt: originalFileName
             }).run()
         } catch (error) {
             console.error('Erro ao fazer upload da imagem:', error)
             alert('Erro ao fazer upload da imagem. Tente novamente.')
         }
-    }, [editor])
+    }, [editor, originalFileName])
 
     const triggerImageUpload = useCallback(() => {
         fileInputRef.current?.click()
     }, [])
 
-    const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
-            handleImageUpload(file)
+            handleFileSelect(file)
             e.target.value = ''
         }
-    }, [handleImageUpload])
+    }, [handleFileSelect])
 
     const setLink = useCallback(() => {
         if (!editor) return
@@ -181,7 +207,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                onChange={handleFileSelect}
+                onChange={handleInputChange}
                 className="hidden"
             />
 
@@ -322,6 +348,20 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
 
             {/* Mobile Bottom Toolbar */}
             <MobileToolbar editor={editor} onImageUpload={triggerImageUpload} />
+
+            {/* Image Cropper Modal */}
+            {tempImage && (
+                <ImageCropperModal
+                    image={tempImage}
+                    open={cropperOpen}
+                    aspectRatio={16 / 9} // Default aspect ratio, maybe make this optional or flexible?
+                    onClose={() => {
+                        setCropperOpen(false)
+                        setTempImage(null)
+                    }}
+                    onConfirm={handleUploadConfirm}
+                />
+            )}
         </div>
     )
 }

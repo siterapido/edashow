@@ -316,148 +316,149 @@ function ChangePasswordModal({ user, onClose, onSuccess }: {
             </div>
         </div>
     )
+}
 
-    function EditUserForm({ user, onSave, onCancel, saving }: {
-        user: User
-        onSave: (data: { name: string }) => void
-        onCancel: () => void
-        saving: boolean
-    }) {
-        const [name, setName] = useState(user.name)
+function EditUserForm({ user, onSave, onCancel, saving }: {
+    user: User
+    onSave: (data: { name: string }) => void
+    onCancel: () => void
+    saving: boolean
+}) {
+    const [name, setName] = useState(user.name)
 
-        return (
-            <div className="flex items-center gap-2">
-                <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="h-8 w-48"
-                    placeholder="Nome"
-                />
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => onSave({ name })} disabled={saving}>
-                    <Check className="w-4 h-4 text-green-600" />
-                </Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onCancel}>
-                    <X className="w-4 h-4 text-gray-500" />
-                </Button>
-            </div>
-        )
-    }
+    return (
+        <div className="flex items-center gap-2">
+            <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-8 w-48"
+                placeholder="Nome"
+            />
+            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => onSave({ name })} disabled={saving}>
+                <Check className="w-4 h-4 text-green-600" />
+            </Button>
+            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onCancel}>
+                <X className="w-4 h-4 text-gray-500" />
+            </Button>
+        </div>
+    )
+}
 
-    function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
-        const [saving, setSaving] = useState(false)
-        const [form, setForm] = useState({
-            email: '',
-            password: '',
-            name: '',
-            role: 'editor' as 'admin' | 'editor'
-        })
-        const [error, setError] = useState('')
+function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
+    const [saving, setSaving] = useState(false)
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+        name: '',
+        role: 'editor' as 'admin' | 'editor'
+    })
+    const [error, setError] = useState('')
 
-        const handleSubmit = async (e: React.FormEvent) => {
-            e.preventDefault()
-            setError('')
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError('')
 
-            if (!form.email || !form.password || !form.name) {
-                setError('Preencha todos os campos')
-                return
-            }
-
-            if (form.password.length < 6) {
-                setError('A senha deve ter pelo menos 6 caracteres')
-                return
-            }
-
-            setSaving(true)
-            const result = await createUser(form)
-
-            if (result.success) {
-                onCreated()
-            } else {
-                setError(result.error || 'Erro ao criar usuário')
-            }
-            setSaving(false)
+        if (!form.email || !form.password || !form.name) {
+            setError('Preencha todos os campos')
+            return
         }
 
-        return (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-                    <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                            <UserPlus className="w-5 h-5 text-orange-500" />
-                            Novo Usuário
-                        </h3>
-                        <Button variant="ghost" size="icon" onClick={onClose}>
-                            <X className="w-5 h-5" />
-                        </Button>
+        if (form.password.length < 6) {
+            setError('A senha deve ter pelo menos 6 caracteres')
+            return
+        }
+
+        setSaving(true)
+        const result = await createUser(form)
+
+        if (result.success) {
+            onCreated()
+        } else {
+            setError(result.error || 'Erro ao criar usuário')
+        }
+        setSaving(false)
+    }
+
+    return (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                        <UserPlus className="w-5 h-5 text-orange-500" />
+                        Novo Usuário
+                    </h3>
+                    <Button variant="ghost" size="icon" onClick={onClose}>
+                        <X className="w-5 h-5" />
+                    </Button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                    {error && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
+                            <AlertCircle className="w-4 h-4" />
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Nome</label>
+                        <Input
+                            value={form.name}
+                            onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="Nome completo"
+                            className="bg-gray-50 border-gray-200 focus:bg-white"
+                        />
                     </div>
 
-                    <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                        {error && (
-                            <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
-                                <AlertCircle className="w-4 h-4" />
-                                {error}
-                            </div>
-                        )}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Email</label>
+                        <Input
+                            type="email"
+                            value={form.email}
+                            onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
+                            placeholder="email@exemplo.com"
+                            className="bg-gray-50 border-gray-200 focus:bg-white"
+                        />
+                    </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Nome</label>
-                            <Input
-                                value={form.name}
-                                onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
-                                placeholder="Nome completo"
-                                className="bg-gray-50 border-gray-200 focus:bg-white"
-                            />
-                        </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Senha</label>
+                        <Input
+                            type="password"
+                            value={form.password}
+                            onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
+                            placeholder="Mínimo 6 caracteres"
+                            className="bg-gray-50 border-gray-200 focus:bg-white"
+                        />
+                    </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Email</label>
-                            <Input
-                                type="email"
-                                value={form.email}
-                                onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
-                                placeholder="email@exemplo.com"
-                                className="bg-gray-50 border-gray-200 focus:bg-white"
-                            />
-                        </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Tipo de Acesso</label>
+                        <select
+                            value={form.role}
+                            onChange={(e) => setForm(prev => ({ ...prev, role: e.target.value as any }))}
+                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white"
+                        >
+                            <option value="editor">Editor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Senha</label>
-                            <Input
-                                type="password"
-                                value={form.password}
-                                onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
-                                placeholder="Mínimo 6 caracteres"
-                                className="bg-gray-50 border-gray-200 focus:bg-white"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Tipo de Acesso</label>
-                            <select
-                                value={form.role}
-                                onChange={(e) => setForm(prev => ({ ...prev, role: e.target.value as any }))}
-                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white"
-                            >
-                                <option value="editor">Editor</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-
-                        <div className="flex justify-end gap-3 pt-4">
-                            <Button type="button" variant="outline" onClick={onClose}>
-                                Cancelar
-                            </Button>
-                            <Button
-                                type="submit"
-                                className="bg-orange-500 hover:bg-orange-400 text-white"
-                                disabled={saving}
-                            >
-                                {saving ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
-                                Criar Usuário
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button type="button" variant="outline" onClick={onClose}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="bg-orange-500 hover:bg-orange-400 text-white"
+                            disabled={saving}
+                        >
+                            {saving ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                            Criar Usuário
+                        </Button>
+                    </div>
+                </form>
             </div>
-        )
-    }
+        </div>
+    )
+}

@@ -12,8 +12,12 @@ export interface AuthError {
   }>
 }
 
-export async function login(formData: { email: string; password: string }): Promise<{ success: boolean } | AuthError> {
+// Cookie name for remember-me preference
+const REMEMBER_ME_COOKIE = 'cms_remember_me'
+
+export async function login(formData: { email: string; password: string; rememberMe?: boolean }): Promise<{ success: boolean } | AuthError> {
   const supabase = await createClient()
+  const cookieStore = await cookies()
 
   const { error } = await supabase.auth.signInWithPassword({
     email: formData.email,
@@ -27,6 +31,17 @@ export async function login(formData: { email: string; password: string }): Prom
     }
   }
 
+  // Save remember-me preference
+  const rememberMe = formData.rememberMe ?? true
+  cookieStore.set(REMEMBER_ME_COOKIE, rememberMe ? 'true' : 'false', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    // If remember me is true, cookie lasts 30 days; otherwise it's a session cookie
+    ...(rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
+  })
+
   // Check if user has admin/editor role
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
@@ -38,6 +53,7 @@ export async function login(formData: { email: string; password: string }): Prom
 
     if (!roleData || (roleData.role !== 'admin' && roleData.role !== 'editor')) {
       await supabase.auth.signOut()
+      cookieStore.delete(REMEMBER_ME_COOKIE)
       return {
         message: 'Acesso negado',
         errors: [{ message: 'Você não tem permissão para acessar o painel' }],
@@ -50,7 +66,11 @@ export async function login(formData: { email: string; password: string }): Prom
 
 export async function logout() {
   const supabase = await createClient()
+  const cookieStore = await cookies()
+
   await supabase.auth.signOut()
+  cookieStore.delete(REMEMBER_ME_COOKIE)
+
   redirect('/cms/login')
 }
 

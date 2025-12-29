@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Logo } from '@/components/logo'
 import { login } from '@/lib/actions/cms-auth'
 
@@ -15,6 +16,7 @@ export default function CMSLoginPage() {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [showPassword, setShowPassword] = useState(false)
+    const [rememberMe, setRememberMe] = useState(true)
     const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
     async function handleSubmit(formData: FormData) {
@@ -24,7 +26,7 @@ export default function CMSLoginPage() {
         setErrorMsg(null)
 
         startTransition(async () => {
-            const result = await login({ email, password })
+            const result = await login({ email, password, rememberMe })
 
             if (result && 'message' in result) {
                 setErrorMsg(result.message)
@@ -103,6 +105,22 @@ export default function CMSLoginPage() {
                                         )}
                                     </button>
                                 </div>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="rememberMe"
+                                    checked={rememberMe}
+                                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                                    disabled={isPending}
+                                    className="border-gray-300 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                                />
+                                <Label
+                                    htmlFor="rememberMe"
+                                    className="text-sm text-gray-600 cursor-pointer select-none"
+                                >
+                                    Permanecer conectado neste dispositivo
+                                </Label>
                             </div>
 
                             {errorMsg && (

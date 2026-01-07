@@ -163,7 +163,8 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
       // Author logic
       const authorName = post.author?.name || "Redação Eda Show";
       const authorRole = post.author?.bio || "Equipe Editorial";
-      const authorImage = post.author?.photo_url || "/images/eda-redacao.png";
+      const isRedacao = authorName.includes('Redação') || authorName.includes('Redacao');
+      const authorImage = isRedacao ? '/images/eda-redacao.png' : (post.author?.photo_url || '/images/eda-redacao.png');
 
       return {
         id: post.id || `post-${index}`,

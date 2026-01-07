@@ -110,7 +110,9 @@ export default async function PostPage({ params }: PostPageProps) {
                 {post.author && (
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 border-2 border-white/20">
-                      {post.author.photo_url ? (
+                      {(post.author.name?.includes('Redação') || post.author.name?.includes('Redacao')) ? (
+                        <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} />
+                      ) : post.author.photo_url ? (
                         <AvatarImage src={post.author.photo_url} alt={post.author.name} />
                       ) : (
                         <AvatarFallback>
@@ -243,7 +245,9 @@ export default async function PostPage({ params }: PostPageProps) {
                 <h3 className="text-2xl font-bold mb-6 text-slate-900">Sobre o Autor</h3>
                 <div className="flex gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <Avatar className="h-24 w-24 shrink-0">
-                    {post.author.photo_url ? (
+                    {(post.author.name?.includes('Redação') || post.author.name?.includes('Redacao')) ? (
+                      <AvatarImage src="/images/eda-redacao.png" alt={post.author.name} />
+                    ) : post.author.photo_url ? (
                       <AvatarImage
                         src={post.author.photo_url}
                         alt={post.author.name}

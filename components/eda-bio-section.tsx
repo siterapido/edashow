@@ -39,7 +39,7 @@ export function EdaBioSection() {
             <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex-shrink-0 mx-auto md:mx-0">
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
                 <Image
-                  src="/images/eda-sobre.jpg"
+                  src="/images/eda-redacao.png"
                   alt="Eda Águia"
                   fill
                   className="object-cover object-center"

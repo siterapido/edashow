@@ -351,6 +351,9 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
               <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-900/90 to-slate-900/80" />
             </div>
 
+            {/* Navigation Buttons - Adjusted for mobile */}
+            <div className={`swiper-button-prev !bg-black/20 hover:!bg-black/40 !w-10 !h-10 sm:!w-12 sm:!h-12 !rounded-full !backdrop-blur-sm after:!text-sm sm:after:!text-lg after:!font-bold !text-white transition-all transform hover:scale-105 active:scale-95 !left-4 sm:!left-6 lg:!left-10 z-50`} style={{ top: 'auto', bottom: '15%' }} />
+            <div className={`swiper-button-next !bg-black/20 hover:!bg-black/40 !w-10 !h-10 sm:!w-12 sm:!h-12 !rounded-full !backdrop-blur-sm after:!text-sm sm:after:!text-lg after:!font-bold !text-white transition-all transform hover:scale-105 active:scale-95 !right-4 sm:!right-6 lg:!right-10 z-50`} style={{ top: 'auto', bottom: '15%' }} />
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -375,7 +378,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                     </span>
                   </div>
 
-                  <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
                     {currentSlideData.title}
                   </h1>
 
@@ -394,7 +397,6 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-xs sm:text-sm font-semibold text-white">Por {currentSlideData.authorName || "Redação Eda Show"}</span>
-                      <span className="text-xs text-slate-400">{currentSlideData.authorRole || "Equipe Editorial"}</span>
                     </div>
                   </div>
 

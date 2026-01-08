@@ -51,17 +51,12 @@ export default async function HomePage() {
     status: 'published'
   })
 
-  // Buscar posts em destaque para o Hero Section
-  const featuredPosts = await getPosts({
-    limit: 6,
-    status: 'published',
-    featured: true
+  // Buscar todos os posts para o Hero Section (incluindo não-destaque)
+  // O componente HeroSection fará a ordenação interna priorizando destaque e depois data
+  const heroPosts = await getPosts({
+    limit: 12,
+    status: 'published'
   })
-
-  // Se não houver posts em destaque, usar os mais recentes
-  const heroPosts = featuredPosts.length > 0
-    ? featuredPosts
-    : allPosts.slice(0, 6)
 
   // Buscar patrocinadores
   const sponsors = await getSponsors({

@@ -1,13 +1,11 @@
 'use client'
 
 import React from 'react'
-import { X, Smartphone, Monitor } from 'lucide-react'
+import { Smartphone, Monitor, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface PostPreviewProps {
-    open: boolean
-    onClose: () => void
     post: {
         title: string
         content: string
@@ -15,80 +13,110 @@ interface PostPreviewProps {
         cover_image_url: string
         category?: string
     }
+    readingTime?: number
+    wordCount?: number
 }
 
-export function PostPreview({ open, onClose, post }: PostPreviewProps) {
+export function PostPreview({ post, readingTime, wordCount }: PostPreviewProps) {
     const [viewMode, setViewMode] = React.useState<'mobile' | 'desktop'>('desktop')
 
-    if (!open) return null
-
     return (
-        <div className="fixed inset-0 z-[100] bg-white/90 backdrop-blur-md flex flex-col">
-            {/* Toolbar */}
-            <div className="border-b border-gray-200 bg-white p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <h2 className="text-gray-900 font-bold">Pré-visualização</h2>
-                    <div className="h-6 w-px bg-gray-200" />
-                    <div className="flex bg-gray-100 rounded-lg p-1">
+        <div className="flex flex-col h-full">
+            {/* Preview Toolbar */}
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+                <div className="flex items-center gap-3">
+                    <h3 className="text-sm font-bold text-gray-900">Pré-visualização ao Vivo</h3>
+
+                    {/* View Mode Toggle */}
+                    <div className="flex bg-gray-100 rounded-lg p-0.5">
                         <button
                             onClick={() => setViewMode('desktop')}
                             className={cn(
-                                "p-1.5 rounded-md transition-all",
+                                "p-1 rounded-md transition-all",
                                 viewMode === 'desktop' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
                             )}
+                            title="Visualização Desktop"
                         >
-                            <Monitor className="w-4 h-4" />
+                            <Monitor className="w-3.5 h-3.5" />
                         </button>
                         <button
                             onClick={() => setViewMode('mobile')}
                             className={cn(
-                                "p-1.5 rounded-md transition-all",
+                                "p-1 rounded-md transition-all",
                                 viewMode === 'mobile' ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
                             )}
+                            title="Visualização Mobile"
                         >
-                            <Smartphone className="w-4 h-4" />
+                            <Smartphone className="w-3.5 h-3.5" />
                         </button>
                     </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="text-gray-400 hover:text-gray-900">
-                    <X className="w-5 h-5" />
-                </Button>
+
+                {/* Metrics Badge */}
+                <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-200">
+                    <Clock className="w-3 h-3" />
+                    <span className="font-medium">{readingTime || 1} min</span>
+                </div>
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-gray-50">
+            {/* Content Preview Area */}
+            <div className={cn(
+                "flex-1 overflow-y-auto bg-gray-50 rounded-xl transition-all duration-300 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent",
+                viewMode === 'desktop' ? "p-6" : "p-4"
+            )}>
                 <div className={cn(
-                    "bg-white shadow-2xl transition-all duration-300 overflow-y-auto scrollbar-hide flex flex-col",
-                    viewMode === 'desktop' ? "w-full max-w-4xl rounded-xl" : "w-[375px] h-[667px] self-center rounded-[3rem] border-8 border-gray-200"
+                    "bg-white shadow-lg mx-auto transition-all duration-300 overflow-hidden",
+                    viewMode === 'desktop'
+                        ? "w-full rounded-xl"
+                        : "w-[320px] rounded-[2rem] border-4 border-gray-300"
                 )}>
-                    {/* Fake Browser/Mobile Status bar */}
+                    {/* Fake Mobile Status Bar */}
                     {viewMode === 'mobile' && (
-                        <div className="h-6 w-full flex justify-center items-center py-6">
-                            <div className="w-20 h-4 bg-gray-100 rounded-full" />
+                        <div className="h-4 w-full bg-gray-100 flex justify-center items-center">
+                            <div className="w-16 h-2 bg-gray-300 rounded-full" />
                         </div>
                     )}
 
-                    <div className="p-6 md:p-12 space-y-6">
-                        {/* Header Info */}
-                        <div className="space-y-4">
-                            {post.category && (
-                                <span className="text-orange-500 font-bold text-sm uppercase tracking-wider">
+                    {/* Article Content */}
+                    <div className={cn(
+                        "space-y-4",
+                        viewMode === 'desktop' ? "p-6" : "p-4"
+                    )}>
+                        {/* Category Badge */}
+                        {post.category && (
+                            <div className="inline-block">
+                                <span className="text-orange-500 font-bold text-xs uppercase tracking-wider">
                                     {post.category}
                                 </span>
-                            )}
-                            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-                                {post.title || 'Título do Post'}
-                            </h1>
-                            {post.excerpt && (
-                                <p className="text-xl text-slate-400 font-medium">
-                                    {post.excerpt}
-                                </p>
-                            )}
-                        </div>
+                            </div>
+                        )}
+
+                        {/* Title */}
+                        <h1 className={cn(
+                            "font-extrabold text-gray-900 leading-tight",
+                            viewMode === 'desktop'
+                                ? "text-2xl md:text-3xl"
+                                : "text-lg"
+                        )}>
+                            {post.title || 'Título do Post'}
+                        </h1>
+
+                        {/* Excerpt */}
+                        {post.excerpt && (
+                            <p className={cn(
+                                "text-slate-400 font-medium",
+                                viewMode === 'desktop' ? "text-base" : "text-sm"
+                            )}>
+                                {post.excerpt}
+                            </p>
+                        )}
 
                         {/* Cover Image */}
                         {post.cover_image_url && (
-                            <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-100 border border-gray-200">
+                            <div className={cn(
+                                "relative overflow-hidden bg-gray-100 border border-gray-200",
+                                viewMode === 'desktop' ? "aspect-video rounded-xl" : "aspect-video rounded-lg"
+                            )}>
                                 <img
                                     src={post.cover_image_url}
                                     alt={post.title}
@@ -99,9 +127,34 @@ export function PostPreview({ open, onClose, post }: PostPreviewProps) {
 
                         {/* Content */}
                         <div
-                            className="prose prose-orange prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-500/5 prose-blockquote:py-1 prose-img:rounded-2xl"
-                            dangerouslySetInnerHTML={{ __html: post.content || '<p class="text-gray-400 italic">Escreva algo para ver o conteúdo...</p>' }}
+                            className={cn(
+                                "prose prose-orange max-w-none",
+                                viewMode === 'desktop'
+                                    ? "prose-base prose-p:text-gray-700 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-500/5 prose-blockquote:py-1 prose-img:rounded-xl"
+                                    : "prose-sm prose-p:text-gray-600 prose-headings:text-gray-800 prose-strong:text-gray-800 prose-img:rounded-lg"
+                            )}
+                            dangerouslySetInnerHTML={{
+                                __html: post.content || '<p class="text-gray-400 italic text-sm">Comece a escrever para ver o conteúdo...</p>'
+                            }}
                         />
+
+                        {/* Reading Time & Word Count at bottom */}
+                        {(readingTime || wordCount) && (
+                            <div className="pt-4 border-t border-gray-100 flex items-center gap-3 text-xs text-gray-400">
+                                {readingTime && (
+                                    <div className="flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        <span>{readingTime} min de leitura</span>
+                                    </div>
+                                )}
+                                {wordCount && (
+                                    <>
+                                        <span>•</span>
+                                        <span>{wordCount} palavras</span>
+                                    </>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

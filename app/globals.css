@@ -105,3 +105,14 @@
 .bg-gradient-conic {
   background: conic-gradient(from 0deg, #f97316, #fbbf24, #f97316, #fbbf24, #f97316);
 }
+
+.ProseMirror {
+  min-height: 600px;
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .ProseMirror {
+    min-height: 90vh;
+  }
+}

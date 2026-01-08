@@ -33,7 +33,11 @@ import {
     AlignLeft,
     AlignCenter,
     AlignRight,
-    AlignJustify
+    AlignJustify,
+    Settings,
+    Send,
+    Check,
+    Loader2
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { uploadMedia } from '@/lib/actions/cms-media'
@@ -42,9 +46,31 @@ interface MediumEditorProps {
     content: string
     onChange: (content: string) => void
     placeholder?: string
+    isMobile?: boolean
+    status?: string
+    isSaving?: boolean
+    hasUnsavedChanges?: boolean
+    statusText?: string
+    onSettingsClick?: () => void
+    onPublishClick?: () => void
+    onSaveClick?: () => void
+    isPublishing?: boolean
 }
 
-export function MediumEditor({ content, onChange, placeholder = 'Comece a escrever sua história...' }: MediumEditorProps) {
+export function MediumEditor({
+    content,
+    onChange,
+    placeholder = 'Comece a escrever sua história...',
+    isMobile = false,
+    status,
+    isSaving = false,
+    hasUnsavedChanges = false,
+    statusText,
+    onSettingsClick,
+    onPublishClick,
+    onSaveClick,
+    isPublishing = false
+}: MediumEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const editor = useEditor({
@@ -83,7 +109,7 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none min-h-[300px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
+                class: 'prose prose-lg max-w-none min-h-[1500px] outline-none py-6 text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:text-justify prose-headings:text-justify prose-a:text-orange-600 prose-img:rounded-xl prose-strong:text-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-orange-500 prose-blockquote:bg-orange-50/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:not-italic prose-blockquote:text-gray-600',
             },
             handleDrop: (view, event, slice, moved) => {
                 if (!moved && event.dataTransfer?.files.length) {
@@ -305,23 +331,48 @@ export function MediumEditor({ content, onChange, placeholder = 'Comece a escrev
             </FloatingMenu>
 
             {/* Editor Content */}
-            <div className="min-h-[500px] outline-none">
-                <EditorContent editor={editor} />
+            <div
+                className={cn(
+                    "outline-none bg-white border border-gray-100 border-b-4 border-b-orange-500 rounded-xl shadow-lg p-12 transition-all duration-300",
+                    "min-h-[1500px]"
+                )}
+                style={{ minHeight: '1500px' }}
+            >
+                <EditorContent
+                    editor={editor}
+                    className="min-h-[1500px]"
+                    style={{ minHeight: '1500px' }}
+                />
             </div>
 
             {/* Status Footer */}
-            <div className="mt-2 flex items-center justify-between px-2 text-xs text-gray-400 font-medium">
-                <div className="flex gap-4">
-                    <span>{wordCount} palavras</span>
-                    <span>{characterCount} caracteres</span>
+            {!isMobile && (
+                <div className="mt-2 flex items-center justify-between px-2 text-xs text-gray-400 font-medium">
+                    <div className="flex gap-4">
+                        <span>{wordCount} palavras</span>
+                        <span>{characterCount} caracteres</span>
+                    </div>
+                    <div>
+                        markdown support
+                    </div>
                 </div>
-                <div>
-                    markdown support
-                </div>
-            </div>
+            )}
 
             {/* Mobile Bottom Toolbar */}
-            <MobileToolbar editor={editor} onImageUpload={triggerImageUpload} />
+            {isMobile && (
+                <MobileToolbar
+                    editor={editor}
+                    onImageUpload={triggerImageUpload}
+                    status={status}
+                    isSaving={isSaving}
+                    hasUnsavedChanges={hasUnsavedChanges}
+                    statusText={statusText}
+                    onSettingsClick={onSettingsClick}
+                    onPublishClick={onPublishClick}
+                    onSaveClick={onSaveClick}
+                    isPublishing={isPublishing}
+                />
+            )}
         </div>
     )
 }
@@ -384,115 +435,166 @@ function FloatingButton({
 // Mobile Toolbar Component
 function MobileToolbar({
     editor,
-    onImageUpload
+    onImageUpload,
+    status,
+    isSaving,
+    hasUnsavedChanges,
+    statusText,
+    onSettingsClick,
+    onPublishClick,
+    onSaveClick,
+    isPublishing
 }: {
     editor: any
     onImageUpload: () => void
+    status?: string
+    isSaving?: boolean
+    hasUnsavedChanges?: boolean
+    statusText?: string
+    onSettingsClick?: () => void
+    onPublishClick?: () => void
+    onSaveClick?: () => void
+    isPublishing?: boolean
 }) {
     if (!editor) return null
 
     return (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden safe-area-pb shadow-lg">
-            <div className="flex items-center gap-1 px-2 py-2 overflow-x-auto scrollbar-hide">
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    isActive={editor.isActive('bold')}
-                >
-                    <Bold className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    isActive={editor.isActive('italic')}
-                >
-                    <Italic className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    isActive={editor.isActive('underline')}
-                >
-                    <UnderlineIcon className="w-5 h-5" />
-                </MobileToolbarButton>
+            <div className="flex flex-col">
+                {/* Line 1: Formatting tools */}
+                <div className="flex items-center gap-1 px-2 py-2 overflow-x-auto scrollbar-hide border-b border-gray-100">
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        isActive={editor.isActive('bold')}
+                    >
+                        <Bold className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        isActive={editor.isActive('italic')}
+                    >
+                        <Italic className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        isActive={editor.isActive('underline')}
+                    >
+                        <UnderlineIcon className="w-5 h-5" />
+                    </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+                    <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    isActive={editor.isActive('heading', { level: 1 })}
-                >
-                    <Heading1 className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    isActive={editor.isActive('heading', { level: 2 })}
-                >
-                    <Heading2 className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().setParagraph().run()}
-                    isActive={editor.isActive('paragraph')}
-                >
-                    <Type className="w-5 h-5" />
-                </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        isActive={editor.isActive('heading', { level: 1 })}
+                    >
+                        <Heading1 className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        isActive={editor.isActive('heading', { level: 2 })}
+                    >
+                        <Heading2 className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().setParagraph().run()}
+                        isActive={editor.isActive('paragraph')}
+                    >
+                        <Type className="w-5 h-5" />
+                    </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+                    <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    isActive={editor.isActive('bulletList')}
-                >
-                    <List className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                    isActive={editor.isActive('blockquote')}
-                >
-                    <Quote className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton onClick={onImageUpload}>
-                    <ImageIcon className="w-5 h-5" />
-                </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        isActive={editor.isActive('bulletList')}
+                    >
+                        <List className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                        isActive={editor.isActive('blockquote')}
+                    >
+                        <Quote className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton onClick={onImageUpload}>
+                        <ImageIcon className="w-5 h-5" />
+                    </MobileToolbarButton>
 
-                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+                    <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
 
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                    isActive={editor.isActive({ textAlign: 'left' })}
-                >
-                    <AlignLeft className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                    isActive={editor.isActive({ textAlign: 'center' })}
-                >
-                    <AlignCenter className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                    isActive={editor.isActive({ textAlign: 'right' })}
-                >
-                    <AlignRight className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-                    isActive={editor.isActive({ textAlign: 'justify' })}
-                >
-                    <AlignJustify className="w-5 h-5" />
-                </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().undo().run()}
+                        disabled={!editor.can().undo()}
+                    >
+                        <Undo className="w-5 h-5" />
+                    </MobileToolbarButton>
+                    <MobileToolbarButton
+                        onClick={() => editor.chain().focus().redo().run()}
+                        disabled={!editor.can().redo()}
+                    >
+                        <Redo className="w-5 h-5" />
+                    </MobileToolbarButton>
+                </div>
 
-                <div className="w-px h-6 bg-gray-200 mx-1 flex-shrink-0" />
+                {/* Line 2: Status + Actions */}
+                <div className="flex items-center justify-between px-3 py-2 bg-gray-50">
+                    {/* Status indicator */}
+                    <div className="flex items-center gap-2">
+                        {isSaving ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+                        ) : hasUnsavedChanges ? (
+                            <div className="w-2 h-2 rounded-full bg-orange-500" />
+                        ) : (
+                            <Check className="w-4 h-4 text-green-500" />
+                        )}
+                        <span className="text-xs text-gray-600 font-medium">
+                            {isSaving ? 'Salvando...' : statusText || 'Rascunho'}
+                        </span>
+                    </div>
 
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().undo().run()}
-                    disabled={!editor.can().undo()}
-                >
-                    <Undo className="w-5 h-5" />
-                </MobileToolbarButton>
-                <MobileToolbarButton
-                    onClick={() => editor.chain().focus().redo().run()}
-                    disabled={!editor.can().redo()}
-                >
-                    <Redo className="w-5 h-5" />
-                </MobileToolbarButton>
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-2">
+                        {onSettingsClick && (
+                            <button
+                                type="button"
+                                onClick={onSettingsClick}
+                                className="p-2 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors"
+                                title="Configurações"
+                            >
+                                <Settings className="w-5 h-5" />
+                            </button>
+                        )}
+
+                        <div className="w-px h-6 bg-gray-300" />
+
+                        {status === 'published' ? (
+                            <button
+                                type="button"
+                                onClick={onSaveClick}
+                                disabled={isSaving}
+                                className="flex items-center gap-1.5 bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-3 py-2 rounded-lg shadow-sm transition-all"
+                            >
+                                <Check className="w-4 h-4" />
+                                <span>Atualizar</span>
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={onPublishClick}
+                                disabled={isPublishing}
+                                className="flex items-center gap-1.5 bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm px-3 py-2 rounded-lg shadow-lg transition-all"
+                            >
+                                {isPublishing ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <Send className="w-4 h-4" />
+                                )}
+                                <span>Publicar</span>
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     )

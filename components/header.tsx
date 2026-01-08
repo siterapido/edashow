@@ -301,11 +301,11 @@ export function Header({ onMenuClick }: HeaderProps) {
             </Button>
 
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+              <span className="text-white font-semibold text-sm">Portal</span>
               <Logo
                 imageClassName="h-7 w-auto brightness-0 invert"
                 priority
               />
-              <span className="text-white font-semibold text-sm">Portal</span>
             </div>
 
             <div className="flex items-center gap-1">

@@ -95,9 +95,8 @@ export function UnifiedMediumEditor({
             textarea.style.height = 'auto'
             // Calcula a altura necessária baseada no conteúdo
             const scrollHeight = textarea.scrollHeight
-            // Define a nova altura, garantindo pelo menos 1000px
-            const newHeight = Math.max(scrollHeight, 1000)
-            textarea.style.height = `${newHeight}px`
+            // Define a nova altura, ajustando dinamicamente ao conteúdo
+            textarea.style.height = `${scrollHeight}px`
         }
     }, [])
 
@@ -442,7 +441,7 @@ export function UnifiedMediumEditor({
                             }}
                             placeholder="Escreva um resumo ou subtítulo para o post..."
                             className="w-full bg-transparent text-xl text-gray-600 placeholder:text-gray-400 outline-none border-none resize-none overflow-hidden"
-                            style={{ minHeight: '1000px' }}
+                            style={{ minHeight: '60px' }}
                         />
 
                         {/* Divider */}

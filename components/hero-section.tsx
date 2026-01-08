@@ -267,7 +267,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
 
   return (
     <section
-      className="relative bg-[#0f172a] text-white overflow-hidden h-[600px] sm:h-[650px] md:h-screen"
+      className="relative bg-[#0f172a] text-white overflow-hidden h-[600px] sm:h-[650px] md:h-screen flex flex-col justify-center"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -289,7 +289,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
       </button>
 
       {/* Hero Navigation Indicators & Mobile Controls */}
-      <div className="absolute left-4 sm:left-16 md:left-20 lg:left-24 bottom-6 sm:bottom-12 z-30 flex items-center gap-6">
+      <div className="absolute left-4 sm:left-16 md:left-20 lg:left-24 bottom-8 sm:bottom-16 z-30 flex items-center gap-6">
         {/* Mobile-only arrows */}
         <div className="flex md:hidden items-center gap-2">
           <button
@@ -357,8 +357,8 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="container mx-auto px-4 sm:px-16 md:px-20 lg:px-24 py-6 sm:py-16 md:py-20 lg:py-24 relative z-10 h-full">
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center h-full min-h-0">
+            <div className="container mx-auto px-4 sm:px-16 md:px-20 lg:px-24 py-12 sm:py-20 md:py-24 lg:py-28 relative z-10">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
 
                 {/* Main Content */}
                 <motion.div

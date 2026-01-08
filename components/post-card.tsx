@@ -28,7 +28,7 @@ export interface PostCardProps {
 }
 
 export function PostCard({ post, variant = 'default', className }: PostCardProps) {
-  const categoryInfo = getCategoryInfo(typeof post.category === 'object' ? post.category.slug : post.category)
+  const categoryInfo = getCategoryInfo(typeof post.category === 'object' && post.category ? post.category.slug : post.category)
   const imageUrl = post.featured_image?.url || null
 
   const cardContent = (

@@ -163,7 +163,7 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
         ? formatDistanceToNow(new Date(post.published_at), { addSuffix: true, locale: ptBR })
         : 'Recente';
 
-      const categorySlug = typeof post.category === 'object' ? post.category.slug : post.category;
+      const categorySlug = typeof post.category === 'object' && post.category ? post.category.slug : post.category;
 
       // Author logic
       const authorName = post.author?.name || "Redação Eda Show";

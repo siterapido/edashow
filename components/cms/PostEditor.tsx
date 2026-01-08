@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import {
     ArrowLeft,
     Trash2,
-    Settings
+    Settings,
+    ExternalLink
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { UnifiedMediumEditor } from './UnifiedMediumEditor'
@@ -155,17 +156,34 @@ export function PostEditor({ post, categories, columnists }: PostEditorProps) {
                         <ArrowLeft className="w-5 h-5" />
                     </Button>
 
-                    {/* Settings Button */}
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setSettingsOpen(true)}
-                        className="text-gray-400 hover:text-gray-900"
-                        title="Configurações do post"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </Button>
+                    {/* Actions */}
+                    <div className="flex items-center gap-2">
+                        {/* View Published Post Button */}
+                        {formData.status === 'published' && formData.slug && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => window.open(`/posts/${formData.slug}`, '_blank')}
+                                className="text-gray-400 hover:text-gray-900"
+                                title="Ver post publicado"
+                            >
+                                <ExternalLink className="w-5 h-5" />
+                            </Button>
+                        )}
+
+                        {/* Settings Button */}
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setSettingsOpen(true)}
+                            className="text-gray-400 hover:text-gray-900"
+                            title="Configurações do post"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </Button>
+                    </div>
                 </div>
             </div>
 

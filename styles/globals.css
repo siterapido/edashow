@@ -180,6 +180,47 @@
   color: rgb(148 163 184);
 }
 
+/* Converte blockquotes do conteúdo do post em parágrafos normais */
+.tiptap-content blockquote {
+  border-left: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  color: inherit !important;
+  background: none !important;
+}
+
+/* Garante que parágrafos dentro de blockquotes do tiptap-content sejam normais */
+.tiptap-content blockquote p {
+  font-style: normal !important;
+  font-weight: normal !important;
+  color: inherit !important;
+  background: none !important;
+}
+
+/* Remove formatação de citação do Tailwind prose para o conteúdo do post */
+.prose.tiptap-content blockquote {
+  border-left: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  color: inherit !important;
+  background: none !important;
+}
+
+.prose.tiptap-content blockquote p {
+  font-style: normal !important;
+  font-weight: normal !important;
+  color: inherit !important;
+  background: none !important;
+}
+
 /* Mobile touch improvements */
 @media (max-width: 768px) {
   .ProseMirror {

@@ -60,11 +60,11 @@ export function EdaBioSection() {
               {/* Bio */}
               <div className="space-y-3 sm:space-y-3.5 text-sm sm:text-base lg:text-base">
                 <p className="text-slate-300 leading-relaxed">
-                  Comunicador, <span className="text-primary font-semibold">palestrante</span> e criador de projetos que conectam o mercado de planos de saúde em todo o Brasil
+                  Comunicador, palestrante e criador de projetos que conectam o mercado de planos de saúde em todo o Brasil
                 </p>
 
                 <p className="text-slate-400 leading-relaxed">
-                  Criador do <span className="text-white font-medium">Jogo das Águias</span>, <span className="text-white font-medium">EDA pelo Brasil</span> e do método <span className="text-primary font-semibold">Comunicação & Oratória – Corretor Faixa Preta</span>
+                  Criador do Jogo das Águias, EDA pelo Brasil e do método Comunicação & Oratória – Corretor Faixa Preta
                 </p>
               </div>
 

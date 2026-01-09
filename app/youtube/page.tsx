@@ -7,6 +7,9 @@ export const metadata = {
     description: 'Assista aos últimos vídeos do canal EdaShow no YouTube. Conteúdo exclusivo sobre saúde suplementar, mercado e inovação.'
 }
 
+// Força renderização dinâmica para evitar erros de serialização durante build
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
 export const revalidate = 3600 // Revalidate every hour
 
 export default async function YouTubePage() {

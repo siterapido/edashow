@@ -20,41 +20,37 @@ export const dynamicParams = true
 
 /**
  * Normaliza o HTML do conteúdo do post
- * Converte blockquotes que englobam todo o conteúdo em parágrafos normais
- * Preserva citações explícitas (quando há parágrafos antes/depois)
+ * Remove TODAS as tags blockquote e converte o conteúdo para parágrafos normais
  */
 function normalizePostContent(html: string): string {
   if (!html) return ''
 
   // Remove espaços em branco do início e fim
-  const trimmed = html.trim()
+  let content = html.trim()
 
-  // Verifica se TODO o conteúdo está dentro de um único blockquote
-  // Padrão: <blockquote>conteúdo</blockquote> (sem <p> antes ou depois)
-  const entireContentInBlockquote = /^<blockquote>([\s\S]*)<\/blockquote>$/.test(trimmed)
+  // Remove TODAS as tags de abertura e fechamento de blockquote
+  // Isso garante que nenhum blockquote seja renderizado como citação
+  content = content.replace(/<\/?blockquote[^>]*>/gi, '')
 
-  if (entireContentInBlockquote) {
-    // Extrai o conteúdo dentro do blockquote
-    const content = trimmed.match(/^<blockquote>([\s\S]*)<\/blockquote>$/)?.[1] || ''
+  // Remove espaços extras que possam ter sobrado
+  content = content.trim()
 
-    // Converte para parágrafo normal
-    // Se o conteúdo já tem tags <p>, mantém
-    // Se não, envolve em <p>
-    if (content.includes('<p>')) {
-      return content
-    } else {
-      // Divide por quebras de linha e cria parágrafos
-      const paragraphs = content
-        .split(/\n\n+/)
-        .filter(p => p.trim())
-        .map(p => `<p>${p.trim()}</p>`)
-        .join('\n')
-      return paragraphs
-    }
+  // Se o conteúdo resultante estiver vazio, retorna string vazia
+  if (!content) return ''
+
+  // Se o conteúdo não tem tags <p>, envolve em parágrafos
+  if (!content.includes('<p>') && !content.includes('<h1>') && !content.includes('<h2>') &&
+      !content.includes('<h3>') && !content.includes('<ul>') && !content.includes('<ol>')) {
+    // Divide por quebras de linha e cria parágrafos
+    const paragraphs = content
+      .split(/\n\n+/)
+      .filter(p => p.trim())
+      .map(p => `<p>${p.trim()}</p>`)
+      .join('\n')
+    return paragraphs
   }
 
-  // Caso contrário, retorna o HTML original (citações legítimas são preservadas)
-  return trimmed
+  return content
 }
 
 interface PostPageProps {
@@ -74,13 +70,39 @@ export async function generateMetadata({ params }: PostPageProps) {
     }
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://edashow.com.br'
+  const postUrl = `${siteUrl}/posts/${slug}`
+
+  // Usa a imagem destacada do post, ou a imagem de capa, ou o logo padrão
+  const imageUrl = post.featured_image?.url ||
+                   post.cover_image_url ||
+                   '/eda-show-logo.png'
+
   return {
+    metadataBase: new URL(siteUrl),
     title: `${post.title} | EdaShow`,
     description: post.excerpt || 'Leia mais no EdaShow',
     openGraph: {
+      type: 'article',
+      locale: 'pt_BR',
+      url: postUrl,
       title: post.title,
-      description: post.excerpt,
-      images: post.featured_image ? [post.featured_image.url] : [],
+      description: post.excerpt || 'Leia mais no EdaShow',
+      siteName: 'EDA.Show',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt || 'Leia mais no EdaShow',
+      images: [imageUrl],
     },
   }
 }

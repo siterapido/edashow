@@ -5,65 +5,72 @@ import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Clock } from "lucide-react"
 import { motion } from "framer-motion"
 import { container, fadeIn } from "@/lib/motion"
+import Link from "next/link"
+import { useState, useEffect } from "react"
+import { getPosts } from "@/lib/supabase/api"
+import { formatDistanceToNow } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
-const newsItems = [
-  {
-    id: 1,
-    tag: "Notícias",
-    title: "Cooperativa reforça protagonismo no setor com nova expansão",
-    description: "A maior cooperativa de saúde em número de cooperados anuncia expansão para novas regiões do país...",
-    date: "16 Dez 2025",
-    readTime: "5 min",
-    image: "/modern-healthcare-building.jpg"
-  },
-  {
-    id: 2,
-    tag: "Regulação",
-    title: "STF publica acórdão com regras para judicialização",
-    description: "Todas as ações judiciais envolvendo tema devem seguir novas diretrizes estabelecidas pelo tribunal...",
-    date: "15 Dez 2025",
-    readTime: "8 min",
-    image: "/ans-building-court.jpg"
-  },
-  {
-    id: 3,
-    tag: "Mercado",
-    title: "Reajuste médio dos planos de saúde será de 11,15%",
-    description: "Confira as principais operadoras e seus respectivos aumentos que entram em vigor a partir de janeiro...",
-    date: "14 Dez 2025",
-    readTime: "3 min",
-    image: "/healthcare-rating-stars.jpg"
-  },
-  {
-    id: 4,
-    tag: "Destaque",
-    title: "Operadora é destaque na premiação dos mais influentes",
-    description: "A lista lançada no último dia 17 de dezembro traz lideranças do setor de saúde...",
-    date: "12 Dez 2025",
-    readTime: "4 min",
-    image: "/award-ceremony-healthcare.jpg"
-  },
-  {
-    id: 5,
-    tag: "Regulação",
-    title: "Susep prepara ajuste que pode ampliar alcance da regulação",
-    description: "O objetivo regulatório da Superintendência de Seguros Privados deverá impactar diversas seguradoras...",
-    date: "10 Dez 2025",
-    readTime: "6 min",
-    image: "/susep-logo-green.jpg"
-  },
-  {
-    id: 6,
-    tag: "Eventos",
-    title: "Grande evento do setor terá atrações especiais em São Paulo",
-    description: "Conhecida por investir no bem-estar de sua equipe, a empresa promove celebração anual...",
-    date: "09 Dez 2025",
-    readTime: "2 min",
-    image: "/corporate-event-celebration.png"
-  },
-]
+interface Post {
+  id: string
+  title: string
+  excerpt?: string
+  cover_image_url?: string
+  featured_image?: any
+  published_at?: string
+  category?: any
+  slug?: string
+}
 
-export function NewsGrid() {
+interface NewsGridProps {
+  initialPosts?: Post[]
+  limit?: number
+}
+
+export function NewsGrid({ initialPosts, limit = 6 }: NewsGridProps) {
+  const [posts, setPosts] = useState<Post[]>(initialPosts || [])
+  const [loading, setLoading] = useState(!initialPosts)
+
+  useEffect(() => {
+    // Se já temos posts iniciais (SSR), não precisamos buscar
+    if (initialPosts && initialPosts.length > 0) {
+      return
+    }
+
+    // Buscar posts do Supabase
+    async function fetchPosts() {
+      try {
+        const data = await getPosts({
+          limit,
+          status: 'published'
+        })
+        setPosts(data || [])
+      } catch (error) {
+        console.error('Erro ao buscar posts:', error)
+        setPosts([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPosts()
+  }, [initialPosts, limit])
+
+  if (loading) {
+    return (
+      <section className="container mx-auto px-4 py-16 bg-slate-50/50">
+        <div className="text-center text-slate-500">Carregando notícias...</div>
+      </section>
+    )
+  }
+
+  if (posts.length === 0) {
+    return (
+      <section className="container mx-auto px-4 py-16 bg-slate-50/50">
+        <div className="text-center text-slate-500">Nenhuma notícia disponível no momento.</div>
+      </section>
+    )
+  }
   return (
     <motion.section 
       variants={container}
@@ -90,53 +97,59 @@ export function NewsGrid() {
       </div>
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {newsItems.map((item, index) => (
-          <motion.div 
-            key={item.id}
-            variants={fadeIn("up", index * 0.1)}
-            whileHover={{ y: -8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            <Card 
-              className="group overflow-hidden border-none shadow-sm hover:shadow-xl transition-shadow duration-300 bg-white h-full"
+        {posts.map((post, index) => {
+          const imageUrl = post.cover_image_url || post.featured_image?.url || '/placeholder.jpg'
+          const categoryName = typeof post.category === 'object' && post.category ? post.category.name : 'Notícias'
+          const publishedDate = post.published_at
+            ? formatDistanceToNow(new Date(post.published_at), { addSuffix: true, locale: ptBR })
+            : 'Recente'
+
+          return (
+            <motion.div
+              key={post.id}
+              variants={fadeIn("up", index * 0.1)}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
-              <div className="relative aspect-video overflow-hidden">
-                <motion.img 
-                  src={item.image} 
-                  alt={item.title} 
-                  className="w-full h-full object-cover" 
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <div className="absolute top-3 left-3">
-                  <Badge variant="secondary" className="bg-white/90 backdrop-blur text-slate-800 font-semibold shadow-sm hover:bg-white">
-                    {item.tag}
-                  </Badge>
-                </div>
-              </div>
-              
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4 text-xs text-slate-400 mb-3">
-                  <div className="flex items-center gap-1">
-                    <CalendarDays className="w-3 h-3" />
-                    {item.date}
+              <Link href={post.slug ? `/posts/${post.slug}` : '#'}>
+                <Card
+                  className="group overflow-hidden border-none shadow-sm hover:shadow-xl transition-shadow duration-300 bg-white h-full cursor-pointer"
+                >
+                  <div className="relative aspect-video overflow-hidden">
+                    <motion.img
+                      src={imageUrl}
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    <div className="absolute top-3 left-3">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur text-slate-800 font-semibold shadow-sm hover:bg-white">
+                        {categoryName}
+                      </Badge>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {item.readTime}
-                  </div>
-                </div>
-                
-                <h3 className="font-bold text-xl mb-3 text-slate-800 line-clamp-2 group-hover:text-primary transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
-                  {item.description}
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 text-xs text-slate-400 mb-3">
+                      <div className="flex items-center gap-1">
+                        <CalendarDays className="w-3 h-3" />
+                        {publishedDate}
+                      </div>
+                    </div>
+
+                    <h3 className="font-bold text-xl mb-3 text-slate-800 line-clamp-2 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
+                      {post.excerpt || 'Clique para ler mais...'}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
+          )
+        })}
       </div>
     </motion.section>
   )

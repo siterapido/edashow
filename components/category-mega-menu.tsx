@@ -9,7 +9,6 @@ import { getPosts } from "@/lib/supabase/api"
 import { getAllCategories, getCategoryInfo } from "@/lib/categories"
 import { CategoryPreviewCard } from "./category-preview-card"
 import { cn } from "@/lib/utils"
-import { getFallbackPosts } from "@/lib/fallback-data"
 
 interface CategoryPosts {
   category: 'news' | 'analysis' | 'interviews' | 'opinion'
@@ -43,11 +42,10 @@ export function CategoryMegaMenu() {
           }
         } catch (error) {
           console.error(`Erro ao buscar posts da categoria ${cat.value}:`, error)
-          // Em caso de erro, usar posts de fallback
-          const fallbackPosts = getFallbackPosts({ category: cat.value, limit: 3 })
+          // Em caso de erro, retornar array vazio (sem fallbacks mockados)
           return {
             category: cat.value as any,
-            posts: fallbackPosts,
+            posts: [],
             loading: false
           }
         }

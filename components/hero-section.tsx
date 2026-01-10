@@ -50,62 +50,6 @@ interface HeroSectionProps {
   posts?: Post[];
 }
 
-// Slides de fallback caso não haja posts
-const fallbackSlides: SlideData[] = [
-  {
-    id: "fallback-1",
-    badge: "Destaque",
-    time: "Há 2 horas",
-    title: "Setor de saúde suplementar projeta expansão nacional para 2026",
-    description: "Novas tecnologias e regulação favorável impulsionam crescimento recorde no último trimestre, segundo relatório da ANS.",
-    image: "/modern-healthcare-building.jpg",
-    imageAlt: "Saúde Suplementar",
-    credit: "Foto: Divulgação",
-    statLabel: "Destaque",
-    statValue: "Saúde Suplementar",
-    slug: undefined
-  },
-  {
-    id: "fallback-2",
-    badge: "Tecnologia",
-    time: "Há 5 horas",
-    title: "Inteligência Artificial revoluciona diagnóstico médico",
-    description: "Plataformas de IA estão transformando a forma como médicos identificam doenças, reduzindo tempo de diagnóstico em até 70%.",
-    image: "/conference-healthcare-panel.jpg",
-    imageAlt: "Tecnologia em Saúde",
-    credit: "Foto: Divulgação",
-    statLabel: "Tendência",
-    statValue: "Tecnologia e Inovação",
-    slug: undefined
-  },
-  {
-    id: "fallback-3",
-    badge: "Regulação",
-    time: "Há 1 dia",
-    title: "ANS anuncia novas diretrizes para operadoras de saúde",
-    description: "Normativas visam aumentar transparência e melhorar qualidade dos serviços prestados aos beneficiários do setor suplementar.",
-    image: "/modern-building-ans.jpg",
-    imageAlt: "ANS",
-    credit: "Foto: Divulgação / ANS",
-    statLabel: "Novidade",
-    statValue: "Política e Regulação",
-    slug: undefined
-  },
-  {
-    id: "fallback-4",
-    badge: "Eventos",
-    time: "Há 2 dias",
-    title: "Maior evento de saúde suplementar do país acontece em São Paulo",
-    description: "Especialistas de todo o Brasil se reúnem para debater o futuro do setor e apresentar as últimas inovações em saúde digital.",
-    image: "/healthcare-launch-event.jpg",
-    imageAlt: "Evento de Saúde",
-    credit: "Foto: Divulgação",
-    statLabel: "Destaque",
-    statValue: "Eventos",
-    slug: undefined
-  }
-];
-
 
 function getCategoryBadge(category?: string): string {
   const categoryMap: Record<string, string> = {
@@ -139,8 +83,9 @@ export function HeroSection({ posts = [] }: HeroSectionProps) {
 
   // Converter posts para slides
   const slides = useMemo(() => {
+    // Se não houver posts, retorna array vazio (sem fallbacks mockados)
     if (posts.length === 0) {
-      return fallbackSlides;
+      return [];
     }
 
     // Priorizar posts em destaque, depois ordenar por data de publicação (mais recentes primeiro)
